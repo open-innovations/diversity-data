@@ -139,8 +139,12 @@
 				});
 				
 				var _obj = this;
+				this.year = document.createElement('select');
+				this.year.setAttribute('id','year');
 				// Add change event to <select>
-				document.querySelector('#year').addEventListener('change', function(e){ _obj.update(); });
+				this.year.addEventListener('change', function(e){ _obj.update(); });
+				// Add the selector to the <header>
+				this.el.querySelector('header').appendChild(this.year);
 
 				return this;
 			}
@@ -161,20 +165,40 @@
 							}
 						}
 					}
-										
 				}
-
-				var yy = 2020;
-				if(document.querySelector('#year')) yy = document.querySelector('#year').value;
+				// Default to this year
+				var yy = (new Date()).getFullYear();
+				// If the selector exists, use the selected value
+				if(this.year && this.year.value) yy = this.year.value;
 				var employees = 0;
 				var n = 0;
 				var m,o,d,dt;
+				var opt="";
 				var summary = "";
+				var dates = {'min':'3000-01-01','max':'2000-01-01'};
+				for(o in orgs){
+					for(d in orgs[o]){
+						for(dt in orgs[o][d]){
+							if(dt < dates.min) dates.min = dt;
+							if(dt > dates.max) dates.max = dt;
+						}
+					}
+				}
+				// Update year selector range
+				miny = parseInt(dates.min.substr(0,4));
+				maxy = parseInt(dates.max.substr(0,4));
+				for(y = maxy; y >= miny ; y--) opt += '<option value="'+y+'"'+(y==yy ? ' selected="selected"':'')+'>'+y+'</option>';
+				this.year.innerHTML = opt;
+				// Limit selected year to the range of the data
+				yy = Math.max(Math.min(yy,maxy),miny);
+
 				for(o in orgs){
 					for(d in orgs[o]){
 						m = "";
 						for(dt in orgs[o][d]){
 							if(dt.substr(0,4)==yy) if(dt > m) m = dt;
+							if(dt < dates.min) dates.min = dt;
+							if(dt > dates.max) dates.max = dt;
 						}
 						if(m && orgs[o][d][m].employees){
 							n++;
@@ -184,6 +208,8 @@
 						}
 					}
 				}
+
+				// Update numbers
 				document.querySelector('#employees .number').innerHTML = employees;
 				document.querySelector('#organisations .number').innerHTML = n;
 				if(summary) document.querySelector('#sources ul').innerHTML = summary;

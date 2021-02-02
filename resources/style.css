@@ -84,6 +84,7 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 .padded-bottom { padding: 1em; margin-bottom: 1em; }
 .doublepadded { padding: 2em; }
 
+input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
 section { margin-top: 1em; }
 #dashboard { background: white; color: #222; }
 /* Use CSS Grid */
