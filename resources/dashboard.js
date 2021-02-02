@@ -125,8 +125,16 @@
 								"dataType": "text",
 								"url": u,
 								"success": function(d,attr){
+									var r,o;
 									// Store the data
 									this.data[attr.data.url] = CSVToArray(d).data;
+									// Convert numbers into numbers
+									for(r = 0; r < this.data[attr.data.url].length; r++){
+										for(o in this.data[attr.data.url][r]){
+											v = parseFloat(this.data[attr.data.url][r][o])
+											if(typeof v==="number" && v==this.data[attr.data.url][r][o]) this.data[attr.data.url][r][o] = v;
+										}
+									}
 									// Increment the loaded counter
 									loaded++;
 									// If we've loaded them all we finish up
@@ -193,6 +201,8 @@
 				// Limit selected year to the range of the data
 				yy = Math.max(Math.min(yy,maxy),miny);
 
+				// Keep the latest rows for the selected year
+				var keep = [];
 				for(o in orgs){
 					for(d in orgs[o]){
 						m = "";
@@ -201,14 +211,41 @@
 							if(dt < dates.min) dates.min = dt;
 							if(dt > dates.max) dates.max = dt;
 						}
-						if(m && orgs[o][d][m].employees){
-							n++;
-							employees += parseInt(orgs[o][d][m].employees);
-							dt = new Date(m);
-							summary += '<li><a href="'+orgs[o][d][m].URL+'">'+o+' updated <time datetime="'+m+'">'+dt.toLocaleDateString()+'</time></a></li>';
-						}
+						if(m && orgs[o][d][m].employees) keep.push(orgs[o][d][m]);
 					}
 				}
+
+				n = 0;
+				var ages = {
+					"16-24":{"keys":["age_16-24"],"n":0},
+					"25-34":{"keys":["age_25-34"],"n":0},
+					"35-44":{"keys":["age_35-44"],"n":0},
+					"45-54":{"keys":["age_45-54"],"n":0},
+					"55-64":{"keys":["age_55-64"],"n":0},
+					"65-69":{"keys":["age_65-69"],"n":0},
+					"70+":{"keys":["age_70+"],"n":0},
+					"total":{"keys":["age_total"],"n":0},
+					"undisclosed":{"keys":["age_undisclosed"],"n":0}
+				}
+				for(i = 0; i < keep.length; i++){
+					employees += keep[i].employees;
+					dt = new Date(keep[i].published);
+					for(a in ages){
+						for(k = 0 ; k < ages[a].keys.length; k++){
+							ky = ages[a].keys[k];
+							if(typeof keep[i][ky]==="number") ages[a].n += keep[i][ky]; 
+						}
+					}
+					summary += '<li><a href="'+keep[i].URL+'">'+keep[i].organisation+(keep[i].organisation_division ? ' ('+keep[i].organisation_division+')' : '')+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
+					n++;
+				}
+				console.log(ages)
+				
+				ageout = "";
+				for(a in ages){
+					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n+'</td></tr>';
+				}
+				if(ageout) document.querySelector('#age .output').innerHTML = '<table><tr><th>Age bracket</th><th>Number</th></tr>'+ageout+'</table>';
 
 				// Update numbers
 				document.querySelector('#employees .number').innerHTML = employees;
