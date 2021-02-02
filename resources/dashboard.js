@@ -162,6 +162,7 @@
 						if(this.data[d.URL][r].organisation == org){
 							if(!d.organisation_division || this.data[d.URL][r].organisation_division==div){
 								orgs[org][div][this.data[d.URL][r].published] = this.data[d.URL][r];
+								orgs[org][div][this.data[d.URL][r].published].URL = d.URL;
 							}
 						}
 					}
@@ -204,7 +205,7 @@
 							n++;
 							employees += parseInt(orgs[o][d][m].employees);
 							dt = new Date(m);
-							summary += '<li>'+o+' updated <time datetime="'+m+'">'+dt.toLocaleDateString()+'</time></li>';
+							summary += '<li><a href="'+orgs[o][d][m].URL+'">'+o+' updated <time datetime="'+m+'">'+dt.toLocaleDateString()+'</time></a></li>';
 						}
 					}
 				}

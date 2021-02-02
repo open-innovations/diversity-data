@@ -107,3 +107,4 @@ section { margin-top: 1em; }
 	list-style: numeric;
 	margin: 1em;
 }
+footer a,footer a:visited { color: inherit; }
