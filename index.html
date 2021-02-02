@@ -7,26 +7,35 @@
 	<script src="resources/dashboard.js"></script>
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 </head>
-<body>
-	<div class="main">
+<body class="b1-bg">
+	<div id="dashboard" class="main padded">
 		<h1>Diversity Dashboard</h1>
-		<div id="dashboard">
+		<select id="year">
+			<option value="2021">2021</option>
+			<option value="2020">2020</option>	
+			<option value="2019">2019</option>			
+		</select>
+
+		<section>
 			<ul class="grid">
-				<li id="organisations" class="c1-bg padded">
+				<li id="organisations" class="c14-bg padded">
 					Organisations
 					<div class="number"></div>
 				</li>
-				<li id="employees" class="c1-bg padded">
+				<li id="employees" class="c14-bg padded">
 					Employees
 					<div class="number"></div>
 				</li>
 			</ul>
-		
-		
-		
-		</div>
+		</section>
 
 	</div>
 	
+	<footer class="b1-bg">
+		<section id="sources">
+			<h2>Data sources</h2>
+			<ul></ul>
+		</section>
+	</footer>
 </body>
 </html>

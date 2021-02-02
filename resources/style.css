@@ -35,7 +35,6 @@ html, body {
 	color: #333;
 	line-height: 1.44em;
 }
-body { margin: 2em; }
 h1 { font-size: 1.7em; font-weight: 600; margin-bottom: 16px; }
 h2 { font-size: 1.4em; margin-top: 1.4285em; font-weight: 600; }
 h3 { font-size: 1.2em; margin-top: 1.666em; }
@@ -85,6 +84,8 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 .padded-bottom { padding: 1em; margin-bottom: 1em; }
 .doublepadded { padding: 2em; }
 
+section { margin-top: 1em; }
+#dashboard { background: white; color: #222; }
 /* Use CSS Grid */
 .grid {
 	display: grid;
@@ -99,4 +100,9 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 	font-size: 4em;
 	line-height: 1em;
 	font-weight: bold;
+}
+
+#sources ul {
+	list-style: numeric;
+	margin: 1em;
 }

@@ -137,6 +137,10 @@
 					}
 					
 				});
+				
+				var _obj = this;
+				// Add change event to <select>
+				document.querySelector('#year').addEventListener('change', function(e){ _obj.update(); });
 
 				return this;
 			}
@@ -148,10 +152,8 @@
 					d = this.index[i];
 					org = (d.organisation);
 					div = (d.organisation_division||"_default");
-					console.log(i,org,div)
 					if(!orgs[org]) orgs[org] = {};
 					if(!orgs[org][div]) orgs[org][div] = {};
-					console.log(orgs)
 					for(var r = 0; r < this.data[d.URL].length; r++){
 						if(this.data[d.URL][r].organisation == org){
 							if(!d.organisation_division || this.data[d.URL][r].organisation_division==div){
@@ -163,21 +165,28 @@
 				}
 
 				var yy = 2020;
+				if(document.querySelector('#year')) yy = document.querySelector('#year').value;
 				var employees = 0;
 				var n = 0;
 				var m,o,d,dt;
+				var summary = "";
 				for(o in orgs){
 					for(d in orgs[o]){
 						m = "";
-						n++;
 						for(dt in orgs[o][d]){
 							if(dt.substr(0,4)==yy) if(dt > m) m = dt;
 						}
-						if(orgs[o][d][m].employees) employees += parseInt(orgs[o][d][m].employees);
+						if(m && orgs[o][d][m].employees){
+							n++;
+							employees += parseInt(orgs[o][d][m].employees);
+							dt = new Date(m);
+							summary += '<li>'+o+' updated <time datetime="'+m+'">'+dt.toLocaleDateString()+'</time></li>';
+						}
 					}
 				}
-				this.el.querySelector('#employees .number').innerHTML = employees;
-				this.el.querySelector('#organisations .number').innerHTML = n;
+				document.querySelector('#employees .number').innerHTML = employees;
+				document.querySelector('#organisations .number').innerHTML = n;
+				if(summary) document.querySelector('#sources ul').innerHTML = summary;
 			}
 
 			return this.init();
