@@ -124,7 +124,6 @@ form + section { margin-top: 1em; }
 	margin-bottom: 0;
 }
 .grid.links a, .tabs button { text-decoration: none; color: inherit; font-weight: 600; font-family: inherit; border: 0px; border-bottom: 4px solid transparent; }
-.grid.links a { background: rgb(230, 230, 230); }
 .grid.links a:hover,.grid.links a:focus { border-bottom-color: #1DD3A7; }
 .tabs button { background: transparent; }
 .tabs .open button, .tabs button:focus, .tabs button:hover { border-bottom-color: #1DD3A7; outline: none; background: transparent; }
