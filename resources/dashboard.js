@@ -385,7 +385,7 @@
 						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
 						info = document.createElement('div');
 						info.classList.add('balloon');
-						info.innerHTML = this.data.series[e.series].label+": "+this.data.series[e.series].data[e.bin];
+						info.innerHTML = this.data.series[e.series].label+": "+this.data.series[e.series].data[e.bin].toFixed(1)+'%';
 						e.event.originalTarget.appendChild(info);
 					}).on('mouseleave',function(e){
 						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });

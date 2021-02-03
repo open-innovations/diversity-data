@@ -28,7 +28,7 @@
 	
 		this.setData = function(d){
 			this.data = d;
-			this.chart.setData(d);
+			console.log('setData',d)
 			return this;
 		};
 	
@@ -110,13 +110,6 @@
 		return this;
 	}
 
-	// A function to provide the data
-	// Our assumption is that the bins will be the same as any previous data
-	BarChart.prototype.setData = function(data){
-		if(data && typeof data.length==="number") this.data = data;
-		return this;
-	};
-
 	BarChart.prototype.draw = function(){
 
 		if(!this.el || !this.parent.data) return this;
@@ -192,7 +185,7 @@
 				}
 			}
 
-			_parent = this.parent;
+			_obj = this;
 
 			// Loop over columns
 			for(i = 0; i < nval; i++){
@@ -210,18 +203,21 @@
 						b.addEventListener('focus',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
-							_parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							e['this'] = _obj.parent;
+							_obj.parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
 						b.addEventListener('mouseover',function(e){
 							e.preventDefault();
 							e.stopPropagation();
 							e.currentTarget = e.currentTarget.parentNode;
-							_parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							e['this'] = _obj.parent;
+							_obj.parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
 						b.addEventListener('click',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
-							_parent.trigger("barclick",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							e['this'] = _obj.parent;
+							_obj.parent.trigger("barclick",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
 						columns[i].appendChild(b);
 						bits.push(b);
