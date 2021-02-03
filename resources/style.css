@@ -129,7 +129,7 @@ form + section { margin-top: 1em; }
 .tabs .open button, .tabs button:focus, .tabs button:hover { border-bottom-color: #1DD3A7; outline: none; background: transparent; }
 .tabs button:focus, .tabs button:hover { outline: 1px solid #1DD3A7; background: transparent!important; color: inherit!important; }
 ul.tabs > li { display: inline-block; margin-right: 0.5em; }
-article article { display: none; padding: 1em; }
+article article { display: none; padding: 1em 0; }
 article article.open { display: block; }
 article p:last-child { margin-bottom: 0; }
 #sources ul {
@@ -137,7 +137,7 @@ article p:last-child { margin-bottom: 0; }
 	margin: 1em;
 }
 .key { font-size:1em; }
-.chart { height: 320px; }
+.barchart { height: 320px; }
 .chart .ct-grid.ct-horizontal { display: none; }
 .chart .ct-series-a .ct-bar, .key .ct-series-a > span { stroke: #F9BC26; background: #F9BC26; }
 .chart .ct-series-b .ct-bar, .key .ct-series-b > span { stroke: #2254F4; background: #2254F4; }

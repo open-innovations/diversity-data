@@ -324,19 +324,16 @@
 					summary += '<li><a href="'+keep[i].URL+'">'+keep[i].organisation+(keep[i].organisation_division ? ' ('+keep[i].organisation_division+')' : '')+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
 					n++;
 				}
-
-
-
 				
 				ageout = "";
-				agedat = [[],[]];
-				agelbl = [];
+				ageseries = [{'label':'Leeds','data':[]},{'label':'Employer','data':[]}];
+				agelables = [];
 				for(a in ages){
-					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td></tr>';
+					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td><td>'+Math.round(100*ages[a].n.total/ages.total.n.total)+'</td></tr>';
 					if(a!="total" && a!="undisclosed"){
-						agelbl.push(a);
-						agedat[0].push(ages[a].n.total);
-						agedat[1].push(ages[a].n.total);
+						agelables.push(a);
+						ageseries[0].data.push(ages[a].n.total);
+						ageseries[1].data.push(ages[a].n.total);
 					}
 				}
 				this.cards.age.addPanels({
@@ -345,44 +342,25 @@
 				});
 				if(ageout){
 					
-					this.cards.age.panels.table.el.innerHTML = '<table><tr><th>Age bracket</th><th>Number</th></tr>'+ageout+'</table>';
+					this.cards.age.panels.table.el.innerHTML = '<table><tr><th>Age bracket</th><th>Number</th><th>%</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
 
-	console.log('here',this.cards.age);
-					var data = {
-						labels: agelbl,
-						series: agedat
-					};
-					var options = {
-						seriesBarDistance: 30,
-						axisY: {
-							scaleMinSpace: 40
-						}
-					};
-					var responsiveOptions = [
-						['screen and (max-width: 640px)', {
-							seriesBarDistance: 5,
-							axisX: {
-								labelInterpolationFnc: function (value) {
-									return value[0];
-								}
-							}
-						}]
-					];
-					var svg = new Chartist.Bar(this.cards.age.panels.chart.el, data, options, responsiveOptions).on('draw', function(data) {
-						if(data.type === 'bar') {
-							data.element.attr({
-								style: 'stroke-width: 30px'
-							});
-						}
+					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false});
+					chart.setData({
+						labels: agelables,
+						series: ageseries
+					}).draw();
+					chart.on('barclick',function(e,a){
+						console.log('barclick',e,this.data.series[e.series].data[e.bin]);
+					}).on('barover',function(e,a){
+						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
+						info = document.createElement('div');
+						info.classList.add('balloon');
+						info.innerHTML = this.data.series[e.series].label+": "+this.data.series[e.series].data[e.bin];
+						e.event.originalTarget.appendChild(info);
+					}).on('mouseleave',function(e){
+						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
 					});
-					key = this.cards.age.panels.chart.el.parentNode.querySelector('.key');
-					if(!key){
-						key = document.createElement('div');
-						key.classList.add('key');
-						this.cards.age.panels.chart.el.insertAdjacentElement('afterend',key);
-					}
-					key.innerHTML = '<ul class="key"><li class="ct-series-a"><span></span> Leeds</li><li class="ct-series-b"><span></span> Employer</li></ul>';
-					console.log(key)
+					console.log(chart);
 				}
 
 				// Update numbers
