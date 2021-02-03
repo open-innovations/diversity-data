@@ -375,7 +375,8 @@
 				});
 				if(ageout){
 					
-					this.cards.age.panels.table.el.innerHTML = '<table><tr><th rowspan="2">Age bracket</th><th colspan="2">Leeds</th><th colspan="2">Employer</th></tr><tr><th>Number</th><th>%</th><th>Number</th><th>%</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
+					this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
+					tableSortJs();
 					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false});
 					chart.setData(age).draw();
 					chart.on('barover',function(e,a){

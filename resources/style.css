@@ -144,6 +144,13 @@ article p:last-child { margin-bottom: 0; }
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
 .key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
 
+table { width: 100%; }
+table th { background: #ddd; color: black; }
+table td, table th { border: 1px solid #222; padding: 0.25em 0.5em; color: black; }
+table tr:hover td { background: rgba(249, 188, 38,0.4); }
+td.num { text-align: center; }
+.sorted-dn::after { content: "▼"; }
+.sorted-up::after { content: "▲"; }
 footer a,footer a:visited { color: inherit; }
 
 
