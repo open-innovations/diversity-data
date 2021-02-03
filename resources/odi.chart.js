@@ -122,8 +122,7 @@
 	BarChart.prototype.draw = function(){
 
 		if(!this.el || !this.parent.data) return this;
-		var id = (this.el.getAttribute('id')||"").replace(/^([^\s]+).*$/,function(m,p1){return p1;});
-		var b,v,s,nseries,series,i,mx,mn,el;
+		var nseries,b,c,g,h,i,o,p,r,s,v,mx,mn,el,grid,output,key,nval,_parent,columns,bits,l,hbot,htop,hbar,wbar,lbar,value,cls,lbls,lh;
 
 		nseries = this.parent.data.series.length;
 
@@ -145,7 +144,7 @@
 			el.querySelector('.barchart-data').style['grid-template-columns'] = 'repeat('+nval+',1fr)';
 
 			// Set the height of the graph
-			h = this.el.offsetHeight;
+			h = 100;
 
 			// Find the min/max values
 			mx = 0;
@@ -161,14 +160,14 @@
 				mn = Math.min(mn,v);
 			}
 
+			r = mx-mn;
+
 			// Draw the grid
 			if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
-			var grid = this.getGrid(mn, mx);
-			var output = "";
-			var key,p;
-			var r = mx-mn;
+			grid = this.getGrid(mn, mx);
+			output = "";
 
-			for(var g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="bottom:'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g,{'units':this.attr.units}) : (this.attr.units || "")+this.formatNumber(g))+'</span></div>';
+			for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="bottom:'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g,{'units':this.attr.units}) : (this.attr.units || "")+this.formatNumber(g))+'</span></div>';
 			this.el.querySelector('.barchart-grid').innerHTML = output;
 
 			columns = el.querySelectorAll('.barchart-column');
@@ -185,11 +184,11 @@
 					c.addEventListener('click',function(e){
 						e.preventDefault();
 						_parent.trigger("columnclick",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin'))});
-					})
+					});
 					c.addEventListener('mouseover',function(e){
 						e.preventDefault();
 						_parent.trigger("columnover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin'))});
-					})
+					});
 					o.appendChild(c);
 					columns.push(c);
 				}
@@ -309,5 +308,6 @@
 		return {'min':t_min,'max':t_max,'inc':t_inc,'range':t_max-t_min};
 	};
 	
-	ODI.chart = function(target,attr){ console.log(target,attr);return new Chart(target,attr); }
+	ODI.chart = function(target,attr){ return new Chart(target,attr); };
+
 })(window || this);
