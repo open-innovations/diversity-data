@@ -151,8 +151,8 @@
 				this.year.setAttribute('id','year');
 				// Add change event to <select>
 				this.year.addEventListener('change', function(e){ _obj.update(); });
-				// Add the selector to the <header>
-				this.el.querySelector('header').appendChild(this.year);
+				// Add the selector to the <nav>
+				this.el.querySelector('.nav').appendChild(this.year);
 
 				return this;
 			}
