@@ -16,7 +16,6 @@
 
 	function Chart(target,attr){
 		var ver = "0.1.0";
-		console.log('chart',target,attr);
 		if(!target) return {};
 		this.target = target;
 		this.attr = attr || {};
@@ -26,7 +25,6 @@
 
 		this.version = function(){ return ver; };
 		this.id = chartcounter;
-
 	
 		this.setData = function(d){
 			this.data = d;

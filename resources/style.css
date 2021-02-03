@@ -136,13 +136,14 @@ article p:last-child { margin-bottom: 0; }
 	list-style: numeric;
 	margin: 1em;
 }
-.key { font-size:1em; }
+.key { font-size:1em; margin-top: 1em;}
 .barchart { height: 320px; }
-.barchart .barchart-data .barchart-column .bar.series-0 { background: #F9BC26; }
-.barchart .barchart-data .barchart-column .bar.series-1 { background: #2254F4; }
-.barchart .barchart-data .barchart-column .bar.series-2 { background: #2254F4; }
+.series-0 { background: #F9BC26!important; }
+.series-1 { background: #2254F4!important; }
+.series-2 { background: #2254F4; }
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
-.key li > span { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
+.key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
+
 footer a,footer a:visited { color: inherit; }
 
 

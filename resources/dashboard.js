@@ -165,6 +165,23 @@
 			this.el = document.getElementById('dashboard');
 			this.data = {};
 
+			var _obj = this;
+			function makeSelect(t,txt,html){
+				if(!_obj.selector) _obj.selector = {};
+				if(!_obj.selector[t]){
+					_obj.selector[t] = { 'lbl': document.createElement('label'), 'el':document.createElement('select') };
+					_obj.selector[t].lbl.setAttribute('for',t);
+					_obj.selector[t].lbl.innerHTML = txt;
+					_obj.selector[t].el.setAttribute('id',t);
+					if(html) _obj.selector[t].el.innerHTML = html;
+					// Add change event to <select>
+					_obj.selector[t].el.addEventListener('change', function(e){ _obj.update(); });
+					// Add the selector to the <nav>
+					_obj.el.querySelector('.nav').appendChild(_obj.selector[t].lbl);
+					_obj.el.querySelector('.nav').appendChild(_obj.selector[t].el);
+				}
+			}
+
 			this.init = function(attr){
 				if(!attr) attr = {};
 				
@@ -211,20 +228,10 @@
 					}
 					
 				});
+
+				makeSelect('year','Year:');
+				makeSelect('employer','Employer:');
 				
-				var _obj = this;
-				this.yearlbl = document.createElement('label');
-				this.yearlbl.setAttribute('for','year');
-				this.yearlbl.innerHTML = 'Year:';
-				this.year = document.createElement('select');
-				this.year.setAttribute('id','year');
-				// Add change event to <select>
-				this.year.addEventListener('change', function(e){ _obj.update(); });
-				// Add the selector to the <nav>
-				this.el.querySelector('.nav').appendChild(this.yearlbl);
-				this.el.querySelector('.nav').appendChild(this.year);
-
-
 				var cards = this.el.querySelectorAll(attr.cards||'.facet');
 				this.cards = {};
 				for(var i = 0; i < cards.length; i++){
@@ -235,18 +242,36 @@
 				return this;
 			}
 			
+			this.getEmployer = function(){
+				var employer = this.selector.employer.el.options[this.selector.employer.el.selectedIndex];
+				if(employer) employer = {'org':employer.getAttribute('data-org'),'div':employer.getAttribute('data-div')};
+				return employer;				
+			}
+			
+			
 			this.update = function(){
 
+				function formatEmployer(o,d){
+					return (o ? o+(d && d!="_none" ? ' ('+d+')' : '') : "");
+				}
 				var orgs = {};
+				var orgopts = '<option>Select an employer</option>';
+				var employer = this.getEmployer();
+
 				for(var i = 0; i < this.index.length; i++){
+					if(!this.index[i].organisation_division) this.index[i].organisation_division = "_none";
 					d = this.index[i];
 					org = (d.organisation);
-					div = (d.organisation_division||"_default");
+					div = (d.organisation_division||"_none");
 					if(!orgs[org]) orgs[org] = {};
-					if(!orgs[org][div]) orgs[org][div] = {};
+					if(!orgs[org][div]){
+						orgs[org][div] = {};
+						orgopts += '<option data-org="'+org+'" data-div="'+div+'"'+(employer && employer.org==org && employer.div==d.organisation_division ? ' selected="selected"' : '')+'>'+formatEmployer(org,d.organisation_division)+'</option>'
+					}
 					for(var r = 0; r < this.data[d.URL].length; r++){
 						if(this.data[d.URL][r].organisation == org){
-							if(!d.organisation_division || this.data[d.URL][r].organisation_division==div){
+							if(!this.data[d.URL][r].organisation_division) this.data[d.URL][r].organisation_division = "_none";
+							if(this.data[d.URL][r].organisation_division==div){
 								if(typeof this.data[d.URL][r].published==="string"){
 									orgs[org][div][this.data[d.URL][r].published] = this.data[d.URL][r];
 									orgs[org][div][this.data[d.URL][r].published].URL = d.URL;
@@ -255,10 +280,11 @@
 						}
 					}
 				}
+
 				// Default to this year
 				var yy = (new Date()).getFullYear();
 				// If the selector exists, use the selected value
-				if(this.year && this.year.value) yy = this.year.value;
+				if(this.selector.year.el && this.selector.year.el.value) yy = this.selector.year.el.value;
 				var employees = 0;
 				var n = 0;
 				var m,o,d,dt;
@@ -279,7 +305,9 @@
 				miny = parseInt(dates.min.substr(0,4));
 				maxy = parseInt(dates.max.substr(0,4));
 				for(y = maxy; y >= miny ; y--) opt += '<option value="'+y+'"'+(y==yy ? ' selected="selected"':'')+'>'+y+'</option>';
-				this.year.innerHTML = opt;
+				this.selector.year.el.innerHTML = opt;
+				this.selector.employer.el.innerHTML = orgopts;
+				employer = this.getEmployer();
 				// Limit selected year to the range of the data
 				yy = Math.max(Math.min(yy,maxy),miny);
 
@@ -293,7 +321,7 @@
 							if(dt < dates.min) dates.min = dt;
 							if(dt > dates.max) dates.max = dt;
 						}
-						if(m && orgs[o][d][m].employees) keep.push(orgs[o][d][m]);
+						if(m && orgs[o][d][m].employees) keep.push(JSON.parse(JSON.stringify(orgs[o][d][m])));
 					}
 				}
 
@@ -309,6 +337,7 @@
 					"total":{"keys":["age_total"],"n":{"total":0,"specific":0}},
 					"undisclosed":{"keys":["age_undisclosed"],"n":{"total":0,"specific":0}}
 				}
+
 				for(i = 0; i < keep.length; i++){
 					employees += keep[i].employees;
 					dt = new Date(keep[i].published);
@@ -316,24 +345,28 @@
 						for(k = 0 ; k < ages[a].keys.length; k++){
 							ky = ages[a].keys[k];
 							if(typeof keep[i][ky]==="number"){
-								ages[a].n.total += keep[i][ky]; 
-							 
+								ages[a].n.total += keep[i][ky];
+								if(employer && keep[i].organisation==employer.org && (!keep[i].organisation_division || keep[i].organisation_division==employer.div)) ages[a].n.specific += keep[i][ky];
 							}
 						}
 					}
-					summary += '<li><a href="'+keep[i].URL+'">'+keep[i].organisation+(keep[i].organisation_division ? ' ('+keep[i].organisation_division+')' : '')+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
+					summary += '<li><a href="'+keep[i].URL+'">'+formatEmployer(keep[i].organisation,keep[i].organisation_division)+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
 					n++;
 				}
-				
 				ageout = "";
-				ageseries = [{'label':'Leeds','data':[]},{'label':'Employer','data':[]}];
-				agelables = [];
+				age = {
+					'series': [{'label':'Leeds','data':[]},{'label':'Employer','data':[]}],
+					'labels': []
+				}
 				for(a in ages){
-					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td><td>'+Math.round(100*ages[a].n.total/ages.total.n.total)+'</td></tr>';
+					totpc = (ages.total.n.total > 0 ? (100*ages[a].n.total/ages.total.n.total) : 0);
+					spepc = (ages.total.n.specific > 0 ? 100*(ages[a].n.specific||0)/ages.total.n.specific : 0);
+					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td><td>'+(totpc).toFixed(1)+'</td><td>'+ages[a].n.specific+'</td><td>'+(spepc).toFixed(1)+'</td></tr>';
 					if(a!="total" && a!="undisclosed"){
-						agelables.push(a);
-						ageseries[0].data.push(ages[a].n.total);
-						ageseries[1].data.push(ages[a].n.total);
+						age.labels.push(a);
+						// Show percentages
+						age.series[0].data.push(totpc);
+						age.series[1].data.push(spepc);
 					}
 				}
 				this.cards.age.addPanels({
@@ -342,16 +375,10 @@
 				});
 				if(ageout){
 					
-					this.cards.age.panels.table.el.innerHTML = '<table><tr><th>Age bracket</th><th>Number</th><th>%</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
-
+					this.cards.age.panels.table.el.innerHTML = '<table><tr><th rowspan="2">Age bracket</th><th colspan="2">Leeds</th><th colspan="2">Employer</th></tr><tr><th>Number</th><th>%</th><th>Number</th><th>%</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
 					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false});
-					chart.setData({
-						labels: agelables,
-						series: ageseries
-					}).draw();
-					chart.on('barclick',function(e,a){
-						console.log('barclick',e,this.data.series[e.series].data[e.bin]);
-					}).on('barover',function(e,a){
+					chart.setData(age).draw();
+					chart.on('barover',function(e,a){
 						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
 						info = document.createElement('div');
 						info.classList.add('balloon');
@@ -360,13 +387,23 @@
 					}).on('mouseleave',function(e){
 						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
 					});
-					console.log(chart);
+					key = this.cards.age.el.querySelector('.key');
+					if(!key){
+						key = document.createElement('ul');
+						key.classList.add('key');
+						key.innerHTML = '<li><span class="series-0 key-item"></span> <span class="label">Leeds Employers</span></li><li><span class="series-1 key-item"></span> <span class="label">Employer</span></li>';
+						this.cards.age.panels.chart.el.appendChild(key);
+					}
+					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers ('+ages.total.n.total.toLocaleString()+')';
+					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> ('+ages.total.n.specific.toLocaleString()+')';
 				}
+				
 
 				// Update numbers
 				document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-				document.querySelector('#employees .number').innerHTML = employees;
-				document.querySelector('#organisations .number').innerHTML = n;
+				document.querySelector('#employees .number').innerHTML = employees.toLocaleString();
+				document.querySelector('#organisations .number').innerHTML = n.toLocaleString();
+				document.querySelectorAll('.employer').forEach(function(e){ if(employer){ e.innerHTML = formatEmployer(employer.org,employer.div); } });
 				if(summary) document.querySelector('#sources ul').innerHTML = summary;
 			}
 

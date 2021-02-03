@@ -33,7 +33,7 @@
 }
 .barchart .barchart-data .barchart-column { position: relative; height: 100%; }
 .barchart .barchart-data .barchart-column:hover { background: rgba(0,0,0,0.1); }
-.barchart .barchart-data .barchart-column .bar { background: #FF7F29; position: absolute; width: 100%; }
+.barchart .barchart-data .barchart-column .bar { background: #FF7F29; position: absolute; width: 100%; transition: all 0.3s ease-in; }
 .barchart .barchart-data .barchart-column .bar.series-0 { background-color: #FF6700; }
 .barchart .barchart-data .barchart-column .bar.series-1 { background-color: #F9BC26; }
 .barchart .barchart-data .barchart-column .category-label {
