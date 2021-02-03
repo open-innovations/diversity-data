@@ -169,7 +169,8 @@
 			function makeSelect(t,txt,html){
 				if(!_obj.selector) _obj.selector = {};
 				if(!_obj.selector[t]){
-					_obj.selector[t] = { 'lbl': document.createElement('label'), 'el':document.createElement('select') };
+					_obj.selector[t] = { 'lbl': document.createElement('label'), 'el':document.createElement('select'),'holder':document.createElement('div') };
+					_obj.selector[t].holder.classList.add('item');
 					_obj.selector[t].lbl.setAttribute('for',t);
 					_obj.selector[t].lbl.innerHTML = txt;
 					_obj.selector[t].el.setAttribute('id',t);
@@ -177,8 +178,9 @@
 					// Add change event to <select>
 					_obj.selector[t].el.addEventListener('change', function(e){ _obj.update(); });
 					// Add the selector to the <nav>
-					_obj.el.querySelector('.nav').appendChild(_obj.selector[t].lbl);
-					_obj.el.querySelector('.nav').appendChild(_obj.selector[t].el);
+					_obj.selector[t].holder.appendChild(_obj.selector[t].lbl);
+					_obj.selector[t].holder.appendChild(_obj.selector[t].el);
+					_obj.el.querySelector('.nav').appendChild(_obj.selector[t].holder);
 				}
 			}
 

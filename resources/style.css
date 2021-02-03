@@ -95,6 +95,7 @@ table td, table th { border:1px solid #444; border-collapse: collapse; padding: 
 form label { margin-right: 0.25em; }
 input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
 form + section { margin-top: 1em; }
+form .item { display: inline-block; margin-right: 1em; }
 .facet { padding-top: 1em; }
 .facet > div { min-height: 3em; position: relative; }
 .facet p, .facet summary { color: #222; margin-bottom: 1em; }
