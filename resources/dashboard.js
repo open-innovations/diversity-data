@@ -333,9 +333,11 @@
 				agelbl = [];
 				for(a in ages){
 					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td></tr>';
-					agelbl.push(a);
-					agedat[0].push(ages[a].n.total);
-					agedat[1].push(ages[a].n.total);
+					if(a!="total" && a!="undisclosed"){
+						agelbl.push(a);
+						agedat[0].push(ages[a].n.total);
+						agedat[1].push(ages[a].n.total);
+					}
 				}
 				this.cards.age.addPanels({
 					'chart':{'label':'Barchart','class':'output chart'},
@@ -366,13 +368,21 @@
 							}
 						}]
 					];
-					new Chartist.Bar(this.cards.age.panels.chart.el, data, options, responsiveOptions).on('draw', function(data) {
+					var svg = new Chartist.Bar(this.cards.age.panels.chart.el, data, options, responsiveOptions).on('draw', function(data) {
 						if(data.type === 'bar') {
 							data.element.attr({
 								style: 'stroke-width: 30px'
 							});
 						}
 					});
+					key = this.cards.age.panels.chart.el.parentNode.querySelector('.key');
+					if(!key){
+						key = document.createElement('div');
+						key.classList.add('key');
+						this.cards.age.panels.chart.el.insertAdjacentElement('afterend',key);
+					}
+					key.innerHTML = '<ul class="key"><li class="ct-series-a"><span></span> Leeds</li><li class="ct-series-b"><span></span> Employer</li></ul>';
+					console.log(key)
 				}
 
 				// Update numbers

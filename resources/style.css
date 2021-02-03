@@ -136,11 +136,14 @@ article p:last-child { margin-bottom: 0; }
 	list-style: numeric;
 	margin: 1em;
 }
-.chart { height: 300px; }
+.key { font-size:1em; }
+.chart { height: 320px; }
 .chart .ct-grid.ct-horizontal { display: none; }
-.chart .ct-series-a .ct-bar { stroke: #F9BC26; }
-.chart .ct-series-b .ct-bar { stroke: #2254F4; }
-
+.chart .ct-series-a .ct-bar, .key .ct-series-a > span { stroke: #F9BC26; background: #F9BC26; }
+.chart .ct-series-b .ct-bar, .key .ct-series-b > span { stroke: #2254F4; background: #2254F4; }
+.chart .ct-series-c .ct-bar, .key .ct-series-c > span { stroke: #2254F4; background: #2254F4; }
+.key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
+.key li > span { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
 footer a,footer a:visited { color: inherit; }
 
 
