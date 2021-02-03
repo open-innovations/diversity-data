@@ -88,9 +88,10 @@ table td, table th { border:1px solid #444; border-collapse: collapse; padding: 
 input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
 section { margin-top: 1em; }
 .facet { padding-top: 1em; }
-.facet > div { background: rgb(248, 248, 248); border: 1px solid rgb(243, 242, 241); min-height: 3em; position: relative; }
+.facet > div { min-height: 3em; position: relative; }
 .facet p { color: rgb(107, 114, 118); }
 .facet h2 { margin: 0 0 0.5em 0; }
+.grey { background: rgb(248, 248, 248); border: 1px solid rgb(243, 242, 241); }
 #dashboard { background: white; color: #222; }
 /* Use CSS Grid */
 .grid {
@@ -115,7 +116,8 @@ section { margin-top: 1em; }
 	font-size: 1.25em;
 	font-weight: bold;
 }
-.grid.links a { text-decoration: none; }
+.grid.links a { text-decoration: none; color: inherit; }
+.grid.links a:hover { border-right: 4px solid #1DD3A7; }
 #sources ul {
 	list-style: numeric;
 	margin: 1em;
