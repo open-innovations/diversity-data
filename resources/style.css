@@ -85,6 +85,7 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 .doublepadded { padding: 2em; }
 
 .alpha { font-size: 0.5em; position: relative; top: -0.8em; left: 0.2em; padding: 0.1em 0.2em; background: #1DD3A7; }
+header { border-bottom: 8px solid #1DD3A7; }
 header h1 { margin-bottom: 0; }
 table td, table th { border:1px solid #444; border-collapse: collapse; padding: 0.25em 0.5em; }
 input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
@@ -118,8 +119,8 @@ section { margin-top: 1em; }
 	font-size: 1.25em;
 	font-weight: bold;
 }
-.grid.links a { text-decoration: none; color: inherit; }
-.grid.links a:hover { border-right: 4px solid #1DD3A7; }
+.grid.links a { text-decoration: none; color: inherit; border-bottom: 4px solid transparent; }
+.grid.links a:hover,.grid.links a:focus { border-bottom: 4px solid #1DD3A7; }
 #sources ul {
 	list-style: numeric;
 	margin: 1em;

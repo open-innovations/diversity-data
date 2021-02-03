@@ -248,6 +248,7 @@
 				if(ageout) document.querySelector('#age .output').innerHTML = '<table><tr><th>Age bracket</th><th>Number</th></tr>'+ageout+'</table>';
 
 				// Update numbers
+				document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 				document.querySelector('#employees .number').innerHTML = employees;
 				document.querySelector('#organisations .number').innerHTML = n;
 				if(summary) document.querySelector('#sources ul').innerHTML = summary;
