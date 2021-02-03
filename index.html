@@ -4,8 +4,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8" />
 	<title>Diversity Data Dashboard</title>
+	<script src="resources/chartist.min.js"></script>
 	<script src="resources/dashboard.js"></script>
+	<link rel="StyleSheet" href='resources/fonts/open-sans/open-sans.css' type='text/css'>
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
+	<link rel="StyleSheet" href="resources/chartist.min.css" type="text/css" />
 </head>
 <body class="b1-bg">
 	<header class="padded b1-bg">
@@ -13,7 +16,7 @@
 	</header>
 	<div class="main doublepadded" id="dashboard">
 		<p>Data last updated on <span class="lastupdated"></span></p>
-		<div class="nav"></div>
+		<form class="nav"></form>
 		<section>
 			<ul class="grid">
 				<li id="organisations" class="grey padded">
@@ -40,49 +43,50 @@
 		<section>
 			<article class="facet" id="age">
 				<div class="doublepadded grey">
-					<h2>Age</h2>
-					<div class="output"></div>
+					<header><h2>Age</h2></header>
+					<summary>Looking at a break down of age.</summary>
+					<p>Footnote</p>
 				</div>
 			</article>
 
 			<article class="facet" id="carers">
 				<div class="doublepadded grey">
-					<h2>Carers</h2>
+					<header><h2>Carers</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>
 
 			<article class="facet" id="disability">
 				<div class="doublepadded grey">
-					<h2>Disability</h2>
+					<header><h2>Disability</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>
 
 			<article class="facet" id="ethnicity">
 				<div class="doublepadded grey">
-					<h2>Ethnicity</h2>
+					<header><h2>Ethnicity</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>
 
 			<article class="facet" id="gender">
 				<div class="doublepadded grey">
-					<h2>Gender</h2>
+					<header><h2>Gender</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>
 
 			<article class="facet" id="religion">
 				<div class="doublepadded grey">
-					<h2>Religion</h2>
+					<header><h2>Religion</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>
 
 			<article class="facet" id="sexuality">
 				<div class="doublepadded grey">
-					<h2>Sexuality</h2>
+					<header><h2>Sexuality</h2></header>
 					<div class="output"></div>
 				</div>
 			</article>

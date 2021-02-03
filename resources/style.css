@@ -84,19 +84,23 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 .padded-bottom { padding: 1em; margin-bottom: 1em; }
 .doublepadded { padding: 2em; }
 
-.alpha { font-size: 0.5em; position: relative; top: -0.8em; left: 0.2em; padding: 0.1em 0.2em; background: #1DD3A7; }
-header { border-bottom: 8px solid #1DD3A7; }
-header h1 { margin-bottom: 0; }
+
+
+
+body { font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif; }
+.alpha { margin-left: 0.25em; padding: 0.1em 0.2em; background: #1DD3A7; }
+body > header { border-bottom: 8px solid #1DD3A7; }
+body > header h1 { margin-bottom: 0; line-height: 1em; }
 table td, table th { border:1px solid #444; border-collapse: collapse; padding: 0.25em 0.5em; }
+form label { margin-right: 0.25em; }
 input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
-section { margin-top: 1em; }
+form + section { margin-top: 1em; }
 .facet { padding-top: 1em; }
 .facet > div { min-height: 3em; position: relative; }
-.facet p { color: rgb(107, 114, 118); }
+.facet p, .facet summary { color: #222; margin-bottom: 1em; }
 .facet h2 { margin: 0 0 0.5em 0; }
 .grey { background: rgb(248, 248, 248); border: 1px solid rgb(243, 242, 241); }
 #dashboard { background: white; color: #222; }
-/* Use CSS Grid */
 .grid {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -117,15 +121,31 @@ section { margin-top: 1em; }
 	grid-template-columns: repeat(7, 1fr);
 	grid-gap: 0.5em;
 	font-size: 1.25em;
-	font-weight: bold;
+	margin-bottom: 0;
 }
-.grid.links a { text-decoration: none; color: inherit; border-bottom: 4px solid transparent; }
-.grid.links a:hover,.grid.links a:focus { border-bottom: 4px solid #1DD3A7; }
+.grid.links a, .tabs button { text-decoration: none; color: inherit; font-weight: 600; font-family: inherit; border: 0px; border-bottom: 4px solid transparent; }
+.grid.links a { background: rgb(230, 230, 230); }
+.grid.links a:hover,.grid.links a:focus { border-bottom-color: #1DD3A7; }
+.tabs button { background: transparent; }
+.tabs .open button, .tabs button:focus, .tabs button:hover { border-bottom-color: #1DD3A7; outline: none; background: transparent; }
+.tabs button:focus, .tabs button:hover { outline: 1px solid #1DD3A7; background: transparent!important; color: inherit!important; }
+ul.tabs > li { display: inline-block; margin-right: 0.5em; }
+article article { display: none; padding: 1em; }
+article article.open { display: block; }
+article p:last-child { margin-bottom: 0; }
 #sources ul {
 	list-style: numeric;
 	margin: 1em;
 }
+.chart { height: 300px; }
+.chart .ct-grid.ct-horizontal { display: none; }
+.chart .ct-series-a .ct-bar { stroke: #F9BC26; }
+.chart .ct-series-b .ct-bar { stroke: #2254F4; }
+
 footer a,footer a:visited { color: inherit; }
+
+
+
 
 @media only screen and (max-width: 1080px) {
 	.grid.links { grid-template-columns: repeat(4, 1fr); grid-gap: 0.25em; }

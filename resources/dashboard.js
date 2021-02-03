@@ -37,6 +37,16 @@
 
 	ODI.ready(function(){
 
+		// A non-jQuery dependent function to get a style
+		function getStyle(el, styleProp) {
+			if (typeof window === 'undefined') return;
+			var style;
+			if(!el) return style;
+			if (el.currentStyle) style = el.currentStyle[styleProp];
+			else if (window.getComputedStyle) style = document.defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+			if (style && style.length === 0) style = null;
+			return style;
+		}
 		/**
 		 * CSVToArray parses any String of Data including '\r' '\n' characters,
 		 * and returns an array with the rows of data.
@@ -95,12 +105,68 @@
 			return {'rows':rows,'data':data}; // Return the parsed data Array
 		}
 
-		function Dashboard(){
+		function Card(attr){
+			if(!attr) attr = {};
+			if(attr.el) this.el = attr.el;
+			this.o = this.el.querySelector('.output');
+			this.header = this.el.querySelector('header');
+			this.addPanels = function(panels){
+				var i,c,end,_obj;
+				if(!this.nav && panels){
+					this.nav = {'el':document.createElement('ul'),'tabs':{}};
+					this.panels = {};
+					this.nav.el.classList.add('tabs');
+					end = this.header;
+					if(this.el.querySelector('summary')) end = this.el.querySelector('summary');
+					end.insertAdjacentElement('afterend', this.nav.el);
+					end = this.nav.el;
+					i = 0;
+					_obj = this;
+					function togglePanels(e){
+						id = e.target.getAttribute('data-id');
+						_obj.el.querySelectorAll('.open').forEach(function(e){ e.classList.remove('open') });
+						for(pid in _obj.panels){
+							if(pid==id){
+								_obj.nav.tabs[pid].el.classList.add('open');
+								_obj.panels[pid].el.classList.add('open');
+							}								
+						}
+					}
+					for(id in panels){
+						b = document.createElement('li');
+						b.innerHTML = '<button>'+panels[id].label+'</button>';
+						b.querySelector('button').setAttribute('data-id',id);
+						this.nav.tabs[id] = {'el':b};
+						this.nav.el.appendChild(b);
+						if(i==0) b.classList.add('open');
+						// Create an output area
+						o = document.createElement('article');
+						// Add classes to the output area
+						if(panels[id]['class']){
+							cls = panels[id]['class'].split(/ /);
+							for(c = 0; c < cls.length; c++) o.classList.add(cls[c]);
+						}
+						if(i==0) o.classList.add('open');
+						b.addEventListener('click',togglePanels);
+						this.panels[id] = {'el':o};
+						// Add it after the header or previously added output areas
+						end.insertAdjacentElement('afterend',o);
+						end = o;
+						i++;
+					}
+				}
+				return this;
+			}
+			return this;
+		}
+
+		function Dashboard(attr){
 			
 			this.el = document.getElementById('dashboard');
 			this.data = {};
 
-			this.init = function(){
+			this.init = function(attr){
+				if(!attr) attr = {};
 				
 				ODI.ajax("leeds.csv",{
 					"this": this,
@@ -147,12 +213,24 @@
 				});
 				
 				var _obj = this;
+				this.yearlbl = document.createElement('label');
+				this.yearlbl.setAttribute('for','year');
+				this.yearlbl.innerHTML = 'Year:';
 				this.year = document.createElement('select');
 				this.year.setAttribute('id','year');
 				// Add change event to <select>
 				this.year.addEventListener('change', function(e){ _obj.update(); });
 				// Add the selector to the <nav>
+				this.el.querySelector('.nav').appendChild(this.yearlbl);
 				this.el.querySelector('.nav').appendChild(this.year);
+
+
+				var cards = this.el.querySelectorAll(attr.cards||'.facet');
+				this.cards = {};
+				for(var i = 0; i < cards.length; i++){
+					id = cards[i].getAttribute('id');
+					if(id) this.cards[id] = new Card({'el':cards[i]});
+				}
 
 				return this;
 			}
@@ -169,8 +247,10 @@
 					for(var r = 0; r < this.data[d.URL].length; r++){
 						if(this.data[d.URL][r].organisation == org){
 							if(!d.organisation_division || this.data[d.URL][r].organisation_division==div){
-								orgs[org][div][this.data[d.URL][r].published] = this.data[d.URL][r];
-								orgs[org][div][this.data[d.URL][r].published].URL = d.URL;
+								if(typeof this.data[d.URL][r].published==="string"){
+									orgs[org][div][this.data[d.URL][r].published] = this.data[d.URL][r];
+									orgs[org][div][this.data[d.URL][r].published].URL = d.URL;
+								}
 							}
 						}
 					}
@@ -188,8 +268,10 @@
 				for(o in orgs){
 					for(d in orgs[o]){
 						for(dt in orgs[o][d]){
-							if(dt < dates.min) dates.min = dt;
-							if(dt > dates.max) dates.max = dt;
+							if(dt){
+								if(dt < dates.min) dates.min = dt;
+								if(dt > dates.max) dates.max = dt;
+							}
 						}
 					}
 				}
@@ -217,15 +299,15 @@
 
 				n = 0;
 				var ages = {
-					"16-24":{"keys":["age_16-24"],"n":0},
-					"25-34":{"keys":["age_25-34"],"n":0},
-					"35-44":{"keys":["age_35-44"],"n":0},
-					"45-54":{"keys":["age_45-54"],"n":0},
-					"55-64":{"keys":["age_55-64"],"n":0},
-					"65-69":{"keys":["age_65-69"],"n":0},
-					"70+":{"keys":["age_70+"],"n":0},
-					"total":{"keys":["age_total"],"n":0},
-					"undisclosed":{"keys":["age_undisclosed"],"n":0}
+					"16-24":{"keys":["age_16-24"],"n":{"total":0,"specific":0}},
+					"25-34":{"keys":["age_25-34"],"n":{"total":0,"specific":0}},
+					"35-44":{"keys":["age_35-44"],"n":{"total":0,"specific":0}},
+					"45-54":{"keys":["age_45-54"],"n":{"total":0,"specific":0}},
+					"55-64":{"keys":["age_55-64"],"n":{"total":0,"specific":0}},
+					"65-69":{"keys":["age_65-69"],"n":{"total":0,"specific":0}},
+					"70+":{"keys":["age_70+"],"n":{"total":0,"specific":0}},
+					"total":{"keys":["age_total"],"n":{"total":0,"specific":0}},
+					"undisclosed":{"keys":["age_undisclosed"],"n":{"total":0,"specific":0}}
 				}
 				for(i = 0; i < keep.length; i++){
 					employees += keep[i].employees;
@@ -233,19 +315,65 @@
 					for(a in ages){
 						for(k = 0 ; k < ages[a].keys.length; k++){
 							ky = ages[a].keys[k];
-							if(typeof keep[i][ky]==="number") ages[a].n += keep[i][ky]; 
+							if(typeof keep[i][ky]==="number"){
+								ages[a].n.total += keep[i][ky]; 
+							 
+							}
 						}
 					}
 					summary += '<li><a href="'+keep[i].URL+'">'+keep[i].organisation+(keep[i].organisation_division ? ' ('+keep[i].organisation_division+')' : '')+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
 					n++;
 				}
-				console.log(ages)
+
+
+
 				
 				ageout = "";
+				agedat = [[],[]];
+				agelbl = [];
 				for(a in ages){
-					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n+'</td></tr>';
+					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td></tr>';
+					agelbl.push(a);
+					agedat[0].push(ages[a].n.total);
+					agedat[1].push(ages[a].n.total);
 				}
-				if(ageout) document.querySelector('#age .output').innerHTML = '<table><tr><th>Age bracket</th><th>Number</th></tr>'+ageout+'</table>';
+				this.cards.age.addPanels({
+					'chart':{'label':'Barchart','class':'output chart'},
+					'table':{'label':'Data','class':'output'}
+				});
+				if(ageout){
+					
+					this.cards.age.panels.table.el.innerHTML = '<table><tr><th>Age bracket</th><th>Number</th></tr>'+ageout+'</table>';
+
+	console.log('here',this.cards.age);
+					var data = {
+						labels: agelbl,
+						series: agedat
+					};
+					var options = {
+						seriesBarDistance: 30,
+						axisY: {
+							scaleMinSpace: 40
+						}
+					};
+					var responsiveOptions = [
+						['screen and (max-width: 640px)', {
+							seriesBarDistance: 5,
+							axisX: {
+								labelInterpolationFnc: function (value) {
+									return value[0];
+								}
+							}
+						}]
+					];
+					new Chartist.Bar(this.cards.age.panels.chart.el, data, options, responsiveOptions).on('draw', function(data) {
+						if(data.type === 'bar') {
+							data.element.attr({
+								style: 'stroke-width: 30px'
+							});
+						}
+					});
+				}
 
 				// Update numbers
 				document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
@@ -254,7 +382,7 @@
 				if(summary) document.querySelector('#sources ul').innerHTML = summary;
 			}
 
-			return this.init();
+			return this.init(attr);
 		}
 		
 		var dash = new Dashboard();
