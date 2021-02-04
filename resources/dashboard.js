@@ -352,7 +352,7 @@
 							}
 						}
 					}
-					summary += '<li><a href="'+keep[i].URL+'">'+formatEmployer(keep[i].organisation,keep[i].organisation_division)+' updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString()+'</time></a></li>';
+					summary += '<li><a href="'+keep[i].URL+'">'+formatEmployer(keep[i].organisation,keep[i].organisation_division)+'</a> updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time></li>';
 					n++;
 				}
 				ageout = "";

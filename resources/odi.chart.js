@@ -28,7 +28,6 @@
 	
 		this.setData = function(d){
 			this.data = d;
-			console.log('setData',d)
 			return this;
 		};
 	
@@ -152,6 +151,8 @@
 			}
 
 			r = mx-mn;
+			// Fix for zero range
+			if(r == 0) r = 1;
 
 			// Draw the grid
 			if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
