@@ -377,7 +377,7 @@
 				});
 				if(ageout){
 					
-					this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+ageout+'</table><p>Numbers are rounded so may not add up to 100%</p>';
+					this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+ageout+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 					tableSortJs();
 					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false});
 					chart.setData(age).draw();
@@ -392,13 +392,14 @@
 					});
 					key = this.cards.age.el.querySelector('.key');
 					if(!key){
-						key = document.createElement('ul');
+						key = document.createElement('div');
 						key.classList.add('key');
-						key.innerHTML = '<li><span class="series-0 key-item"></span> <span class="label">Leeds Employers</span></li><li><span class="series-1 key-item"></span> <span class="label">Employer</span></li>';
+						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Leeds Employers</span></li><li><span class="series-1 key-item"></span> <span class="label">Employer</span></li></ul><p class="extranotes"></p>';
 						this.cards.age.panels.chart.el.appendChild(key);
 					}
-					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers ('+ages.total.n.total.toLocaleString()+')';
-					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> ('+ages.total.n.specific.toLocaleString()+')';
+					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers - '+ages.total.n.total.toLocaleString()+' employee'+(ages.total.n.total==1?'':'s')+' total';
+					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> - '+ages.total.n.specific.toLocaleString()+' employee'+(ages.total.n.specific==1?'':'s')+' total';
+					key.querySelector('.extranotes').innerHTML = (employees>ages.total.n.total ? '<p>There are '+(employees-ages.total.n.total).toLocaleString()+' employees without age data':'');
 				}
 
 				// Update numbers

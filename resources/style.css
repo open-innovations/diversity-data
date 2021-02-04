@@ -133,6 +133,7 @@ ul.tabs > li { display: inline-block; margin-right: 0.5em; }
 article article { display: none; padding: 1em 0; }
 article article.open { display: block; }
 article p:last-child { margin-bottom: 0; }
+article article p { margin-top: 1em; }
 #sources ul {
 	list-style: numeric;
 	margin: 1em;
