@@ -14,6 +14,17 @@
 	
 	var chartcounter = 0;
 
+	// A non-jQuery dependent function to get a style
+	function getStyle(el, styleProp) {
+		if (typeof window === 'undefined') return;
+		var style;
+		if(!el) return style;
+		if (el.currentStyle) style = el.currentStyle[styleProp];
+		else if (window.getComputedStyle) style = document.defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+		if (style && style.length === 0) style = null;
+		return style;
+	}
+
 	function Chart(target,attr){
 		var ver = "0.1.0";
 		if(!target) return {};
@@ -30,7 +41,7 @@
 			this.data = d;
 			return this;
 		};
-	
+
 		this.draw = function(){
 			if(this.chart && typeof this.chart.draw==="function") this.chart.draw();
 			return this;
@@ -96,7 +107,7 @@
 		this.events = {resize:""};
 		this.attr.units = (typeof _obj.attr.units==="undefined") ? "" : _obj.attr.units;
 		this.attr.formatX = (typeof _obj.attr.formatX==="undefined") ? (typeof _obj.attr.formatKey==="function" ? _obj.attr.formatKey : function(key){ return key; }) : _obj.attr.formatX;
-		this.attr.formatY = (typeof _obj.attr.formatY==="undefined") ? function(v){ return _obj.attr.units+v; } : _obj.attr.formatY;
+		this.attr.formatY = (typeof _obj.attr.formatY==="undefined") ? function(v){ return v+_obj.attr.units; } : _obj.attr.formatY;
 		this.attr.formatBar = (typeof this.attr.formatBar==="undefined") ? function(key,val,series){ return ""; } : _obj.attr.formatBar;
 		this.parent = (typeof this.attr.parent==="undefined") ? _obj : _obj.attr.parent;
 
@@ -130,8 +141,12 @@
 				this.el.addEventListener('mouseleave',function(e){ e.preventDefault(); _parent.trigger("mouseleave",{event:e}); });
 				this.el.addEventListener('mouseover',function(e){ e.preventDefault(); _parent.trigger("mouseover",{event:e}); });
 			}
+			;
+			if(this.attr.dir=="horizontal") el.classList.add('horizontal');
+			else el.classList.remove('horizontal');
+
 			// Set number of columns
-			el.querySelector('.barchart-data').style['grid-template-columns'] = 'repeat('+nval+',1fr)';
+			el.querySelector('.barchart-data').style['grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')] = 'repeat('+nval+',1fr)';
 
 			// Set the height of the graph
 			h = 100;
@@ -159,7 +174,7 @@
 			grid = this.getGrid(mn, mx);
 			output = "";
 
-			for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="bottom:'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g,{'units':this.attr.units}) : (this.attr.units || "")+this.formatNumber(g))+'</span></div>';
+			for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="'+(this.attr.dir=="horizontal" ? 'left':'bottom')+':'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g,{'units':this.attr.units}) : this.formatNumber(g)+(this.attr.units || ""))+'</span></div>';
 			this.el.querySelector('.barchart-grid').innerHTML = output;
 
 			columns = el.querySelectorAll('.barchart-column');
@@ -254,20 +269,27 @@
 					bits[s].setAttribute('data-bin',i);
 					bits[s].setAttribute('data-series',s);
 					// Set style
-					bits[s].style.height = hbar+"%";
-					bits[s].style.top = htop+"%";
-					bits[s].style.left = lbar+"%";
-					bits[s].style.width = wbar+"%";
+					if(this.attr.dir=="horizontal"){
+						bits[s].style.width = hbar+"%";
+						bits[s].style.right = htop+"%";
+						bits[s].style.top = lbar+"%";
+						bits[s].style.height = wbar+"%";
+					}else{
+						bits[s].style.height = hbar+"%";
+						bits[s].style.top = htop+"%";
+						bits[s].style.left = lbar+"%";
+						bits[s].style.width = wbar+"%";
+					}
 				}
 			}
 
 			// Get the maximum label height
 			lbls = el.querySelectorAll('.barchart-data .category-label');
 			lh = 0;
-			lbls.forEach(function(e){ lh = Math.max(lh,e.offsetHeight); });
+			lbls.forEach(function(e){ lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? e.offsetWidth-parseInt(getStyle(e,'left')) : e.offsetHeight)); });
 			// Padding for labels
-			el.querySelector('.barchart-grid').style["margin-bottom"] = lh+"px";
-			el.querySelector('.barchart-data').style["margin-bottom"] = lh+"px";
+			el.querySelector('.barchart-grid').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
+			el.querySelector('.barchart-data').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
 
 		}
 		return this;

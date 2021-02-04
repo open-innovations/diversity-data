@@ -379,7 +379,7 @@
 					
 					this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+ageout+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 					tableSortJs();
-					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false});
+					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false,'units':'%'});
 					chart.setData(age).draw();
 					chart.on('barover',function(e,a){
 						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
