@@ -400,13 +400,12 @@
 					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers ('+ages.total.n.total.toLocaleString()+')';
 					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> ('+ages.total.n.specific.toLocaleString()+')';
 				}
-				
 
 				// Update numbers
 				document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 				document.querySelector('#employees .number').innerHTML = employees.toLocaleString();
 				document.querySelector('#organisations .number').innerHTML = n.toLocaleString();
-				document.querySelectorAll('.employer').forEach(function(e){ if(employer){ e.innerHTML = formatEmployer(employer.org,employer.div); } });
+				document.querySelectorAll('.employer').forEach(function(e){ if(employer){ e.innerHTML = formatEmployer(employer.org,employer.div)||"No employer selected"; } });
 				if(summary) document.querySelector('#sources ul').innerHTML = summary;
 			}
 
