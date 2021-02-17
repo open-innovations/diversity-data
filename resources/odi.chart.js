@@ -11,7 +11,7 @@
 			return destination;
 		};
 	}else G.extend = Object.extend;
-	
+
 	var chartcounter = 0;
 
 	// A non-jQuery dependent function to get a style
@@ -81,7 +81,7 @@
 		if(typeof this.events[ev]=="object"){
 			for(var i = 0 ; i < this.events[ev].length ; i++){
 				var e = G.extend(this.events[ev][i].e,args);
-				if(typeof this.events[ev][i].fn == "function") o.push(this.events[ev][i].fn.call(this,e));
+				if(typeof this.events[ev][i].fn == "function") o.push(this.events[ev][i].fn.call(e['this']||this,e));
 			}
 		}
 		if(o.length > 0) return o;
@@ -105,9 +105,8 @@
 		this.el = target;
 		this.attr = _obj.attr || {};
 		this.events = {resize:""};
-		this.attr.units = (typeof _obj.attr.units==="undefined") ? "" : _obj.attr.units;
-		this.attr.formatX = (typeof _obj.attr.formatX==="undefined") ? (typeof _obj.attr.formatKey==="function" ? _obj.attr.formatKey : function(key){ return key; }) : _obj.attr.formatX;
-		this.attr.formatY = (typeof _obj.attr.formatY==="undefined") ? function(v){ return v+_obj.attr.units; } : _obj.attr.formatY;
+		this.attr.formatX = (typeof _obj.attr.formatX==="undefined") ? function(key){ return key; } : _obj.attr.formatX;
+		this.attr.formatY = (typeof _obj.attr.formatY==="undefined") ? function(v){ return v; } : _obj.attr.formatY;
 		this.attr.formatBar = (typeof this.attr.formatBar==="undefined") ? function(key,val,series){ return ""; } : _obj.attr.formatBar;
 		this.parent = (typeof this.attr.parent==="undefined") ? _obj : _obj.attr.parent;
 
@@ -120,178 +119,207 @@
 		return this;
 	}
 
+
 	BarChart.prototype.draw = function(){
 
 		if(!this.el || !this.parent.data) return this;
-		var nseries,b,c,g,h,i,o,p,r,s,v,mx,mn,el,grid,output,key,nval,_parent,columns,bits,l,hbot,htop,hbar,wbar,lbar,value,cls,lbls,lh;
+		var d,nc,ns,nb,clusters,b,c,g,h,i,o,p,r,s,v,mx,mn,el,grid,output,key,nval,_parent,columns,series,l,hbot,htop,hbar,wbar,lbar,value,cls,lbls,lh,_obj;
 
-		nseries = this.parent.data.series.length;
+		d = this.parent.data;
+		if(typeof d!=="object"){
+			console.error('data is not an object');
+			return this;
+		}
 
-		if(nseries > 0){
-
-			nval = this.parent.data.series[0].data.length;
-
+		// Build the basic graph structure
+		el = this.el.querySelector('.barchart');
+		if(!el){
+			this.el.innerHTML = '<div class="barchart"><div class="barchart-grid"></div><div class="barchart-data"></div><div style="clear:both;"></div></div>';
 			el = this.el.querySelector('.barchart');
-			// Build the basic graph structure
-			if(!el){
-				this.el.innerHTML = '<div class="barchart"><div class="barchart-grid"></div><div class="barchart-data"></div><div style="clear:both;"></div></div>';
-				el = this.el.querySelector('.barchart');
-				// Add events to main chart area
-				_parent = this;
-				this.el.addEventListener('mouseleave',function(e){ e.preventDefault(); _parent.trigger("mouseleave",{event:e}); });
-				this.el.addEventListener('mouseover',function(e){ e.preventDefault(); _parent.trigger("mouseover",{event:e}); });
-			}
-			;
-			if(this.attr.dir=="horizontal") el.classList.add('horizontal');
-			else el.classList.remove('horizontal');
+			// Add events to main chart area
+			_parent = this.parent;
+			this.el.addEventListener('mouseleave',function(e){ e.preventDefault(); _parent.trigger("mouseleave",{event:e}); });
+			this.el.addEventListener('mouseover',function(e){ e.preventDefault(); _parent.trigger("mouseover",{event:e}); });
+		}
+		if(this.attr.dir=="horizontal") el.classList.add('horizontal');
+		else el.classList.remove('horizontal');
 
-			// Set number of columns
-			el.querySelector('.barchart-data').style['grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')] = 'repeat('+nval+',1fr)';
+		// The number of clusters
+		if(typeof d.length!=="number"){
+			d = [d];
+		}
+		nc = d.length;
+		ns = 0;
 
-			// Set the height of the graph
-			h = 100;
-
-			// Find the min/max values
-			mx = 0;
-			mn = (this.attr.ymin) ? this.attr.ymin : 0;
-			for(i = 0; i < nval; i++){
+		// Need to loop over clusters, loop over stacks and find min/max
+		mx = 0;
+		mn = (this.attr.ymin) ? this.attr.ymin : 0;
+		// For each cluster
+		for(c = 0 ; c < d.length; c++){
+			if(d[c].data){
+				if(d[c].stacked) ns = Math.max(ns,1);
+				else ns = Math.max(d[c].data.length,ns);
+				// For each series
 				v = 0;
-				for(s = 0; s < nseries; s++){
-					if(this.attr.stacked) v += this.parent.data.series[s].data[i];	// Add series values
-					else v = Math.max(v,this.parent.data.series[s].data[i]);	// Find maximum series value
+				for(s = 0; s < d[c].data.length; s++){
+					if(typeof d[c].data[s].v==="number"){
+						if(d[c].stacked) v += d[c].data[s].v;
+						else v = d[c].data[s].v;
+					}
+					// Find max and min values
+					mx = Math.max(mx,v);
+					mn = Math.min(mn,v);
 				}
-				// Find max and min values
-				mx = Math.max(mx,v);
-				mn = Math.min(mn,v);
+			}else{
+				console.warn('No data for cluster '+c);
 			}
+		}
+		r = mx-mn;
+		if(r == 0) r = 1; // Fix for zero range
 
-			r = mx-mn;
-			// Fix for zero range
-			if(r == 0) r = 1;
+		// Set number of columns
+		el.querySelector('.barchart-data').style['grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')] = 'repeat('+nc+',1fr)';
 
-			// Draw the grid
-			if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
-			grid = this.getGrid(mn, mx);
-			output = "";
+		// Set the height of the graph
+		h = 100;
 
-			for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="'+(this.attr.dir=="horizontal" ? 'left':'bottom')+':'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g,{'units':this.attr.units}) : this.formatNumber(g)+(this.attr.units || ""))+'</span></div>';
-			this.el.querySelector('.barchart-grid').innerHTML = output;
 
-			columns = el.querySelectorAll('.barchart-column');
-			if(!columns || columns.length != nval){
-				o = el.querySelector('.barchart-data');
-				o.innerHTML = "";
-				columns = [];
-				for(i = 0; i < nval; i++){
-					c = document.createElement('div');
-					c.classList.add('barchart-column');
-					c.innerHTML = '';
-					c.setAttribute('data-bin',i);
-					_parent = this.parent;
-					c.addEventListener('click',function(e){
-						e.preventDefault();
-						_parent.trigger("columnclick",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin'))});
-					});
-					c.addEventListener('mouseover',function(e){
-						e.preventDefault();
-						_parent.trigger("columnover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin'))});
-					});
-					o.appendChild(c);
-					columns.push(c);
-				}
+
+		// Draw the grid
+		if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
+		grid = this.getGrid(mn,mx);
+		output = "";
+
+		for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="'+(this.attr.dir=="horizontal" ? 'left':'bottom')+':'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g) : this.formatNumber(g))+'</span></div>';
+		this.el.querySelector('.barchart-grid').innerHTML = output;
+
+		clusters = el.querySelectorAll('.barchart-cluster-inner');
+
+		if(!clusters || clusters.length != nc){
+			o = el.querySelector('.barchart-data');
+			o.innerHTML = "";
+			clusters = new Array(d.length);
+
+			for(c  = 0 ; c < d.length; c++){
+				cat = document.createElement('div');
+				cat.classList.add('barchart-cluster');
+				// Set number of columns for this category
+				
+				cat.innerHTML = '<div class="barchart-cluster-inner"></div>';// style="grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')+':repeat('+ns+',1fr)"></div>';
+				cluster = cat.querySelector('.barchart-cluster-inner');
+				cat.setAttribute('data-cluster',c);
+				_parent = this.parent;
+				cat.addEventListener('click',function(e){
+					e.preventDefault();
+					_parent.trigger("clusterclick",{event:e});
+				});
+				cat.addEventListener('mouseover',function(e){
+					e.preventDefault();
+					_parent.trigger("clusterover",{event:e});
+				});
+				o.appendChild(cat);
+				clusters[c] = cluster;
 			}
+		}
 
-			_obj = this;
+		_obj = this;
 
-			// Loop over columns
-			for(i = 0; i < nval; i++){
-				bits = columns[i].querySelectorAll('.bar');
-				if(!bits || bits.length != nseries){
-					bits = [];
-					columns[i].innerHTML = "";
-					for(s = 0; s < nseries; s++){
+		// Loop over clusters
+		for(c = 0 ; c < d.length; c++){
+			series = clusters[c].querySelectorAll('.barchart-series');
+			if(!series || series.length != ns){
+				series = [];
+				clusters[c].innerHTML = "";
+
+				// Make cluster label
+				l = document.createElement('span');
+				l.classList.add('category-label');
+				l.innerHTML = (typeof this.attr.formatX==="function" ? this.attr.formatX.call(this,d[c].label) : d[c].label);
+				clusters[c].append(l);
+
+				// Add series
+				if(d[c].data){
+					for(s = 0; s < d[c].data.length; s++){
 						b = document.createElement('div');
-						b.classList.add('bar');
+						b.classList.add('barchart-series');
 						b.classList.add('series-'+s);
-						b.setAttribute('data-bin',i);
+						if(d[c].data[s]['class']) b.classList.add(d[c].data[s]['class'])
+						b.setAttribute('data-cluster',c);
 						b.setAttribute('data-series',s);
 
 						b.addEventListener('focus',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
-							e['this'] = _obj.parent;
-							_obj.parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							_obj.parent.trigger("barover",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
 						b.addEventListener('mouseover',function(e){
 							e.preventDefault();
 							e.stopPropagation();
 							e.currentTarget = e.currentTarget.parentNode;
-							e['this'] = _obj.parent;
-							_obj.parent.trigger("barover",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							_obj.parent.trigger("barover",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
 						b.addEventListener('click',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
-							e['this'] = _obj.parent;
-							_obj.parent.trigger("barclick",{event:e,bin:parseInt(e.currentTarget.getAttribute('data-bin')),series:parseInt(e.currentTarget.getAttribute('data-series'))});
+							_obj.parent.trigger("barclick",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
-						columns[i].appendChild(b);
-						bits.push(b);
+						clusters[c].appendChild(b);
+						series.push(b);
 					}
-					l = document.createElement('span');
-					l.classList.add('category-label');
-					l.innerHTML = (typeof this.attr.formatX==="function" ? this.attr.formatX.call(this,this.parent.data.labels[i]) : this.parent.data.labels[i]);
-					columns[i].append(l);
+				}else{
+					console.warn('No data for cluster '+c,d[c]);
 				}
-
-				v = mn;
-				for(s = 0; s < nseries; s++){
-					if(this.attr.stacked){
-						v += this.parent.data.series[s].data[i];
-					}else{
-						v = this.parent.data.series[s].data[i];
-					}
-					hbot = (100*(v-mn))/r;
-					htop = 100-hbot;
-					hbar = 100*(this.parent.data.series[s].data[i]-mn)/r;
-					wbar = (this.attr.stacked ? 100 : 100/nseries);
-					lbar = (this.attr.stacked ? 0 : 100*s/nseries);
-					key = this.parent.data.series[s].label;
-					value = this.parent.data.series[s].data[i];
-					// Set class
-					if(typeof this.attr.formatBar==="function"){
-						cls = this.attr.formatBar.call(this,key,value).split(/ /);
-						if(cls.length == 1 && cls[0]=="") cls = [];
-						for(c = 0; c < cls.length; c++) bits[s].classList.add(cls[c]);
-					}
-					// Set attributes
-					bits[s].setAttribute('title',key+': '+(this.attr.units || "")+this.parent.formatNumber(value));
-					bits[s].setAttribute('data-bin',i);
-					bits[s].setAttribute('data-series',s);
-					// Set style
-					if(this.attr.dir=="horizontal"){
-						bits[s].style.width = hbar+"%";
-						bits[s].style.right = htop+"%";
-						bits[s].style.top = lbar+"%";
-						bits[s].style.height = wbar+"%";
-					}else{
-						bits[s].style.height = hbar+"%";
-						bits[s].style.top = htop+"%";
-						bits[s].style.left = lbar+"%";
-						bits[s].style.width = wbar+"%";
-					}
-				}
+				
 			}
 
-			// Get the maximum label height
-			lbls = el.querySelectorAll('.barchart-data .category-label');
-			lh = 0;
-			lbls.forEach(function(e){ lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? e.offsetWidth-parseInt(getStyle(e,'left')) : e.offsetHeight)); });
-			// Padding for labels
-			el.querySelector('.barchart-grid').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
-			el.querySelector('.barchart-data').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
+			v = mn;
+			for(s = 0; s < d[c].data.length; s++){
 
+				if(d[c].stacked) v += d[c].data[s].v;
+				else v = d[c].data[s].v;
+
+				hbot = (100*(v-mn))/r;
+				htop = 100-hbot;
+				hbar = 100*(d[c].data[s].v-mn)/r;
+				wbar = (d[c].stacked ? 100 : 100/ns);
+				lbar = (d[c].stacked ? 0 : 100*s/ns);
+				key = d[c].data[s].label;
+				value = d[c].data[s].v;
+				// Set class
+				if(typeof this.attr.formatBar==="function"){
+					cls = this.attr.formatBar.call(this,key,value).split(/ /);
+					if(cls.length == 1 && cls[0]=="") cls = [];
+					for(cl = 0; cl < cls.length; cl++) series[s].classList.add(cls[cl]);
+				}
+				// Set attributes
+				series[s].setAttribute('title',key+': '+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,value) : this.parent.formatNumber(value)));
+				//series[s].setAttribute('data-bin',i);
+				series[s].setAttribute('data-series',s);
+				// Set style
+				if(this.attr.dir=="horizontal"){
+					series[s].style.width = hbar+"%";
+					series[s].style.right = htop+"%";
+					series[s].style.top = lbar+"%";
+					series[s].style.height = wbar+"%";
+					if(htop+(hbar/2) < 50) series[s].classList.add('bar-right');
+				}else{
+					series[s].style.height = hbar+"%";
+					series[s].style.top = htop+"%";
+					series[s].style.left = lbar+"%";
+					series[s].style.width = wbar+"%";
+					if(c > d.length/2) series[s].classList.add('bar-right');
+				}
+			}
 		}
+
+		// Get the maximum label height
+		lbls = el.querySelectorAll('.barchart-data .category-label');
+		lh = 0;
+		lbls.forEach(function(e){ lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? e.offsetWidth-parseInt(getStyle(e,'left')) : e.offsetHeight)); });
+		// Padding for labels
+		el.querySelector('.barchart-grid').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
+		el.querySelector('.barchart-data').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
+
 		return this;
 	};
 
@@ -325,6 +353,6 @@
 		return {'min':t_min,'max':t_max,'inc':t_inc,'range':t_max-t_min};
 	};
 	
-	ODI.chart = function(target,attr){ return new Chart(target,attr); };
+	ODI.chart = Chart;
 
 })(window || this);

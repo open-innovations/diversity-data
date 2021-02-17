@@ -149,9 +149,13 @@
 						if(i==0) o.classList.add('open');
 						b.addEventListener('click',togglePanels);
 						this.panels[id] = {'el':o};
+						if(panels[id].events) this.panels[id].events = panels[id].events;
 						// Add it after the header or previously added output areas
 						end.insertAdjacentElement('afterend',o);
 						end = o;
+						
+						if(panels[id].chart) this.chart = new ODI.chart(this.panels[id].el,panels[id].chart);
+						
 						i++;
 					}
 				}
@@ -212,14 +216,7 @@
 								"success": function(d,attr){
 									var r,o;
 									// Store the data
-									this.data[attr.data.url] = CSVToArray(d).data;
-									// Convert numbers into numbers
-									for(r = 0; r < this.data[attr.data.url].length; r++){
-										for(o in this.data[attr.data.url][r]){
-											v = parseFloat(this.data[attr.data.url][r][o])
-											if(typeof v==="number" && v==this.data[attr.data.url][r][o]) this.data[attr.data.url][r][o] = v;
-										}
-									}
+									this.addData(attr.data.url,CSVToArray(d).data);
 									// Increment the loaded counter
 									loaded++;
 									// If we've loaded them all we finish up
@@ -249,7 +246,32 @@
 				if(employer) employer = {'org':employer.getAttribute('data-org'),'div':employer.getAttribute('data-div')};
 				return employer;				
 			}
-			
+
+			this.addData = function(url,d){
+				// Convert numbers into numbers
+				for(r = 0; r < d.length; r++){
+					for(o in d[r]){
+						v = parseFloat(d[r][o])
+						if(typeof v==="number" && v==d[r][o]) d[r][o] = v;
+					}
+					if(!d[r].employees){
+						console.error('No employee total given');
+					}
+					// Tidy up totals
+					if(!d[r].age_total){
+						d[r].age_total = d[r].employees;
+						console.warn('No age "total" given for '+url);
+					}
+					if(!d[r].age_undisclosed){
+						t = (d[r]['age_16-24']||0)+(d[r]['age_25-34']||0)+(d[r]['age_35-44']||0)+(d[r]['age_45-54']||0)+(d[r]['age_55-64']||0)+(d[r]['age_65-69']||0)+(d[r]['age_70']||0);
+						d[r].age_undisclosed = d[r].age_total-t;
+						console.warn('No age "undisclosed" for '+url+' so using '+d[r].age_undisclosed+'/'+d[r].age_total);
+					}
+				}
+				this.data[url] = d;
+				console.info('Add '+url,this.data[url]);
+				return this;
+			}
 			
 			this.update = function(){
 
@@ -328,79 +350,279 @@
 				}
 
 				n = 0;
-				var ages = {
-					"16-24":{"keys":["age_16-24"],"n":{"total":0,"specific":0}},
-					"25-34":{"keys":["age_25-34"],"n":{"total":0,"specific":0}},
-					"35-44":{"keys":["age_35-44"],"n":{"total":0,"specific":0}},
-					"45-54":{"keys":["age_45-54"],"n":{"total":0,"specific":0}},
-					"55-64":{"keys":["age_55-64"],"n":{"total":0,"specific":0}},
-					"65-69":{"keys":["age_65-69"],"n":{"total":0,"specific":0}},
-					"70+":{"keys":["age_70+"],"n":{"total":0,"specific":0}},
-					"total":{"keys":["age_total"],"n":{"total":0,"specific":0}},
-					"undisclosed":{"keys":["age_undisclosed"],"n":{"total":0,"specific":0}}
+				var data = {
+					"ages":{
+						"16-24":{"keys":["age_16-24"],"n":{"total":0,"specific":0}},
+						"25-34":{"keys":["age_25-34"],"n":{"total":0,"specific":0}},
+						"35-44":{"keys":["age_35-44"],"n":{"total":0,"specific":0}},
+						"45-54":{"keys":["age_45-54"],"n":{"total":0,"specific":0}},
+						"55-64":{"keys":["age_55-64"],"n":{"total":0,"specific":0}},
+						"65-69":{"keys":["age_65-69"],"n":{"total":0,"specific":0}},
+						"70+":{"keys":["age_70+"],"n":{"total":0,"specific":0}},
+						"total":{"keys":["age_total"],"n":{"total":0,"specific":0}},
+						"undisclosed":{"keys":["age_undisclosed"],"n":{"total":0,"specific":0}}
+					},
+					"carers":{
+						"yes":{"keys":["carer_yes"],"n":{"total":0,"specific":0}},
+						"no":{"keys":["carer_no"],"n":{"total":0,"specific":0}},
+						"prefernottosay":{"keys":["carer_prefernottosay"],"n":{"total":0,"specific":0}},
+						"undisclosed":{"keys":["carer_undisclosed"],"n":{"total":0,"specific":0}},
+						"total":{"keys":["carer_total"],"n":{"total":0,"specific":0}}
+					},
+					"disability":{
+						"yes":{"keys":["disability_yes"],"n":{"total":0,"specific":0}},
+						"no":{"keys":["disability_no"],"n":{"total":0,"specific":0}},
+						"prefernottosay":{"keys":["disability_prefernottosay"],"n":{"total":0,"specific":0}},
+						"undisclosed":{"keys":["disability_undisclosed"],"n":{"total":0,"specific":0}},
+						"total":{"keys":["disability_total"],"n":{"total":0,"specific":0}}
+					}
 				}
 
+				// Clean up data - add in missing totals etc
 				for(i = 0; i < keep.length; i++){
 					employees += keep[i].employees;
 					dt = new Date(keep[i].published);
-					for(a in ages){
-						for(k = 0 ; k < ages[a].keys.length; k++){
-							ky = ages[a].keys[k];
-							if(typeof keep[i][ky]==="number"){
-								ages[a].n.total += keep[i][ky];
-								if(employer && keep[i].organisation==employer.org && (!keep[i].organisation_division || keep[i].organisation_division==employer.div)) ages[a].n.specific += keep[i][ky];
+					// Process ages
+					for(s in data){
+						for(a in data[s]){
+							for(k = 0 ; k < data[s][a].keys.length; k++){
+								ky = data[s][a].keys[k];
+								if(typeof keep[i][ky]==="number"){
+									data[s][a].n.total += keep[i][ky];
+									if(employer && keep[i].organisation==employer.org && (!keep[i].organisation_division || keep[i].organisation_division==employer.div)) data[s][a].n.specific += keep[i][ky];
+								}
 							}
 						}
 					}
 					summary += '<li><a href="'+keep[i].URL+'">'+formatEmployer(keep[i].organisation,keep[i].organisation_division)+'</a> updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time></li>';
 					n++;
 				}
-				ageout = "";
-				age = {
-					'series': [{'label':'Leeds','data':[]},{'label':'Employer','data':[]}],
-					'labels': []
-				}
-				for(a in ages){
-					totpc = (ages.total.n.total > 0 ? (100*ages[a].n.total/ages.total.n.total) : 0);
-					spepc = (ages.total.n.specific > 0 ? 100*(ages[a].n.specific||0)/ages.total.n.specific : 0);
-					ageout += '<tr><td>'+a+'</td><td>'+ages[a].n.total+'</td><td>'+(totpc).toFixed(1)+'</td><td>'+ages[a].n.specific+'</td><td>'+(spepc).toFixed(1)+'</td></tr>';
-					if(a!="total" && a!="undisclosed"){
-						age.labels.push(a);
-						// Show percentages
-						age.series[0].data.push(totpc);
-						age.series[1].data.push(spepc);
-					}
-				}
-				this.cards.age.addPanels({
-					'chart':{'label':'Barchart','class':'output chart'},
+
+				this.cards.ages.addPanels({
+					'chart':{
+						'label':'Barchart',
+						'class':'output chart',
+						'chart': {
+							'type': 'bar',
+							'formatY': function(v){
+								if(!v) return "";
+								return v.toFixed(1).replace(/\.0/,"")+'%';
+							}
+						},
+						'events':{
+							'barover':function(e,a){
+								removeBalloons();
+								info = document.createElement('div');
+								info.classList.add('balloon');
+								i = (this.data[e.cluster].data[e.series].data) ? this.data[e.cluster].data[e.series].data[e.bin] : this.data[e.cluster].data[e.series];
+								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
+								e.event.originalTarget.appendChild(info);
+							},
+							'mouseleave':function(e){
+								removeBalloons();
+							}
+						}
+					},
 					'table':{'label':'Data','class':'output'}
 				});
-				if(ageout){
-					
-					this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+ageout+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
-					tableSortJs();
-					chart = new ODI.chart(this.cards.age.panels.chart.el,{'type':'bar','stacked':false,'units':'%'});
-					chart.setData(age).draw();
-					chart.on('barover',function(e,a){
-						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
-						info = document.createElement('div');
-						info.classList.add('balloon');
-						info.innerHTML = this.data.series[e.series].label+": "+this.data.series[e.series].data[e.bin].toFixed(1)+'%';
-						e.event.originalTarget.appendChild(info);
-					}).on('mouseleave',function(e){
-						this.target.querySelectorAll('.balloon').forEach(function(e){ e.remove(); });
-					});
-					key = this.cards.age.el.querySelector('.key');
+				this.cards.carers.addPanels({
+					'chart':{
+						'label':'Barchart',
+						'class':'output chart',
+						'chart': {
+							'type': 'bar',
+							'dir': 'horizontal',
+							'formatY': function(v,attr){
+								if(!v) return "";
+								return v.toFixed(1).replace(/\.0/,"")+'%';
+							}
+						},
+						'events':{
+							'barover':function(e,a){
+								removeBalloons();
+								info = document.createElement('div');
+								info.classList.add('balloon');
+								i = this.data[e.cluster].data[e.series];
+								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
+								e.event.originalTarget.appendChild(info);
+							},
+							'mouseleave':function(e){
+								removeBalloons();
+							}
+						}
+					},
+					'table':{'label':'Data','class':'output'}
+				});
+				this.cards.disability.addPanels({
+					'chart':{
+						'label':'Barchart',
+						'class':'output chart',
+						'chart': {
+							'type': 'bar',
+							'dir': 'horizontal',
+							'formatY': function(v,attr){
+								if(!v) return "";
+								return v.toFixed(1).replace(/\.0/,"")+'%';
+							}
+						},
+						'events':{
+							'barover':function(e,a){
+								removeBalloons();
+								info = document.createElement('div');
+								info.classList.add('balloon');
+								i = this.data[e.cluster].data[e.series];
+								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
+								e.event.originalTarget.appendChild(info);
+							},
+							'mouseleave':function(e){
+								removeBalloons();
+							}
+						}
+					},
+					'table':{'label':'Data','class':'output'}
+				});
+				g = {
+					'ages':{
+						'html':'',
+						'data': []
+					},
+					'carers':{
+						'html':'',
+						'data': []
+					},
+					'disability':{
+						'html':'',
+						'data': []
+					}
+				}
+				for(s in data){
+					for(a in data[s]){
+						totpc = (data[s].total.n.total > 0 ? (100*data[s][a].n.total/data[s].total.n.total) : 0);
+						spepc = (data[s].total.n.specific > 0 ? 100*(data[s][a].n.specific||0)/data[s].total.n.specific : 0);
+						if(s=="ages"){
+							g.ages.html += '<tr><td>'+a+'</td><td>'+data[s][a].n.total+'</td><td>'+(totpc).toFixed(1)+'</td><td>'+data[s][a].n.specific+'</td><td>'+(spepc).toFixed(1)+'</td></tr>';
+							if(a!="total" && a!="undisclosed"){
+								g.ages.data.push({'label':a,'data':[{'v':totpc,'label':'Leeds'},{'v':spepc,'label':'Employer'}]});
+								// Show percentages
+	//							g.ages.data[0].data.push({'v':totpc,'label':a});
+		//						g.ages.data[1].data.push({'v':spepc,'label':a});
+							}
+						}
+					}
+					if(s=="carers"){
+						ys_l = 100*data.carers.yes.n.total/data.carers.total.n.total;
+						no_l = 100*data.carers.no.n.total/data.carers.total.n.total;
+						pf_l = 100*data.carers.prefernottosay.n.total/data.carers.total.n.total;
+						un_l = 100*data.carers.undisclosed.n.total/data.carers.total.n.total;
+						ys_e = 100*data.carers.yes.n.specific/data.carers.total.n.total;
+						no_e = 100*data.carers.no.n.specific/data.carers.total.n.total;
+						pf_e = 100*data.carers.prefernottosay.n.specific/data.carers.total.n.total;
+						un_e = 100*data.carers.undisclosed.n.specific/data.carers.total.n.total;
+						if(data.carers.yes.n.total + data.carers.no.n.total + data.carers.prefernottosay.n.total + data.carers.undisclosed.n.total > data.carers.total.n.total) console.warn('Carers: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.carers.total.n.total);
+						
+						g.carers.html += '<tr><td>Leeds</span></td><td>'+data.carers.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.carers.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.carers.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.carers.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
+						g.carers.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.carers.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.carers.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.carers.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.carers.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
+						g.carers.data.push({
+							'label': 'Leeds',
+							'stacked': true,
+							'data': [
+								{'label':'Yes','class':'cat-0','v':ys_l},
+								{'label':'No','class':'cat-0','v':no_l},
+								{'label':'Prefer not to say','class':'cat-0','v':pf_l},
+								{'label':'Undisclosed','class':'cat-0','v':un_l}
+							]
+						});
+						g.carers.data.push({
+							'label':'Employer',
+							'stacked': true,
+							'data': [
+								{'label':'Yes','class':'cat-1','v':ys_e},
+								{'label':'No','class':'cat-1','v':no_e},
+								{'label':'Prefer not to say','class':'cat-1','v':pf_e},
+								{'label':'Undisclosed','class':'cat-1','v':un_e}
+							]
+						});
+					}else if(s=="disability"){
+						ys_l = 100*data.disability.yes.n.total/data.disability.total.n.total;
+						no_l = 100*data.disability.no.n.total/data.disability.total.n.total;
+						pf_l = 100*data.disability.prefernottosay.n.total/data.disability.total.n.total;
+						un_l = 100*data.disability.undisclosed.n.total/data.disability.total.n.total;
+						ys_e = 100*data.disability.yes.n.specific/data.disability.total.n.total;
+						no_e = 100*data.disability.no.n.specific/data.disability.total.n.total;
+						pf_e = 100*data.disability.prefernottosay.n.specific/data.disability.total.n.total;
+						un_e = 100*data.disability.undisclosed.n.specific/data.disability.total.n.total;
+						if(data.disability.yes.n.total + data.disability.no.n.total + data.disability.prefernottosay.n.total + data.disability.undisclosed.n.total > data.disability.total.n.total) console.warn('Disability: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.disability.total.n.total);
+						
+						g.disability.html += '<tr><td>Leeds</span></td><td>'+data.disability.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.disability.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
+						g.disability.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.disability.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.disability.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
+						g.disability.data.push({
+							'label': 'Leeds',
+							'stacked': true,
+							'data': [
+								{'label':'Yes','class':'cat-0','v':ys_l},
+								{'label':'No','class':'cat-0','v':no_l},
+								{'label':'Prefer not to say','class':'cat-0','v':pf_l},
+								{'label':'Undisclosed','class':'cat-0','v':un_l}
+							]
+						});
+						g.disability.data.push({
+							'label':'Employer',
+							'stacked': true,
+							'data': [
+								{'label':'Yes','class':'cat-1','v':ys_e},
+								{'label':'No','class':'cat-1','v':no_e},
+								{'label':'Prefer not to say','class':'cat-1','v':pf_e},
+								{'label':'Undisclosed','class':'cat-1','v':un_e}
+							]
+						});
+					}
+				}
+
+				if(g.ages.html){
+					this.cards.ages.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+g.ages.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+					this.cards.ages.chart.setData(g.ages.data).draw();
+					for(e in this.cards.ages.panels.chart.events) this.cards.ages.chart.on(e,this.cards.ages.panels.chart.events[e]);
+					key = this.cards.ages.el.querySelector('.key');
 					if(!key){
 						key = document.createElement('div');
 						key.classList.add('key');
 						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Leeds Employers</span></li><li><span class="series-1 key-item"></span> <span class="label">Employer</span></li></ul><p class="extranotes"></p>';
-						this.cards.age.panels.chart.el.appendChild(key);
+						this.cards.ages.panels.chart.el.appendChild(key);
 					}
-					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers - '+ages.total.n.total.toLocaleString()+' employee'+(ages.total.n.total==1?'':'s')+' total';
-					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> - '+ages.total.n.specific.toLocaleString()+' employee'+(ages.total.n.specific==1?'':'s')+' total';
-					key.querySelector('.extranotes').innerHTML = (employees>ages.total.n.total ? '<p>There are '+(employees-ages.total.n.total).toLocaleString()+' employees without age data':'');
+					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers - '+data.ages.total.n.total.toLocaleString()+' employee'+(data.ages.total.n.total==1?'':'s')+' total';
+					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> - '+data.ages.total.n.specific.toLocaleString()+' employee'+(data.ages.total.n.specific==1?'':'s')+' total';
+					key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+
 				}
+				if(g.carers.html){
+					this.cards.carers.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Carer #</th><th>Carer %</th><th>Not a carer #</th><th>Not a carer %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.carers.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+					this.cards.carers.chart.setData(g.carers.data).draw();
+					for(e in this.cards.carers.panels.chart.events) this.cards.carers.chart.on(e,this.cards.carers.panels.chart.events[e]);
+					key = this.cards.carers.el.querySelector('.key');
+					if(!key){
+						key = document.createElement('div');
+						key.classList.add('key');
+						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
+						this.cards.carers.panels.chart.el.appendChild(key);
+					}
+					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+				}
+				if(g.disability.html){
+					this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Disability #</th><th>Disability %</th><th>No disability #</th><th>No disability %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.carers.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+					this.cards.disability.chart.setData(g.disability.data).draw();
+					for(e in this.cards.disability.panels.chart.events) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
+					key = this.cards.disability.el.querySelector('.key');
+					if(!key){
+						key = document.createElement('div');
+						key.classList.add('key');
+						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
+						this.cards.disability.panels.chart.el.appendChild(key);
+					}
+					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+				}
+				
+				// Make tables sortable
+				tableSortJs();
 
 				// Update numbers
 				document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
@@ -411,6 +633,12 @@
 			}
 
 			return this.init(attr);
+		}
+
+		function removeBalloons(){
+			b = document.querySelectorAll('.balloon');
+			if(b) b.forEach(function(e){ e.remove(); });
+			return;
 		}
 		
 		var dash = new Dashboard();

@@ -140,9 +140,14 @@ article article p { margin-top: 1em; }
 }
 .key { font-size:1em; margin-top: 1em;}
 .barchart { height: 320px; }
-.series-0 { background: #F9BC26!important; }
-.series-1 { background: #2254F4!important; }
-.series-2 { background: #2254F4; }
+#ages .series-0 { background-color: #F9BC26; background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
+#ages .series-1 { background-color: #F9BC26; }
+#ages .series-2 { background: #00B6FF; }
+#carers .cat-0, #disability .cat-0 { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
+#carers .series-0, #disability .series-0 { background-color: #F9BC26; }
+#carers .series-1, #disability .series-1 { background-color: #00B6FF; }
+#carers .series-2, #disability .series-2 { background-color: #BBB; }
+#carers .series-3, #disability .series-3 { background-color: #999; }
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
 .key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
 
@@ -162,5 +167,6 @@ footer a,footer a:visited { color: inherit; }
 	.grid.links { grid-template-columns: repeat(4, 1fr); grid-gap: 0.25em; }
 }
 @media only screen and (max-width: 740px) {
+	.doublepadded { padding: 1em; }
 	.grid.links { grid-template-columns: repeat(2, 1fr); }
 }
