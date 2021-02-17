@@ -295,7 +295,7 @@
 								if(!orgs[org]) orgs[org] = {};
 								if(!orgs[org][div]){
 									orgs[org][div] = {};
-									orgopts += '<option data-org="'+org+'" data-div="'+div+'"'+(employer && employer.org==org && employer.div==d2.organisation_division ? ' selected="selected"' : '')+'>'+formatEmployer(org,d2.organisation_division)+'</option>'
+									orgopts += '<option data-org="'+org+'" data-div="'+div+'"'+(employer && employer.org==org && employer.div==div ? ' selected="selected"' : '')+'>'+formatEmployer(org,d2.organisation_division)+'</option>'
 								}
 								if(typeof d2.published==="string"){
 									orgs[org][div][d2.published] = d2;

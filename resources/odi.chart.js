@@ -157,8 +157,7 @@
 		// For each cluster
 		for(c = 0 ; c < d.length; c++){
 			if(d[c].data){
-				if(d[c].stacked) ns = Math.max(ns,1);
-				else ns = Math.max(d[c].data.length,ns);
+				ns = Math.max(d[c].data.length,ns);
 				// For each series
 				v = 0;
 				for(s = 0; s < d[c].data.length; s++){
@@ -183,8 +182,6 @@
 		// Set the height of the graph
 		h = 100;
 
-
-
 		// Draw the grid
 		if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
 		grid = this.getGrid(mn,mx);
@@ -207,6 +204,7 @@
 				
 				cat.innerHTML = '<div class="barchart-cluster-inner"></div>';// style="grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')+':repeat('+ns+',1fr)"></div>';
 				cluster = cat.querySelector('.barchart-cluster-inner');
+				//cluster.style['grid-template-'+(this.attr.dir=="horizontal" ? 'rows':'columns')] = 'repeat('+ns+',1fr)';
 				cat.setAttribute('data-cluster',c);
 				_parent = this.parent;
 				cat.addEventListener('click',function(e){
@@ -226,7 +224,7 @@
 
 		// Loop over clusters
 		for(c = 0 ; c < d.length; c++){
-			series = clusters[c].querySelectorAll('.barchart-series');
+			series = clusters[c].querySelectorAll('.barchart-series-inner');
 			if(!series || series.length != ns){
 				series = [];
 				clusters[c].innerHTML = "";
@@ -240,39 +238,49 @@
 				// Add series
 				if(d[c].data){
 					for(s = 0; s < d[c].data.length; s++){
-						b = document.createElement('div');
-						b.classList.add('barchart-series');
-						b.classList.add('series-'+s);
-						if(d[c].data[s]['class']) b.classList.add(d[c].data[s]['class'])
-						b.setAttribute('data-cluster',c);
-						b.setAttribute('data-series',s);
-
-						b.addEventListener('focus',function(e){
+						if(d[c].stacked && s==0 || !d[c].stacked){
+							b = document.createElement('div');
+							b.classList.add('barchart-series');
+							if(d[c].data[s]['class']) b.classList.add(d[c].data[s]['class'])
+							b.setAttribute('data-cluster',c);
+							b.setAttribute('data-series',s);
+							
+						}
+						// Create inner
+						i = document.createElement('div');
+						i.classList.add('barchart-series-inner');
+						i.classList.add('series-'+s);
+						if(d[c].data[s]['class']) i.classList.add(d[c].data[s]['class'])
+						i.setAttribute('data-cluster',c);
+						i.setAttribute('data-series',s);
+						i.addEventListener('focus',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
 							_obj.parent.trigger("barover",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
-						b.addEventListener('mouseover',function(e){
+						i.addEventListener('mouseover',function(e){
 							e.preventDefault();
 							e.stopPropagation();
 							e.currentTarget = e.currentTarget.parentNode;
 							_obj.parent.trigger("barover",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
-						b.addEventListener('click',function(e){
+						i.addEventListener('click',function(e){
 							e.preventDefault();
 							e.currentTarget = e.currentTarget.parentNode;
 							_obj.parent.trigger("barclick",{'event':e,'cluster':parseInt(e.currentTarget.getAttribute('data-cluster')),'series':parseInt(e.currentTarget.getAttribute('data-series'))});
 						});
+						b.appendChild(i);
 						clusters[c].appendChild(b);
-						series.push(b);
+						series.push(i);
 					}
 				}else{
 					console.warn('No data for cluster '+c,d[c]);
 				}
-				
 			}
 
 			v = mn;
+			var splits = "";
+			var dir = "";
 			for(s = 0; s < d[c].data.length; s++){
 
 				if(d[c].stacked) v += d[c].data[s].v;
@@ -299,17 +307,20 @@
 				if(this.attr.dir=="horizontal"){
 					series[s].style.width = hbar+"%";
 					series[s].style.right = htop+"%";
-					series[s].style.top = lbar+"%";
-					series[s].style.height = wbar+"%";
+					//series[s].style.top = lbar+"%";
+					//series[s].style.height = wbar+"%";
+					//splits += hbar+"%";
 					if(htop+(hbar/2) < 50) series[s].classList.add('bar-right');
+					dir = (d[c].stacked ? "columns" : "rows");
 				}else{
 					series[s].style.height = hbar+"%";
 					series[s].style.top = htop+"%";
-					series[s].style.left = lbar+"%";
-					series[s].style.width = wbar+"%";
+					splits += wbar+"%";
 					if(c > d.length/2) series[s].classList.add('bar-right');
+					dir = (d[c].stacked ? "rows" : "columns");
 				}
 			}
+			clusters[c].style['grid-template-'+dir] = splits;
 		}
 
 		// Get the maximum label height
