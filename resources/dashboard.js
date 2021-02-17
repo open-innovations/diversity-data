@@ -274,7 +274,6 @@
 			}
 			
 			this.update = function(){
-
 				function formatEmployer(o,d){
 					return (o ? o+(d && d!="_none" ? ' ('+d+')' : '') : "");
 				}
@@ -285,20 +284,22 @@
 				for(var i = 0; i < this.index.length; i++){
 					if(!this.index[i].organisation_division) this.index[i].organisation_division = "_none";
 					d = this.index[i];
-					org = (d.organisation);
-					div = (d.organisation_division||"_none");
-					if(!orgs[org]) orgs[org] = {};
-					if(!orgs[org][div]){
-						orgs[org][div] = {};
-						orgopts += '<option data-org="'+org+'" data-div="'+div+'"'+(employer && employer.org==org && employer.div==d.organisation_division ? ' selected="selected"' : '')+'>'+formatEmployer(org,d.organisation_division)+'</option>'
-					}
-					for(var r = 0; r < this.data[d.URL].length; r++){
-						if(this.data[d.URL][r].organisation == org){
-							if(!this.data[d.URL][r].organisation_division) this.data[d.URL][r].organisation_division = "_none";
-							if(this.data[d.URL][r].organisation_division==div){
-								if(typeof this.data[d.URL][r].published==="string"){
-									orgs[org][div][this.data[d.URL][r].published] = this.data[d.URL][r];
-									orgs[org][div][this.data[d.URL][r].published].URL = d.URL;
+					orgtmp = (d.organisation);
+					divtmp = (d.organisation_division||"_none");
+					if(this.data[this.index[i].URL]){
+						for(var j = 0; j < this.data[this.index[i].URL].length; j++){
+							d2 = this.data[this.index[i].URL][j];
+							org = d2.organisation;
+							div = (d2.organisation_division||"_none");
+							if(orgtmp == org && divtmp == div){
+								if(!orgs[org]) orgs[org] = {};
+								if(!orgs[org][div]){
+									orgs[org][div] = {};
+									orgopts += '<option data-org="'+org+'" data-div="'+div+'"'+(employer && employer.org==org && employer.div==d2.organisation_division ? ' selected="selected"' : '')+'>'+formatEmployer(org,d2.organisation_division)+'</option>'
+								}
+								if(typeof d2.published==="string"){
+									orgs[org][div][d2.published] = d2;
+									orgs[org][div][d2.published].URL = d.URL;
 								}
 							}
 						}
@@ -331,7 +332,7 @@
 				for(y = maxy; y >= miny ; y--) opt += '<option value="'+y+'"'+(y==yy ? ' selected="selected"':'')+'>'+y+'</option>';
 				this.selector.year.el.innerHTML = opt;
 				this.selector.employer.el.innerHTML = orgopts;
-				employer = this.getEmployer();
+				//employer = this.getEmployer();
 				// Limit selected year to the range of the data
 				yy = Math.max(Math.min(yy,maxy),miny);
 
@@ -482,18 +483,9 @@
 					'table':{'label':'Data','class':'output'}
 				});
 				g = {
-					'ages':{
-						'html':'',
-						'data': []
-					},
-					'carers':{
-						'html':'',
-						'data': []
-					},
-					'disability':{
-						'html':'',
-						'data': []
-					}
+					'ages':{'html':'','data': []},
+					'carers':{'html':'','data': []},
+					'disability':{'html':'','data': []}
 				}
 				for(s in data){
 					for(a in data[s]){
@@ -510,14 +502,19 @@
 						}
 					}
 					if(s=="carers"){
-						ys_l = 100*data.carers.yes.n.total/data.carers.total.n.total;
-						no_l = 100*data.carers.no.n.total/data.carers.total.n.total;
-						pf_l = 100*data.carers.prefernottosay.n.total/data.carers.total.n.total;
-						un_l = 100*data.carers.undisclosed.n.total/data.carers.total.n.total;
-						ys_e = 100*data.carers.yes.n.specific/data.carers.total.n.total;
-						no_e = 100*data.carers.no.n.specific/data.carers.total.n.total;
-						pf_e = 100*data.carers.prefernottosay.n.specific/data.carers.total.n.total;
-						un_e = 100*data.carers.undisclosed.n.specific/data.carers.total.n.total;
+						ys_l = no_l = pf_l = un_l = ys_e = no_e = pf_e = un_e = 0;
+						if(data.carers.total.n.total > 0){
+							ys_l = 100*data.carers.yes.n.total/data.carers.total.n.total;
+							no_l = 100*data.carers.no.n.total/data.carers.total.n.total;
+							pf_l = 100*data.carers.prefernottosay.n.total/data.carers.total.n.total;
+							un_l = 100*data.carers.undisclosed.n.total/data.carers.total.n.total;
+						}
+						if(data.carers.total.n.specific > 0){
+							ys_e = 100*data.carers.yes.n.specific/data.carers.total.n.specific;
+							no_e = 100*data.carers.no.n.specific/data.carers.total.n.specific;
+							pf_e = 100*data.carers.prefernottosay.n.specific/data.carers.total.n.specific;
+							un_e = 100*data.carers.undisclosed.n.specific/data.carers.total.n.specific;
+						}
 						if(data.carers.yes.n.total + data.carers.no.n.total + data.carers.prefernottosay.n.total + data.carers.undisclosed.n.total > data.carers.total.n.total) console.warn('Carers: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.carers.total.n.total);
 						
 						g.carers.html += '<tr><td>Leeds</span></td><td>'+data.carers.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.carers.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.carers.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.carers.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
@@ -542,15 +539,28 @@
 								{'label':'Undisclosed','class':'cat-1','v':un_e}
 							]
 						});
-					}else if(s=="disability"){
-						ys_l = 100*data.disability.yes.n.total/data.disability.total.n.total;
-						no_l = 100*data.disability.no.n.total/data.disability.total.n.total;
-						pf_l = 100*data.disability.prefernottosay.n.total/data.disability.total.n.total;
-						un_l = 100*data.disability.undisclosed.n.total/data.disability.total.n.total;
-						ys_e = 100*data.disability.yes.n.specific/data.disability.total.n.total;
-						no_e = 100*data.disability.no.n.specific/data.disability.total.n.total;
-						pf_e = 100*data.disability.prefernottosay.n.specific/data.disability.total.n.total;
-						un_e = 100*data.disability.undisclosed.n.specific/data.disability.total.n.total;
+					}
+					if(s=="disability"){
+						ys_l = 0;
+						no_l = 0;
+						pf_l = 0;
+						un_l = 0;
+						ys_e = 0;
+						no_e = 0;
+						pf_e = 0;
+						un_e = 0;
+						if(data.disability.total.n.total > 0){
+							ys_l = 100*data.disability.yes.n.total/data.disability.total.n.total;
+							no_l = 100*data.disability.no.n.total/data.disability.total.n.total;
+							pf_l = 100*data.disability.prefernottosay.n.total/data.disability.total.n.total;
+							un_l = 100*data.disability.undisclosed.n.total/data.disability.total.n.total;
+						}
+						if(data.disability.total.n.specific > 0){
+							ys_e = 100*data.disability.yes.n.specific/data.disability.total.n.specific;
+							no_e = 100*data.disability.no.n.specific/data.disability.total.n.specific;
+							pf_e = 100*data.disability.prefernottosay.n.specific/data.disability.total.n.specific;
+							un_e = 100*data.disability.undisclosed.n.specific/data.disability.total.n.specific;
+						}
 						if(data.disability.yes.n.total + data.disability.no.n.total + data.disability.prefernottosay.n.total + data.disability.undisclosed.n.total > data.disability.total.n.total) console.warn('Disability: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.disability.total.n.total);
 						
 						g.disability.html += '<tr><td>Leeds</span></td><td>'+data.disability.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.disability.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
@@ -592,7 +602,6 @@
 					key.querySelector('.series-0 + .label').innerHTML = 'Leeds Employers - '+data.ages.total.n.total.toLocaleString()+' employee'+(data.ages.total.n.total==1?'':'s')+' total';
 					key.querySelector('.series-1 + .label').innerHTML = '<span class="employer">Employer</span> - '+data.ages.total.n.specific.toLocaleString()+' employee'+(data.ages.total.n.specific==1?'':'s')+' total';
 					key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
-
 				}
 				if(g.carers.html){
 					this.cards.carers.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Carer #</th><th>Carer %</th><th>Not a carer #</th><th>Not a carer %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.carers.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -605,10 +614,10 @@
 						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 						this.cards.carers.panels.chart.el.appendChild(key);
 					}
-					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+					key.querySelector('.extranotes').innerHTML = (employees>data.carers.total.n.total ? '<p>There are '+(employees-data.carers.total.n.total).toLocaleString()+' employees without carer data':'');
 				}
 				if(g.disability.html){
-					this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Disability #</th><th>Disability %</th><th>No disability #</th><th>No disability %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.carers.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+					this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Disability #</th><th>Disability %</th><th>No disability #</th><th>No disability %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.disability.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 					this.cards.disability.chart.setData(g.disability.data).draw();
 					for(e in this.cards.disability.panels.chart.events) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
 					key = this.cards.disability.el.querySelector('.key');
