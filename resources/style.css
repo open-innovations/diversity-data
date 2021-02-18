@@ -143,11 +143,16 @@ article article p { margin-top: 1em; }
 #ages .series-0 { background-color: #F9BC26; }
 #ages .series-1 { background-color: #F9BC26; background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
 #ages .series-2 { background: #00B6FF; }
-#carers .cat-1, #disability .cat-1 { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
+#carers .cat-1, #disability .cat-1, #gender .cat-1 { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
 #carers .series-0, #disability .series-0 { background-color: #F9BC26; }
 #carers .series-1, #disability .series-1 { background-color: #00B6FF; }
 #carers .series-2, #disability .series-2 { background-color: #BBB; }
 #carers .series-3, #disability .series-3 { background-color: #999; }
+#gender .series-0 { background-color: #722EA5; }
+#gender .series-1 { background-color: #67E767; }
+#gender .series-2 { background-color: #F9BC26; }
+#gender .series-3 { background-color: #BBB; }
+#gender .series-4 { background-color: #999; }
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
 .key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
 

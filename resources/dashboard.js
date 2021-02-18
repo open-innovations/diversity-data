@@ -376,6 +376,14 @@
 						"prefernottosay":{"keys":["disability_prefernottosay"],"n":{"total":0,"specific":0}},
 						"undisclosed":{"keys":["disability_undisclosed"],"n":{"total":0,"specific":0}},
 						"total":{"keys":["disability_total"],"n":{"total":0,"specific":0}}
+					},
+					"gender":{
+						"female":{"keys":["gender_female"],"n":{"total":0,"specific":0}},
+						"male":{"keys":["gender_male"],"n":{"total":0,"specific":0}},
+						"diverse":{"keys":["gender_diverse"],"n":{"total":0,"specific":0}},
+						"prefernottosay":{"keys":["gender_prefernottosay"],"n":{"total":0,"specific":0}},
+						"undisclosed":{"keys":["gender_undisclosed"],"n":{"total":0,"specific":0}},
+						"total":{"keys":["gender_total"],"n":{"total":0,"specific":0}}
 					}
 				}
 
@@ -398,7 +406,34 @@
 					summary += '<li><a href="'+keep[i].URL+'">'+formatEmployer(keep[i].organisation,keep[i].organisation_division)+'</a> updated <time datetime="'+keep[i].published+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time></li>';
 					n++;
 				}
-
+				var horizpanel = {
+					'chart':{
+						'label':'Barchart',
+						'class':'output chart',
+						'chart': {
+							'type': 'bar',
+							'dir': 'horizontal',
+							'formatY': function(v,attr){
+								if(!v) return "";
+								return v.toFixed(1).replace(/\.0/,"")+'%';
+							}
+						},
+						'events':{
+							'barover':function(e,a){
+								removeBalloons();
+								info = document.createElement('div');
+								info.classList.add('balloon');
+								i = this.data[e.cluster].data[e.series];
+								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
+								e.event.originalTarget.appendChild(info);
+							},
+							'mouseleave':function(e){
+								removeBalloons();
+							}
+						}
+					},
+					'table':{'label':'Data','class':'output'}
+				}
 				this.cards.ages.addPanels({
 					'chart':{
 						'label':'Barchart',
@@ -426,66 +461,14 @@
 					},
 					'table':{'label':'Data','class':'output'}
 				});
-				this.cards.carers.addPanels({
-					'chart':{
-						'label':'Barchart',
-						'class':'output chart',
-						'chart': {
-							'type': 'bar',
-							'dir': 'horizontal',
-							'formatY': function(v,attr){
-								if(!v) return "";
-								return v.toFixed(1).replace(/\.0/,"")+'%';
-							}
-						},
-						'events':{
-							'barover':function(e,a){
-								removeBalloons();
-								info = document.createElement('div');
-								info.classList.add('balloon');
-								i = this.data[e.cluster].data[e.series];
-								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
-								e.event.originalTarget.appendChild(info);
-							},
-							'mouseleave':function(e){
-								removeBalloons();
-							}
-						}
-					},
-					'table':{'label':'Data','class':'output'}
-				});
-				this.cards.disability.addPanels({
-					'chart':{
-						'label':'Barchart',
-						'class':'output chart',
-						'chart': {
-							'type': 'bar',
-							'dir': 'horizontal',
-							'formatY': function(v,attr){
-								if(!v) return "";
-								return v.toFixed(1).replace(/\.0/,"")+'%';
-							}
-						},
-						'events':{
-							'barover':function(e,a){
-								removeBalloons();
-								info = document.createElement('div');
-								info.classList.add('balloon');
-								i = this.data[e.cluster].data[e.series];
-								info.innerHTML = i.label+": "+this.attr.formatY(i.v);
-								e.event.originalTarget.appendChild(info);
-							},
-							'mouseleave':function(e){
-								removeBalloons();
-							}
-						}
-					},
-					'table':{'label':'Data','class':'output'}
-				});
+				this.cards.carers.addPanels(horizpanel);
+				this.cards.disability.addPanels(horizpanel);
+				this.cards.gender.addPanels(horizpanel);
 				g = {
 					'ages':{'html':'','data': []},
 					'carers':{'html':'','data': []},
-					'disability':{'html':'','data': []}
+					'disability':{'html':'','data': []},
+					'gender':{'html':'','data': []}
 				}
 				for(s in data){
 					for(a in data[s]){
@@ -586,6 +569,49 @@
 							]
 						});
 					}
+					if(s=="gender"){
+						pc = {'f':{'all':0,'spec':0},'m':{'all':0,'spec':0},'d':{'all':0,'spec':0},'p':{'all':0,'spec':0},'u':{'all':0,'spec':0},'t':{'all':0,'spec':0}};
+						if(data.gender.total.n.total > 0){
+							pc.f.all = 100*data.gender.female.n.total/data.gender.total.n.total;
+							pc.m.all = 100*data.gender.male.n.total/data.gender.total.n.total;
+							pc.d.all = 100*data.gender.diverse.n.total/data.gender.total.n.total;
+							pc.p.all = 100*data.gender.prefernottosay.n.total/data.gender.total.n.total;
+							pc.u.all = 100*data.gender.undisclosed.n.total/data.gender.total.n.total;
+						}
+						if(data.gender.total.n.specific > 0){
+							pc.f.spec = 100*data.gender.female.n.specific/data.gender.total.n.specific;
+							pc.m.spec = 100*data.gender.male.n.specific/data.gender.total.n.specific;
+							pc.d.spec = 100*data.gender.diverse.n.specific/data.gender.total.n.specific;
+							pc.p.spec = 100*data.gender.prefernottosay.n.specific/data.gender.total.n.specific;
+							pc.u.spec = 100*data.gender.undisclosed.n.specific/data.gender.total.n.specific;
+						}
+						if(data.gender.female.n.total + data.gender.male.n.total + data.gender.prefernottosay.n.total + data.gender.undisclosed.n.total > data.gender.total.n.total) console.warn('Gender: Total of options is greater than '+data.gender.total.n.total);
+						
+						g.gender.html += '<tr><td>Leeds</span></td><td>'+data.gender.female.n.total+'</td><td>'+pc.f.all.toFixed(1)+'</td><td>'+data.gender.male.n.total+'</td><td>'+pc.m.all.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.total+'</td><td>'+pc.p.all.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.total+'</td><td>'+pc.u.all.toFixed(1)+'</td></tr>';
+						g.gender.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.gender.female.n.specific+'</td><td>'+pc.f.spec.toFixed(1)+'</td><td>'+data.gender.male.n.specific+'</td><td>'+pc.m.spec.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.specific+'</td><td>'+pc.p.spec.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.specific+'</td><td>'+pc.u.spec.toFixed(1)+'</td></tr>';
+						g.gender.data.push({
+							'label': 'Leeds',
+							'stacked': true,
+							'data': [
+								{'label':'Female','class':'cat-0','v':pc.f.all},
+								{'label':'Male','class':'cat-0','v':pc.m.all},
+								{'label':'Diverse','class':'cat-0','v':pc.d.all},
+								{'label':'Prefer not to say','class':'cat-0','v':pc.p.all},
+								{'label':'Undisclosed','class':'cat-0','v':pc.u.all}
+							]
+						});
+						g.gender.data.push({
+							'label':'Employer',
+							'stacked': true,
+							'data': [
+								{'label':'Female','class':'cat-1','v':pc.f.spec},
+								{'label':'Male','class':'cat-1','v':pc.m.spec},
+								{'label':'Diverse','class':'cat-1','v':pc.d.spec},
+								{'label':'Prefer not to say','class':'cat-1','v':pc.p.spec},
+								{'label':'Undisclosed','class':'cat-1','v':pc.u.spec}
+							]
+						});
+					}
 				}
 
 				if(g.ages.html){
@@ -626,6 +652,19 @@
 						key.classList.add('key');
 						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 						this.cards.disability.panels.chart.el.appendChild(key);
+					}
+					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+				}
+				if(g.gender.html){
+					this.cards.gender.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Female #</th><th>Female %</th><th>Male #</th><th>Male %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.gender.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+					this.cards.gender.chart.setData(g.gender.data).draw();
+					for(e in this.cards.gender.panels.chart.events) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
+					key = this.cards.gender.el.querySelector('.key');
+					if(!key){
+						key = document.createElement('div');
+						key.classList.add('key');
+						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Female</span></li><li><span class="series-1 key-item"></span> <span class="label">Male</span></li><li><span class="series-2 key-item"></span> <span class="label">Diverse</span></li><li><span class="series-3 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-4 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
+						this.cards.gender.panels.chart.el.appendChild(key);
 					}
 					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
 				}
