@@ -154,7 +154,7 @@ article article p { margin-top: 1em; }
 #gender .series-3 { background-color: #BBB; }
 #gender .series-4 { background-color: #999; }
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
-.key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; }
+.key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; border-radius: 100%; }
 
 table { width: 100%; }
 table th { background: #ddd; color: black; }

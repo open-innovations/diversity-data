@@ -380,7 +380,7 @@
 					"gender":{
 						"female":{"keys":["gender_female"],"n":{"total":0,"specific":0}},
 						"male":{"keys":["gender_male"],"n":{"total":0,"specific":0}},
-						"diverse":{"keys":["gender_diverse"],"n":{"total":0,"specific":0}},
+						"other":{"keys":["gender_other"],"n":{"total":0,"specific":0}},
 						"prefernottosay":{"keys":["gender_prefernottosay"],"n":{"total":0,"specific":0}},
 						"undisclosed":{"keys":["gender_undisclosed"],"n":{"total":0,"specific":0}},
 						"total":{"keys":["gender_total"],"n":{"total":0,"specific":0}}
@@ -574,14 +574,14 @@
 						if(data.gender.total.n.total > 0){
 							pc.f.all = 100*data.gender.female.n.total/data.gender.total.n.total;
 							pc.m.all = 100*data.gender.male.n.total/data.gender.total.n.total;
-							pc.d.all = 100*data.gender.diverse.n.total/data.gender.total.n.total;
+							pc.d.all = 100*data.gender.other.n.total/data.gender.total.n.total;
 							pc.p.all = 100*data.gender.prefernottosay.n.total/data.gender.total.n.total;
 							pc.u.all = 100*data.gender.undisclosed.n.total/data.gender.total.n.total;
 						}
 						if(data.gender.total.n.specific > 0){
 							pc.f.spec = 100*data.gender.female.n.specific/data.gender.total.n.specific;
 							pc.m.spec = 100*data.gender.male.n.specific/data.gender.total.n.specific;
-							pc.d.spec = 100*data.gender.diverse.n.specific/data.gender.total.n.specific;
+							pc.d.spec = 100*data.gender.other.n.specific/data.gender.total.n.specific;
 							pc.p.spec = 100*data.gender.prefernottosay.n.specific/data.gender.total.n.specific;
 							pc.u.spec = 100*data.gender.undisclosed.n.specific/data.gender.total.n.specific;
 						}
@@ -595,7 +595,7 @@
 							'data': [
 								{'label':'Female','class':'cat-0','v':pc.f.all},
 								{'label':'Male','class':'cat-0','v':pc.m.all},
-								{'label':'Diverse','class':'cat-0','v':pc.d.all},
+								{'label':'Other','class':'cat-0','v':pc.d.all},
 								{'label':'Prefer not to say','class':'cat-0','v':pc.p.all},
 								{'label':'Undisclosed','class':'cat-0','v':pc.u.all}
 							]
@@ -606,7 +606,7 @@
 							'data': [
 								{'label':'Female','class':'cat-1','v':pc.f.spec},
 								{'label':'Male','class':'cat-1','v':pc.m.spec},
-								{'label':'Diverse','class':'cat-1','v':pc.d.spec},
+								{'label':'Other','class':'cat-1','v':pc.d.spec},
 								{'label':'Prefer not to say','class':'cat-1','v':pc.p.spec},
 								{'label':'Undisclosed','class':'cat-1','v':pc.u.spec}
 							]
@@ -663,7 +663,7 @@
 					if(!key){
 						key = document.createElement('div');
 						key.classList.add('key');
-						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Female</span></li><li><span class="series-1 key-item"></span> <span class="label">Male</span></li><li><span class="series-2 key-item"></span> <span class="label">Diverse</span></li><li><span class="series-3 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-4 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
+						key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Female</span></li><li><span class="series-1 key-item"></span> <span class="label">Male</span></li><li><span class="series-2 key-item"></span> <span class="label">Other</span></li><li><span class="series-3 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-4 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 						this.cards.gender.panels.chart.el.appendChild(key);
 					}
 					//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
