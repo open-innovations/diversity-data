@@ -1,0 +1,66 @@
+{
+	"name":"Yorkshire and The Humber",
+	"id": "E12000003",
+	"OAs": 17275,
+	"data":{
+		"age":{
+			"15-24": 731324,
+			"25-34": 668632,
+			"35-44": 720793,
+			"45-54": 725788,
+			"55-64": 630607,
+			"65-69": 252608,
+			"70+": 621963,
+			"total": 5283733
+		},
+		"carer":{
+			"no": 4732392,
+			"yes": 551341,
+			"total": 5283733
+		},
+		"disability":{
+			"no": 4290084,
+			"yes": 993649,
+			"total": 5283733
+		},
+		"ethnicity":{
+			"asian": 385964,
+			"black": 80345,
+			"mixed": 84558,
+			"other": 40910,
+			"white": 4691956,
+			"total": 5283733
+		},
+		"gender":{
+			"female": 1949555,
+			"male": 1925664,
+			"total": 3875219
+		},
+		"religion":{
+			"buddhist": 14319,
+			"christian": 3143819,
+			"hindu": 24074,
+			"jewish": 9929,
+			"muslim": 326050,
+			"no": 1366219,
+			"other": 16517,
+			"sikh": 22179,
+			"undisclosed": 360627,
+			"total": 5283733
+		},
+		"seb":{
+			"intermediate": 481281,
+			"lower": 850999,
+			"professional": 308284,
+			"total": 1640564
+		},
+		"sexuality":{
+			"bisexual": 45000,
+			"heterosexual": 4106000,
+			"homosexual": 56000,
+			"prefernottosay": 135000,
+			"useanotherterm": 20000,
+			"total": 4362000
+		}
+	}
+}
