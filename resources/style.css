@@ -56,7 +56,7 @@ header a { line-height: 0; }
 
 .holder { position: relative; width: 1080px; max-width: 100%; margin: auto; }
 button, .button { margin-top: 0.25em; border: 0px; font-size: 1em; background-color: #efefef; color: black; text-decoration: none!important; display: inline-block; padding: 0.5em 1em; cursor: pointer; }
-a.button:hover, button:hover, button:focus, a.button:focus { background-color: #333333!important; color: #efefef!important; }
+a.button:hover, button:hover, button:focus, a.button:focus { background-color: #ddd; }
 .b1-bg { background-color: #000000; color: white!important; }
 .b2-bg { background-color: #333333; color: white!important; }
 .bk-bg { background-color: #6D6D6D; color: white!important; }
@@ -88,12 +88,14 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 
 
 body { font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif; }
-.alpha { margin-left: 0.25em; padding: 0.1em 0.2em; background: #1DD3A7; }
+.alpha { margin-left: 0.25em; padding: 0.1em 0.2em; background: #1DD3A7; color: black; }
 body > header { border-bottom: 8px solid #1DD3A7; }
 body > header h1 { margin-bottom: 0; line-height: 1em; }
 table td, table th { border:1px solid #444; border-collapse: collapse; padding: 0.25em 0.5em; }
 form label { margin-right: 0.25em; }
-input,select { font-size: 1em; line-height: 1.5em; height: 1.5em; }
+input,select { font: inherit; line-height: 2em; height: 2em; border: 2px solid #444; }
+input:focus, select:focus { outline: 4px solid #F9BC26; }
+button:focus, input[type=submit]:focus, button:hover, input[type=submit]:hover { background:#F9BC26; }
 form + section { margin-top: 1em; }
 form .item { display: inline-block; margin-right: 1em; }
 .facet { padding-top: 1em; }
@@ -118,6 +120,9 @@ form .item { display: inline-block; margin-right: 1em; }
 	line-height: 1em;
 	font-weight: bold;
 }
+.grid.headline {
+	grid-template-columns: repeat(3, 1fr);	
+}
 .grid.links {
 	grid-template-columns: repeat(7, 1fr);
 	grid-gap: 0.5em;
@@ -140,19 +145,12 @@ article article p { margin-top: 1em; }
 }
 .key { font-size:1em; margin-top: 1em;}
 .barchart { height: 320px; }
-#ages .series-0 { background-color: #F9BC26; }
-#ages .series-1 { background-color: #F9BC26; background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
-#ages .series-2 { background: #00B6FF; }
-#carers .cat-1, #disability .cat-1, #gender .cat-1 { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px); }
-#carers .series-0, #disability .series-0 { background-color: #F9BC26; }
-#carers .series-1, #disability .series-1 { background-color: #00B6FF; }
-#carers .series-2, #disability .series-2 { background-color: #BBB; }
-#carers .series-3, #disability .series-3 { background-color: #999; }
-#gender .series-0 { background-color: #722EA5; }
-#gender .series-1 { background-color: #67E767; }
-#gender .series-2 { background-color: #F9BC26; }
-#gender .series-3 { background-color: #BBB; }
-#gender .series-4 { background-color: #999; }
+.series-0, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-0 { background-color: #F9BC26; }
+.series-1, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-1 { background-color: #00B6FF; }
+.series-2, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-2 { background-color: #67E767; }
+.series-3, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-3 { background-color: #EF3AAB; }
+.series-4, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-4 { background-color: #FF6700; }
+
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
 .key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; border-radius: 100%; }
 
@@ -166,7 +164,27 @@ td.num { text-align: center; }
 footer a,footer a:visited { color: inherit; }
 
 
-
+.comparators {
+	margin: 1em 0 2em 0;
+	display: grid;
+	grid-gap: 1em;
+	grid-template-columns: repeat(auto-fill,minmax(250px, 1fr));
+}
+.comparators .add { display: grid; grid-template-columns: auto 1fr; }
+.comparators .add input[type=submit] { margin: 0; width: 1.5em; height: 100%; font-weight: bold; font-size: 2em; border: 0; cursor: pointer; }
+.comparators .inner { padding: 1em; background: rgba(255,255,255,0.85); height: 100%; position: relative; }
+.comparators .inner h3 { margin-top: 0; margin-bottom: 0.5em; font-weight: bold; font-size: 1em; line-height: 1em; }
+.comparators .inner p { margin: 0 0 0.5em 0; }
+.comparators .inner > *:last-child { margin-bottom: 0; }
+.comparators .add .inner { background: transparent; }
+.comparators .option-block { display: grid; grid-template-columns: auto 1fr; grid-gap: 0.5em; }
+.comparators .option-block label { line-height: 2em; display: block; }
+.comparators .option-block select { min-width: 250px; }
+.comparators .comparator { padding: 4px; }
+.comparators .comparator .close { position: absolute; top: 0.25em; right: 0.25em; font-size:1.5em; line-height: 1.5em; width: 1.5em; text-align: center; font-weight: bold; cursor: pointer; background: transparent; margin: 0; padding: 0; }
+.comparators .comparator legend { font-weight: bold; margin-bottom: 0.5em; }
+.comparators .comparator select { width: 100%; }
+.hidden { display: none; }
 
 @media only screen and (max-width: 1080px) {
 	.grid.links { grid-template-columns: repeat(4, 1fr); grid-gap: 0.25em; }

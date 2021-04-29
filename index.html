@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<title>Diversity Data Dashboard</title>
 	<script src="resources/odi.chart.js"></script>
-	<script src="resources/dashboard.js"></script>
+	<script src="resources/odi.diversity-dashboard.js"></script>
 	<script src="resources/table-sort.js"></script>
 	<link rel="StyleSheet" href='resources/fonts/open-sans/open-sans.css' type='text/css'>
 	<link rel="StyleSheet" href="resources/odi.chart.css" type="text/css" />
@@ -17,16 +17,48 @@
 	</header>
 	<div class="main doublepadded" id="dashboard">
 		<p>Data last updated on <span class="lastupdated"></span></p>
-		<form class="nav"></form>
 		<section>
-			<ul class="grid">
+			<h2>Select organisations to compare</h2>
+			<form id="comparators" class="comparators">
+				<div class="comparator series-0">
+					<div class="inner">
+						<h3><label for="area">Reference area</label></h3>
+						<select id="area">
+							<option value="E08000035" selected="selected">Leeds</option>
+							<option value="E08000032">Bradford</option>
+							<option value="E37000050">Leeds City Region</option>
+							<option value="E12000003">Yorkshire and The Humber</option>
+						</select>
+					</div>
+				</div>
+				<fieldset class="add grey">
+					<input id="add-comparison" type="submit" class="grey" aria-label="Add an organisation to compare with" value="+"></input>
+					<div class="inner">
+						<legend><h3>Add an organisation</h3></legend>
+						<div class="option-block">
+							<label for="org">Organisation</label><select id="org"><option value="">Select organisation</option></select>
+							<label for="div">Division</label><select id="div"><option value="">Select division</option></select>
+							<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
+							<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form class="nav"></form>
+		</section>
+		<section>
+			<ul class="grid headline">
 				<li id="organisations" class="grey padded">
-					Organisations included
+					Organisations publishing data
 					<div class="number"></div>
 				</li>
 				<li id="employees" class="grey padded">
 					Total employees included
 					<div class="number"></div>
+				</li>
+				<li id="population" class="grey padded">
+					Area population
+					<div class="number">751,485</div>
 				</li>
 			</ul>
 			
@@ -42,14 +74,16 @@
 		</section>
 		
 		<section>
-			<article class="facet" id="ages">
+			<article class="facet" id="age">
 				<div class="doublepadded grey">
 					<header><h2>Age</h2></header>
 					<summary>Number of people in each age bracket for the selected year. If no employers report data in the selected year, this will be blank. The number of employees included in this may differ from the total at the top - it depends of the level of reporting by each employer.</summary>
+					<div class="output"></div>
+					<p>Some footer text</p>
 				</div>
 			</article>
 
-			<article class="facet" id="carers">
+			<article class="facet" id="carer">
 				<div class="doublepadded grey">
 					<header><h2>Carers</h2></header>
 				</div>
@@ -99,5 +133,24 @@
 			<ul></ul>
 		</section>
 	</footer>
+	
+	<script>
+	var dash;
+	ODI.ready(function(){
+		dash = ODI.diversityDashboard({
+			'index':'leeds.csv',
+			'comparison': {
+				'max': 3,
+				'el':document.getElementById('comparators'),
+				'geography': document.getElementById('area'),
+				'add': document.getElementById('add-comparison'),
+				'org': document.getElementById('org'),
+				'division': document.getElementById('div'),
+				'level': document.getElementById('lvl'),
+				'date': document.getElementById('dat')
+			}
+		});
+	});
+	</script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 .barchart { width: 100%; display: block; margin: auto; text-align: center; position: relative; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 .barchart .barchart-grid, .barchart .barchart-data { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
-.barchart .barchart-data { width: 96%; display: grid; grid-gap: 1em; }
+.barchart .barchart-data { width: 96%; display: grid; grid-gap: 3em; }
 .barchart.horizontal .barchart-data { grid-gap: 2px; }
 .barchart .barchart-data .barchart-cluster { position: relative; }
 .barchart.horizontal .barchart-data { height: calc(100% - 1.5em); width: auto; }
