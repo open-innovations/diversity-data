@@ -1,0 +1,9 @@
+*temp/
+data/Census2011/MSOA/
+data/Census2011/OA/AGE_UNIT/
+data/Census2011/OA/AGE_NSSEC_UNIT/
+data/Census2011/OA/ETHGRP_UNIT/
+data/Census2011/OA/LLHPDI_UNIT/
+data/Census2011/OA/PRUNCA_UNIT/
+data/Census2011/OA/RELIG_UNIT/
+data/Census2011/OA/economic-activity-by-sex.csv
