@@ -206,6 +206,7 @@
 		this.cache = {};
 		this.orgs = {};
 		this.compare = [{}];
+		this.lastupdate = "0000-00-00";
 		this.format = {
 			'age':{
 				'0-14':{'_total':0},
@@ -663,6 +664,7 @@
 					if(!this.orgs[org][div][lvl]) this.orgs[org][div][lvl] = {};
 					
 					pubdate = d[r].published;
+					if(pubdate > this.lastupdate) this.lastupdate = pubdate;
 	
 					this.orgs[org][div][lvl][pubdate] = JSON.parse(JSON.stringify(d2));
 				}
@@ -823,139 +825,8 @@
 					}
 				}
 
-/*
-				if(s=="carer"){
-					ys_l = no_l = pf_l = un_l = ys_e = no_e = pf_e = un_e = 0;
-					if(data.carer.total.n.total > 0){
-						ys_l = 100*data.carer.yes.n.total/data.carer.total.n.total;
-						no_l = 100*data.carer.no.n.total/data.carer.total.n.total;
-						pf_l = 100*data.carer.prefernottosay.n.total/data.carer.total.n.total;
-						un_l = 100*data.carer.undisclosed.n.total/data.carer.total.n.total;
-					}
-					if(data.carer.total.n.specific > 0){
-						ys_e = 100*data.carer.yes.n.specific/data.carer.total.n.specific;
-						no_e = 100*data.carer.no.n.specific/data.carer.total.n.specific;
-						pf_e = 100*data.carer.prefernottosay.n.specific/data.carer.total.n.specific;
-						un_e = 100*data.carer.undisclosed.n.specific/data.carer.total.n.specific;
-					}
-					if(data.carer.yes.n.total + data.carer.no.n.total + data.carer.prefernottosay.n.total + data.carer.undisclosed.n.total > data.carer.total.n.total) console.warn('Carers: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.carers.total.n.total);
-					
-					g.carer.html += '<tr><td>Leeds</span></td><td>'+data.carer.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.carer.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.carer.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.carer.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
-					g.carer.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.carer.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.carer.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.carer.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.carer.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
-					g.carer.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-0','v':ys_l},
-							{'label':'No','class':'cat-0','v':no_l},
-							{'label':'Prefer not to say','class':'cat-0','v':pf_l},
-							{'label':'Undisclosed','class':'cat-0','v':un_l}
-						]
-					});
-					g.carer.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-1','v':ys_e},
-							{'label':'No','class':'cat-1','v':no_e},
-							{'label':'Prefer not to say','class':'cat-1','v':pf_e},
-							{'label':'Undisclosed','class':'cat-1','v':un_e}
-						]
-					});
-				}
-				if(s=="disability"){
-					ys_l = 0;
-					no_l = 0;
-					pf_l = 0;
-					un_l = 0;
-					ys_e = 0;
-					no_e = 0;
-					pf_e = 0;
-					un_e = 0;
-					if(data.disability.total.n.total > 0){
-						ys_l = 100*data.disability.yes.n.total/data.disability.total.n.total;
-						no_l = 100*data.disability.no.n.total/data.disability.total.n.total;
-						pf_l = 100*data.disability.prefernottosay.n.total/data.disability.total.n.total;
-						un_l = 100*data.disability.undisclosed.n.total/data.disability.total.n.total;
-					}
-					if(data.disability.total.n.specific > 0){
-						ys_e = 100*data.disability.yes.n.specific/data.disability.total.n.specific;
-						no_e = 100*data.disability.no.n.specific/data.disability.total.n.specific;
-						pf_e = 100*data.disability.prefernottosay.n.specific/data.disability.total.n.specific;
-						un_e = 100*data.disability.undisclosed.n.specific/data.disability.total.n.specific;
-					}
-					if(data.disability.yes.n.total + data.disability.no.n.total + data.disability.prefernottosay.n.total + data.disability.undisclosed.n.total > data.disability.total.n.total) console.warn('Disability: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.disability.total.n.total);
-					
-					g.disability.html += '<tr><td>Leeds</span></td><td>'+data.disability.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.disability.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
-					g.disability.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.disability.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.disability.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
-					g.disability.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-0','v':ys_l},
-							{'label':'No','class':'cat-0','v':no_l},
-							{'label':'Prefer not to say','class':'cat-0','v':pf_l},
-							{'label':'Undisclosed','class':'cat-0','v':un_l}
-						]
-					});
-					g.disability.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-1','v':ys_e},
-							{'label':'No','class':'cat-1','v':no_e},
-							{'label':'Prefer not to say','class':'cat-1','v':pf_e},
-							{'label':'Undisclosed','class':'cat-1','v':un_e}
-						]
-					});
-				}
-				if(s=="gender"){
-					pc = {'f':{'all':0,'spec':0},'m':{'all':0,'spec':0},'d':{'all':0,'spec':0},'p':{'all':0,'spec':0},'u':{'all':0,'spec':0},'t':{'all':0,'spec':0}};
-					if(data.gender.total.n.total > 0){
-						pc.f.all = 100*data.gender.female.n.total/data.gender.total.n.total;
-						pc.m.all = 100*data.gender.male.n.total/data.gender.total.n.total;
-						pc.d.all = 100*data.gender.other.n.total/data.gender.total.n.total;
-						pc.p.all = 100*data.gender.prefernottosay.n.total/data.gender.total.n.total;
-						pc.u.all = 100*data.gender.undisclosed.n.total/data.gender.total.n.total;
-					}
-					if(data.gender.total.n.specific > 0){
-						pc.f.spec = 100*data.gender.female.n.specific/data.gender.total.n.specific;
-						pc.m.spec = 100*data.gender.male.n.specific/data.gender.total.n.specific;
-						pc.d.spec = 100*data.gender.other.n.specific/data.gender.total.n.specific;
-						pc.p.spec = 100*data.gender.prefernottosay.n.specific/data.gender.total.n.specific;
-						pc.u.spec = 100*data.gender.undisclosed.n.specific/data.gender.total.n.specific;
-					}
-					if(data.gender.female.n.total + data.gender.male.n.total + data.gender.prefernottosay.n.total + data.gender.undisclosed.n.total > data.gender.total.n.total) console.warn('Gender: Total of options is greater than '+data.gender.total.n.total);
-					
-					g.gender.html += '<tr><td>Leeds</span></td><td>'+data.gender.female.n.total+'</td><td>'+pc.f.all.toFixed(1)+'</td><td>'+data.gender.male.n.total+'</td><td>'+pc.m.all.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.total+'</td><td>'+pc.p.all.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.total+'</td><td>'+pc.u.all.toFixed(1)+'</td></tr>';
-					g.gender.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.gender.female.n.specific+'</td><td>'+pc.f.spec.toFixed(1)+'</td><td>'+data.gender.male.n.specific+'</td><td>'+pc.m.spec.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.specific+'</td><td>'+pc.p.spec.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.specific+'</td><td>'+pc.u.spec.toFixed(1)+'</td></tr>';
-					g.gender.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Female','class':'cat-0','v':pc.f.all},
-							{'label':'Male','class':'cat-0','v':pc.m.all},
-							{'label':'Other','class':'cat-0','v':pc.d.all},
-							{'label':'Prefer not to say','class':'cat-0','v':pc.p.all},
-							{'label':'Undisclosed','class':'cat-0','v':pc.u.all}
-						]
-					});
-					g.gender.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Female','class':'cat-1','v':pc.f.spec},
-							{'label':'Male','class':'cat-1','v':pc.m.spec},
-							{'label':'Other','class':'cat-1','v':pc.d.spec},
-							{'label':'Prefer not to say','class':'cat-1','v':pc.p.spec},
-							{'label':'Undisclosed','class':'cat-1','v':pc.u.spec}
-						]
-					});
-				}
-				*/
 			}
 
-console.log('graph',g);
 			if(g.age.html){
 				this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+g.age.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.log('MESSAGE','Data',g.age.data);
@@ -1035,210 +906,13 @@ console.log('graph',g);
 			tableSortJs();
 
 			// Update numbers
-//			document.querySelector('.lastupdated').innerHTML = (new Date(dates.max).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+			document.querySelector('.lastupdated').innerHTML = (new Date(this.lastupdate).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 //			document.querySelector('#employees .number').innerHTML = employees.toLocaleString();
 			document.querySelector('#organisations .number').innerHTML = this.compare.length.toLocaleString();
 //			document.querySelectorAll('.employer').forEach(function(e){ if(employer){ e.innerHTML = formatEmployer(employer.org,employer.div)||"No employer selected"; } });
 			if(summary) document.querySelector('#sources ul').innerHTML = summary;
 
 			return this;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			n = 0;
-			var data = {
-				"age":{
-					"16-24":{"keys":["age_16-24"],"n":{"total":0,"specific":0}},
-					"25-34":{"keys":["age_25-34"],"n":{"total":0,"specific":0}},
-					"35-44":{"keys":["age_35-44"],"n":{"total":0,"specific":0}},
-					"45-54":{"keys":["age_45-54"],"n":{"total":0,"specific":0}},
-					"55-64":{"keys":["age_55-64"],"n":{"total":0,"specific":0}},
-					"65-69":{"keys":["age_65-69"],"n":{"total":0,"specific":0}},
-					"70+":{"keys":["age_70+"],"n":{"total":0,"specific":0}},
-					"total":{"keys":["age_total"],"n":{"total":0,"specific":0}},
-					"undisclosed":{"keys":["age_undisclosed"],"n":{"total":0,"specific":0}}
-				},
-				"carer":{
-					"yes":{"keys":["carer_yes"],"n":{"total":0,"specific":0}},
-					"no":{"keys":["carer_no"],"n":{"total":0,"specific":0}},
-					"prefernottosay":{"keys":["carer_prefernottosay"],"n":{"total":0,"specific":0}},
-					"undisclosed":{"keys":["carer_undisclosed"],"n":{"total":0,"specific":0}},
-					"total":{"keys":["carer_total"],"n":{"total":0,"specific":0}}
-				},
-				"disability":{
-					"yes":{"keys":["disability_yes"],"n":{"total":0,"specific":0}},
-					"no":{"keys":["disability_no"],"n":{"total":0,"specific":0}},
-					"prefernottosay":{"keys":["disability_prefernottosay"],"n":{"total":0,"specific":0}},
-					"undisclosed":{"keys":["disability_undisclosed"],"n":{"total":0,"specific":0}},
-					"total":{"keys":["disability_total"],"n":{"total":0,"specific":0}}
-				},
-				"gender":{
-					"female":{"keys":["gender_female"],"n":{"total":0,"specific":0}},
-					"male":{"keys":["gender_male"],"n":{"total":0,"specific":0}},
-					"other":{"keys":["gender_other"],"n":{"total":0,"specific":0}},
-					"prefernottosay":{"keys":["gender_prefernottosay"],"n":{"total":0,"specific":0}},
-					"undisclosed":{"keys":["gender_undisclosed"],"n":{"total":0,"specific":0}},
-					"total":{"keys":["gender_total"],"n":{"total":0,"specific":0}}
-				}
-			}
-
-
-			for(s in data){
-				for(a in data[s]){
-					totpc = (data[s].total.n.total > 0 ? (100*data[s][a].n.total/data[s].total.n.total) : 0);
-					spepc = (data[s].total.n.specific > 0 ? 100*(data[s][a].n.specific||0)/data[s].total.n.specific : 0);
-					if(s=="age"){
-						g.age.html += '<tr><td>'+a+'</td><td>'+data[s][a].n.total+'</td><td>'+(totpc).toFixed(1)+'</td><td>'+data[s][a].n.specific+'</td><td>'+(spepc).toFixed(1)+'</td></tr>';
-						if(a!="total" && a!="undisclosed"){
-							g.age.data.push({'label':a,'data':[{'v':totpc,'label':'Leeds'},{'v':spepc,'label':'Employer'}]});
-							// Show percentages
-//							g.ages.data[0].data.push({'v':totpc,'label':a});
-	//						g.ages.data[1].data.push({'v':spepc,'label':a});
-						}
-					}
-				}
-				if(s=="carer"){
-					ys_l = no_l = pf_l = un_l = ys_e = no_e = pf_e = un_e = 0;
-					if(data.carer.total.n.total > 0){
-						ys_l = 100*data.carer.yes.n.total/data.carer.total.n.total;
-						no_l = 100*data.carer.no.n.total/data.carer.total.n.total;
-						pf_l = 100*data.carer.prefernottosay.n.total/data.carer.total.n.total;
-						un_l = 100*data.carer.undisclosed.n.total/data.carer.total.n.total;
-					}
-					if(data.carer.total.n.specific > 0){
-						ys_e = 100*data.carer.yes.n.specific/data.carer.total.n.specific;
-						no_e = 100*data.carer.no.n.specific/data.carer.total.n.specific;
-						pf_e = 100*data.carer.prefernottosay.n.specific/data.carer.total.n.specific;
-						un_e = 100*data.carer.undisclosed.n.specific/data.carer.total.n.specific;
-					}
-					if(data.carer.yes.n.total + data.carer.no.n.total + data.carer.prefernottosay.n.total + data.carer.undisclosed.n.total > data.carer.total.n.total) console.warn('Carers: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.carers.total.n.total);
-					
-					g.carer.html += '<tr><td>Leeds</span></td><td>'+data.carer.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.carer.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.carer.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.carer.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
-					g.carer.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.carer.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.carer.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.carer.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.carer.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
-					g.carer.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-0','v':ys_l},
-							{'label':'No','class':'cat-0','v':no_l},
-							{'label':'Prefer not to say','class':'cat-0','v':pf_l},
-							{'label':'Undisclosed','class':'cat-0','v':un_l}
-						]
-					});
-					g.carer.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-1','v':ys_e},
-							{'label':'No','class':'cat-1','v':no_e},
-							{'label':'Prefer not to say','class':'cat-1','v':pf_e},
-							{'label':'Undisclosed','class':'cat-1','v':un_e}
-						]
-					});
-				}
-				if(s=="disability"){
-					ys_l = 0;
-					no_l = 0;
-					pf_l = 0;
-					un_l = 0;
-					ys_e = 0;
-					no_e = 0;
-					pf_e = 0;
-					un_e = 0;
-					if(data.disability.total.n.total > 0){
-						ys_l = 100*data.disability.yes.n.total/data.disability.total.n.total;
-						no_l = 100*data.disability.no.n.total/data.disability.total.n.total;
-						pf_l = 100*data.disability.prefernottosay.n.total/data.disability.total.n.total;
-						un_l = 100*data.disability.undisclosed.n.total/data.disability.total.n.total;
-					}
-					if(data.disability.total.n.specific > 0){
-						ys_e = 100*data.disability.yes.n.specific/data.disability.total.n.specific;
-						no_e = 100*data.disability.no.n.specific/data.disability.total.n.specific;
-						pf_e = 100*data.disability.prefernottosay.n.specific/data.disability.total.n.specific;
-						un_e = 100*data.disability.undisclosed.n.specific/data.disability.total.n.specific;
-					}
-					if(data.disability.yes.n.total + data.disability.no.n.total + data.disability.prefernottosay.n.total + data.disability.undisclosed.n.total > data.disability.total.n.total) console.warn('Disability: Total of Yes/No/Prefer-not-to-say/undisclosed is greater than '+data.disability.total.n.total);
-					
-					g.disability.html += '<tr><td>Leeds</span></td><td>'+data.disability.yes.n.total+'</td><td>'+ys_l.toFixed(1)+'</td><td>'+data.disability.no.n.total+'</td><td>'+no_l.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.total+'</td><td>'+pf_l.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.total+'</td><td>'+un_l.toFixed(1)+'</td></tr>';
-					g.disability.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.disability.yes.n.specific+'</td><td>'+ys_e.toFixed(1)+'</td><td>'+data.disability.no.n.specific+'</td><td>'+no_e.toFixed(1)+'</td><td>'+data.disability.prefernottosay.n.specific+'</td><td>'+pf_e.toFixed(1)+'</td><td>'+data.disability.undisclosed.n.specific+'</td><td>'+un_e.toFixed(1)+'</td></tr>';
-					g.disability.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-0','v':ys_l},
-							{'label':'No','class':'cat-0','v':no_l},
-							{'label':'Prefer not to say','class':'cat-0','v':pf_l},
-							{'label':'Undisclosed','class':'cat-0','v':un_l}
-						]
-					});
-					g.disability.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Yes','class':'cat-1','v':ys_e},
-							{'label':'No','class':'cat-1','v':no_e},
-							{'label':'Prefer not to say','class':'cat-1','v':pf_e},
-							{'label':'Undisclosed','class':'cat-1','v':un_e}
-						]
-					});
-				}
-				if(s=="gender"){
-					pc = {'f':{'all':0,'spec':0},'m':{'all':0,'spec':0},'d':{'all':0,'spec':0},'p':{'all':0,'spec':0},'u':{'all':0,'spec':0},'t':{'all':0,'spec':0}};
-					if(data.gender.total.n.total > 0){
-						pc.f.all = 100*data.gender.female.n.total/data.gender.total.n.total;
-						pc.m.all = 100*data.gender.male.n.total/data.gender.total.n.total;
-						pc.d.all = 100*data.gender.other.n.total/data.gender.total.n.total;
-						pc.p.all = 100*data.gender.prefernottosay.n.total/data.gender.total.n.total;
-						pc.u.all = 100*data.gender.undisclosed.n.total/data.gender.total.n.total;
-					}
-					if(data.gender.total.n.specific > 0){
-						pc.f.spec = 100*data.gender.female.n.specific/data.gender.total.n.specific;
-						pc.m.spec = 100*data.gender.male.n.specific/data.gender.total.n.specific;
-						pc.d.spec = 100*data.gender.other.n.specific/data.gender.total.n.specific;
-						pc.p.spec = 100*data.gender.prefernottosay.n.specific/data.gender.total.n.specific;
-						pc.u.spec = 100*data.gender.undisclosed.n.specific/data.gender.total.n.specific;
-					}
-					if(data.gender.female.n.total + data.gender.male.n.total + data.gender.prefernottosay.n.total + data.gender.undisclosed.n.total > data.gender.total.n.total) console.warn('Gender: Total of options is greater than '+data.gender.total.n.total);
-					
-					g.gender.html += '<tr><td>Leeds</span></td><td>'+data.gender.female.n.total+'</td><td>'+pc.f.all.toFixed(1)+'</td><td>'+data.gender.male.n.total+'</td><td>'+pc.m.all.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.total+'</td><td>'+pc.p.all.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.total+'</td><td>'+pc.u.all.toFixed(1)+'</td></tr>';
-					g.gender.html += '<tr><td><span class="employer">Employer</span></span></td><td>'+data.gender.female.n.specific+'</td><td>'+pc.f.spec.toFixed(1)+'</td><td>'+data.gender.male.n.specific+'</td><td>'+pc.m.spec.toFixed(1)+'</td><td>'+data.gender.prefernottosay.n.specific+'</td><td>'+pc.p.spec.toFixed(1)+'</td><td>'+data.gender.undisclosed.n.specific+'</td><td>'+pc.u.spec.toFixed(1)+'</td></tr>';
-					g.gender.data.push({
-						'label': 'Leeds',
-						'stacked': true,
-						'data': [
-							{'label':'Female','class':'cat-0','v':pc.f.all},
-							{'label':'Male','class':'cat-0','v':pc.m.all},
-							{'label':'Other','class':'cat-0','v':pc.d.all},
-							{'label':'Prefer not to say','class':'cat-0','v':pc.p.all},
-							{'label':'Undisclosed','class':'cat-0','v':pc.u.all}
-						]
-					});
-					g.gender.data.push({
-						'label':'Employer',
-						'stacked': true,
-						'data': [
-							{'label':'Female','class':'cat-1','v':pc.f.spec},
-							{'label':'Male','class':'cat-1','v':pc.m.spec},
-							{'label':'Other','class':'cat-1','v':pc.d.spec},
-							{'label':'Prefer not to say','class':'cat-1','v':pc.p.spec},
-							{'label':'Undisclosed','class':'cat-1','v':pc.u.spec}
-						]
-					});
-				}
-			}
-
-			if(summary) document.querySelector('#sources ul').innerHTML = summary;
 		}
 
 		return this.init(attr);
