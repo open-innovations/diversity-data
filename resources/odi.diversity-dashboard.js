@@ -321,7 +321,7 @@
 
 		this.init = function(attr){
 			if(!attr) attr = {};
-			this.log('INFO','init',attr);
+			this.log('MESSAGE','init',attr);
 			if(!attr.index){
 				this.log('ERROR','No index file provided');
 				return this;
@@ -418,7 +418,7 @@
 		}
 
 		this.updateOptions = function(){
-			this.log('INFO','updateOptions',this.selected);
+			this.log('MESSAGE','updateOptions',this.selected);
 
 			var added,org,div,lvl,dt;
 			
@@ -491,7 +491,7 @@
 
 		// Get the data into a JSON format
 		this.loaded = function(){
-			this.log('INFO','loaded');
+			this.log('MESSAGE','loaded');
 
 			this.updateOptions();
 			this.update();
@@ -501,7 +501,7 @@
 
 		this.loadGeography = function(cb){
 			var geocode = this.attr.comparison.geography.value;
-			this.log('INFO','loadGeography',geocode);
+			this.log('MESSAGE','loadGeography',geocode);
 			if(!this.cache) this.cache = {};
 			if(this.cache[geocode]){
 				if(this.cache[geocode].loaded && typeof cb==="function") cb.call(this,geocode);
@@ -535,7 +535,7 @@
 		
 		// Use the "Add an organisation" form to add a comparison organisation
 		this.addComparison = function(){
-			this.log('INFO','addComparison');
+			this.log('MESSAGE','addComparison');
 			if(this.attr.comparison.el){
 				org =  this.selected.org||"";
 				date = this.selected.date||"";
@@ -582,7 +582,7 @@
 
 		// Remove an organisation that has been added as a comparison
 		this.removeComparison = function(n){
-			this.log('INFO','removeComparison',n);
+			this.log('MESSAGE','removeComparison',n);
 			cur = this.attr.comparison.el.querySelectorAll('.comparator');
 			len = cur.length;
 			if(len >= 1){
@@ -611,7 +611,7 @@
 		}
 
 		this.addData = function(url,d){
-			this.log('INFO','addData',url,d);
+			this.log('MESSAGE','addData',url,d);
 
 			// Restructure the CSV into JSON
 			for(r = 0; r < d.length; r++){
@@ -624,7 +624,7 @@
 				d2 = JSON.parse(JSON.stringify(this.format));
 
 				total = 0;
-				if(!d[r].employees) console.error('No employee total given');
+				if(!d[r].employees) this.log('ERROR','No employee total given');
 				else total = d[r].employees;
 
 				for(p in d[r]){
@@ -678,7 +678,7 @@
 		
 		this.update = function(){
 			
-			this.log('INFO','update');
+			this.log('MESSAGE','update');
 
 
 			data = JSON.parse(JSON.stringify(this.format));
@@ -736,7 +736,6 @@
 					}					
 				}
 			}
-			console.log('data',data);
 
 			var horizpanel = {
 				'chart':{
@@ -841,7 +840,6 @@
 				}
 				ul = key.querySelector('ul');
 				ul.innerHTML = "";
-				console.log('cache',this.cache,this.attr.comparison.geography.value);
 				for(var i = 0; i < this.compare.length; i++){
 					li = document.createElement('li');
 					li.innerHTML = '<span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' employee'+(data.age.total==1?"":"s")+' total</span>';
