@@ -803,8 +803,10 @@
 					}
 				}
 			}
-			
-			summary = '';
+
+			// Clear sources
+			document.querySelectorAll('#sources ul li.org').forEach(function(e){ e.remove(); });
+
 			// Work out percentages
 			for(var i = 0; i < this.compare.length; i++){
 				o = this.compare[i];
@@ -812,7 +814,10 @@
 					this.compare[i].name = formatEmployer(o.org,o.div,o.lvl,o.date);
 					d = this.orgs[o.org][o.div][o.lvl][o.date];
 					dt = new Date(o.date);
-					summary += '<li><a href="'+d.URL+'">'+this.compare[i].name+'</a> updated <time datetime="'+o.date+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time></li>';
+					sli = document.createElement('li');
+					sli.classList.add('org');
+					sli.innerHTML = '<a href="'+d.URL+'">'+this.compare[i].name+'</a> updated <time datetime="'+o.date+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time>';
+					document.querySelector('#sources ul').appendChild(sli);
 					for(r in d){
 						if(typeof d[r]==="object"){
 							for(p in d[r]){
@@ -1032,7 +1037,6 @@
 			document.querySelector('.lastupdated').innerHTML = (new Date(this.lastupdate).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 		//	document.querySelector('#population .number').innerHTML = (this.cache[this.attr.comparison.geography.value].json.data.age.total||0).toLocaleString();
 			document.querySelector('#organisations .number').innerHTML = Object.keys(dash.orgs).length;
-			if(summary) document.querySelector('#sources ul').innerHTML = summary;
 
 			return this;
 		}
