@@ -12,128 +12,124 @@
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 </head>
 <body class="b1-bg">
-	<header class="padded b1-bg">
-		<h1>Leeds Diversity Dashboard<span class="alpha">alpha</span></h1>
-	</header>
-	<div class="main doublepadded" id="dashboard">
-		<p>Data last updated on <span class="lastupdated"></span></p>
-		<section>
-			<h2>Select organisations to compare</h2>
-			<form id="comparators" class="comparators">
-				<div class="comparator series-0">
-					<div class="inner">
-						<h3><label for="area">Reference area</label></h3>
-						<select id="area">
-							<option value="E08000035" selected="selected">Leeds</option>
-							<option value="E08000032">Bradford</option>
-							<option value="E37000050">Leeds City Region</option>
-							<option value="E12000003">Yorkshire and The Humber</option>
-						</select>
-					</div>
-				</div>
-				<fieldset class="add grey">
-					<input id="add-comparison" type="submit" class="grey" aria-label="Add an organisation to compare with" value="+"></input>
-					<div class="inner">
-						<legend><h3>Add an organisation</h3></legend>
-						<div class="option-block">
-							<label for="org">Organisation</label><select id="org"><option value="">Select organisation</option></select>
-							<label for="div">Division</label><select id="div"><option value="">Select division</option></select>
-							<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
-							<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
+	<div id="dashboard">
+		<header class="padded b1-bg">
+			<h1>Leeds Diversity Dashboard<span class="alpha">alpha</span></h1>
+		</header>
+		<div class="main doublepadded">
+			<p class="datestamp">Data last updated on <span class="lastupdated"></span></p>
+			<section>
+				<h2>Compare</h2>
+				<p id="organisations">There are <span class="number">0</span> organisation(s) currently included in the dashboard. You can compare them - and divisions/levels within them where those are provided - against a reference area below.</p>
+				<form id="comparators" class="comparators">
+					<div class="comparator series-0">
+						<div class="inner">
+							<h3><label for="area">Reference area</label></h3>
+							<select id="area">
+								<option value="E08000035" selected="selected">Leeds</option>
+								<option value="E08000032">Bradford</option>
+								<option value="E08000033">Calderdale</option>
+								<option value="E37000050">Leeds City Region</option>
+								<option value="E12000003">Yorkshire and The Humber</option>
+							</select>
+							<div id="area-error"></div>
 						</div>
 					</div>
-				</fieldset>
-			</form>
-			<form class="nav"></form>
-		</section>
-		<section>
-			<ul class="grid headline">
-				<li id="organisations" class="grey padded">
-					Organisations publishing data
-					<div class="number"></div>
-				</li>
-				<li id="employees" class="grey padded">
-					Total employees included
-					<div class="number"></div>
-				</li>
-				<li id="population" class="grey padded">
-					Area population
-					<div class="number">751,485</div>
-				</li>
-			</ul>
+					<div class="add">
+						<button id="add-comparison" type="submit" class="grey" aria-label="Add an organisation to compare with">+</button>
+					</div>
+				</form>
+				<form class="nav"></form>
+			</section>
+			<section>
+				<nav>
+					<ul class="grid links">
+						<li><a href="#age" class="grey padded">Age</a></li>
+						<li><a href="#carer" class="grey padded">Carers</a></li>
+						<li><a href="#disability" class="grey padded">Disability</a></li>
+						<li><a href="#ethnicity" class="grey padded">Ethnicity</a></li>
+						<li><a href="#gender" class="grey padded">Gender</a></li>
+						<li><a href="#religion" class="grey padded">Religion</a></li>
+						<li><a href="#seb" class="grey padded">Socio-economic</a></li>
+						<li><a href="#sexuality" class="grey padded">Sexuality</a></li>
+					</ul>
+				</nav>
+			</section>
 			
-			<ul class="grid links">
-				<li><a href="#ages" class="grey padded">Age</a></li>
-				<li><a href="#carers" class="grey padded">Carers</a></li>
-				<li><a href="#disability" class="grey padded">Disability</a></li>
-				<li><a href="#ethnicity" class="grey padded">Ethnicity</a></li>
-				<li><a href="#gender" class="grey padded">Gender</a></li>
-				<li><a href="#religion" class="grey padded">Religion</a></li>
-				<li><a href="#sexuality" class="grey padded">Sexuality</a></li>
-			</ul>
-		</section>
+			<section>
+				<article class="facet" id="age">
+					<div class="doublepadded grey">
+						<header><h2>Age</h2></header>
+						<summary>Number of people in each age bracket for the selected year. If no employers report data in the selected year, this will be blank. The number of employees included in this may differ from the total at the top - it depends of the level of reporting by each employer.</summary>
+					</div>
+				</article>
+
+				<article class="facet" id="carer">
+					<div class="doublepadded grey">
+						<header><h2>Carers</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="disability">
+					<div class="doublepadded grey">
+						<header><h2>Disability</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="ethnicity">
+					<div class="doublepadded grey">
+						<header><h2>Ethnicity</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="gender">
+					<div class="doublepadded grey">
+						<header><h2>Gender</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="religion">
+					<div class="doublepadded grey">
+						<header><h2>Religion</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="seb">
+					<div class="doublepadded grey">
+						<header><h2>Socio-economic background</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="sexuality">
+					<div class="doublepadded grey">
+						<header><h2>Sexuality</h2></header>
+						<p>The "Reference area" <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2018">sexuality figures come from the ONS Population Survey (2018)</a> which is only published by UK Region (e.g. Yorkshire and The Humber) so we have used the regional values in place of the reference area.</p>
+					</div>
+				</article>
+			</section>
+
+		</div>
 		
-		<section>
-			<article class="facet" id="age">
-				<div class="doublepadded grey">
-					<header><h2>Age</h2></header>
-					<summary>Number of people in each age bracket for the selected year. If no employers report data in the selected year, this will be blank. The number of employees included in this may differ from the total at the top - it depends of the level of reporting by each employer.</summary>
-					<div class="output"></div>
-					<p>Some footer text</p>
-				</div>
-			</article>
-
-			<article class="facet" id="carer">
-				<div class="doublepadded grey">
-					<header><h2>Carers</h2></header>
-				</div>
-			</article>
-
-			<article class="facet" id="disability">
-				<div class="doublepadded grey">
-					<header><h2>Disability</h2></header>
-					<div class="output"></div>
-				</div>
-			</article>
-
-			<article class="facet" id="ethnicity">
-				<div class="doublepadded grey">
-					<header><h2>Ethnicity</h2></header>
-					<div class="output"></div>
-				</div>
-			</article>
-
-			<article class="facet" id="gender">
-				<div class="doublepadded grey">
-					<header><h2>Gender</h2></header>
-					<div class="output"></div>
-				</div>
-			</article>
-
-			<article class="facet" id="religion">
-				<div class="doublepadded grey">
-					<header><h2>Religion</h2></header>
-					<div class="output"></div>
-				</div>
-			</article>
-
-			<article class="facet" id="sexuality">
-				<div class="doublepadded grey">
-					<header><h2>Sexuality</h2></header>
-					<div class="output"></div>
-				</div>
-			</article>
-		</section>
-
+		<footer class="b1-bg doublepadded">
+			<section id="sources">
+				<h2>Data sources</h2>
+				<ul></ul>
+			</section>
+		</footer>
 	</div>
-	
-	<footer class="b1-bg doublepadded">
-		<section id="sources">
-			<h2>Data sources</h2>
-			<ul></ul>
-		</section>
-	</footer>
-	
+	<div id="add" class="dialog dialog-hidden" role="dialog" aria-labelledby="addTitle">
+		<fieldset class="inner">
+			<legend><h3 id="addTitle">Add an organisation</h3></legend>
+			<div class="option-block">
+				<label for="org">Name</label><select id="org"><option value="">Select organisation</option></select>
+				<label for="div">Division</label><select id="div"><option value="">Select division</option></select>
+				<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
+				<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
+			</div>
+		</fieldset>
+		<input type="submit" class="grey" aria-label="Add the organisation to the dashboard" value="Add organisation"></input>
+	</div>
+
 	<script>
 	var dash;
 	ODI.ready(function(){
@@ -141,15 +137,20 @@
 			'index':'leeds.csv',
 			'comparison': {
 				'max': 3,
+				'nav':document.querySelector('nav'),
+				'main':document.getElementById('dashboard'),
 				'el':document.getElementById('comparators'),
 				'geography': document.getElementById('area'),
+				'geography-error':document.getElementById('area-error'),
 				'add': document.getElementById('add-comparison'),
 				'org': document.getElementById('org'),
 				'division': document.getElementById('div'),
 				'level': document.getElementById('lvl'),
-				'date': document.getElementById('dat')
+				'date': document.getElementById('dat'),
+				'dialog': document.getElementById('add')
 			}
 		});
+		
 	});
 	</script>
 </body>

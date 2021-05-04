@@ -165,13 +165,14 @@
 		return this;
 	}
 
-	function Loader(el){
-		this.el = document.createElement('div');
-		this.el.classList.add('spinner');
-		this.el.innerHTML = '<img src="https://odileeds.org/resources/images/odi.svg" alt="Loading..." />';
-		el.insertAdjacentElement('afterend',this.el);
-		this.remove = function(){ this.el.parentNode.removeChild(this.el); }
-		this.error = function(msg){ this.el.innerHTML = '<span class="error">'+msg+'</span>'; }
+	function Loader(_parent){
+		var _obj = this;
+		el = document.createElement('div');
+		el.classList.add('spinner');
+		el.innerHTML = '<img src="https://odileeds.org/resources/images/odi.svg" alt="Loading..." />';
+		_parent.appendChild(el);
+		this.remove = function(){ _parent.innerHTML = ''; }
+		this.error = function(msg){ _parent.innerHTML = '<span class="error">'+msg+'</span>'; }
 		return this;
 	}
 
@@ -205,6 +206,7 @@
 		this.selected = {'org':''};
 		this.cache = {};
 		this.orgs = {};
+		this.loader = {};
 		this.compare = [{}];
 		this.lastupdate = "0000-00-00";
 		this.format = {
@@ -217,32 +219,34 @@
 				'55-64':{'_total':0},
 				'65-69':{'_total':0},
 				'70+':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'carer':{
 				'yes':{
 					'1-19':{'_total':0},
 					'20-49':{'_total':0},
 					'50':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'Yes'
 				},
-				'no':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'no':{'_total':0,'_label':'No'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'disability':{
 				'yes':{
 					'daytodayalot':{'_total':0},
 					'daytodayalittle':{'_total':0},
-					'_total': 0
+					'_total': 0,
+					'_label':'Yes'
 				},
-				'no':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'no':{'_total':0,'_label':'No'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'ethnicity':{
 				'asian':{
@@ -251,69 +255,74 @@
 					'indian':{'_total':0},
 					'pakistani':{'_total':0},
 					'other':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'Asian'
 				},
 				'black':{
 					'african':{'_total':0},
 					'caribbean':{'_total':0},
 					'other':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'Black'
 				},
 				'mixed':{
 					'african':{'_total':0},
 					'asian':{'_total':0},
 					'caribbean':{'_total':0},
 					'other':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'Mixed'
 				},
 				'other':{
 					'arab':{'_total':0},
 					'anyother':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'Other'
 				},
 				'white':{
 					'british':{'_total':0},
 					'irish':{'_total':0},
 					'traveller':{'_total':0},
 					'other':{'_total':0},
-					'_total':0
+					'_total':0,
+					'_label':'White'
 				},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'gender':{
-				'female':{'_total':0},
-				'male':{'_total':0},
-				'other':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'female':{'_total':0,'_label':'Female'},
+				'male':{'_total':0,'_label':'Male'},
+				'other':{'_total':0,'_label':'Other'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'religion':{
-				'buddhist':{'_total':0},
-				'christian':{'_total':0},
-				'hindu':{'_total':0},
-				'jewish':{'_total':0},
-				'muslim':{'_total':0},
-				'no':{'_total':0},
-				'other':{'_total':0},
-				'sikh':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'buddhist':{'_total':0,'_label':'Buddhist'},
+				'christian':{'_total':0,'_label':'Christian'},
+				'hindu':{'_total':0,'_label':'Hindu'},
+				'jewish':{'_total':0,'_label':'Jewish'},
+				'muslim':{'_total':0,'_label':'Muslim'},
+				'no':{'_total':0,'_label':'None'},
+				'other':{'_total':0,'_label':'Other'},
+				'sikh':{'_total':0,'_label':'Sikh'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'seb':{
 				
 			},
 			'sexuality':{
-				'bisexual':{'_total':0},
-				'heterosexual':{'_total':0},
-				'homosexual':{'_total':0},
-				'useanotherterm':{'_total':0},
-				'prefernottosay':0,
-				'undisclosed':0,
-				'total':0
+				'bisexual':{'_total':0,'_label':'Bisexual'},
+				'heterosexual':{'_total':0,'_label':'Heterosexual/straight'},
+				'homosexual':{'_total':0,'_label':'Gay/Lesbian'},
+				'useanotherterm':{'_total':0,'_label':'Use another term'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			}
 		};
 
@@ -366,7 +375,7 @@
 
 			// Add events to comparison form
 			if(attr.comparison){
-				if(attr.comparison.add) attr.comparison.add.addEventListener('click',function(e){ e.preventDefault(); _obj.addComparison(); });
+				if(attr.comparison.add) attr.comparison.add.addEventListener('click',function(e){ e.preventDefault(); _obj.toggleDialog("show"); });
 				if(attr.comparison.org) attr.comparison.org.addEventListener('change', function(e){ _obj.selected.org = e.currentTarget.value; _obj.selected.div = "_none"; _obj.selected.lvl = "_none"; _obj.selected.date = ""; _obj.updateOptions(); });
 				if(attr.comparison.division) attr.comparison.division.addEventListener('change', function(e){ _obj.selected.div = e.currentTarget.value||"_none"; _obj.updateOptions(); });
 				if(attr.comparison.level) attr.comparison.level.addEventListener('change', function(e){ _obj.selected.lvl = e.currentTarget.value||"_none"; _obj.updateOptions(); });
@@ -374,25 +383,101 @@
 				if(attr.comparison.geography){
 					// Load the new geography
 					attr.comparison.geography.addEventListener('change',function(e){ _obj.loadGeography(_obj.update); });
-
 					// Load the initially selected geography
 					this.loadGeography();
 				}
+				this.dialogOpen = false;
+				if(attr.comparison.dialog){
+					if(!attr.comparison.dialogSubmit) attr.comparison.dialogSubmit = attr.comparison.dialog.querySelector('input[type=submit]');
+					if(!attr.comparison.dialogDefault) attr.comparison.dialogDefault = attr.comparison.dialog.querySelector('select'); // Default form element to focus on
+					cls = attr.comparison.dialog.querySelector('.close');
+
+					attr.comparison.dialogSubmit.addEventListener('click',function(e){ e.preventDefault(); console.log('add comparison'); _obj.addComparison(); _obj.toggleDialog(); });
+					if(!cls){
+						cls = document.createElement('button');
+						cls.classList.add('close');
+						cls.innerHTML = "&times;";
+						cls.setAttribute('aria-label','Close this dialog');
+						attr.comparison.dialog.insertBefore(cls, attr.comparison.dialog.firstChild);
+					}
+					cls.addEventListener('click',function(e){
+						e.preventDefault(); console.log('add comparison'); 
+						_obj.toggleDialog();
+					});
+					cls.addEventListener('blur',function(e){
+						if(_obj.dialogOpen){
+							e.stopPropagation();
+							// Set focus back to the dialog
+							attr.comparison.dialogSubmit.focus();
+						}
+					});
+				}
 			}
 			
+			// Build the cards
 			var cards = this.el.querySelectorAll(attr.cards||'.facet');
 			this.cards = {};
 			for(var i = 0; i < cards.length; i++){
 				id = cards[i].getAttribute('id');
 				if(id) this.cards[id] = new Card({'el':cards[i]});
+				//if(i>0) cards[i].style.display = 'none';
 			}
-			
+
+			// Add click events to navigation links
+			var a = attr.comparison.nav.querySelectorAll('li a');
+			for(var i = 0; i < a.length; i++){
+				id = a[i].getAttribute('href').substr(1,);
+				a[i].addEventListener('click',function(e){
+					e.preventDefault();
+					id = e.target.getAttribute('href').substr(1,);
+					// Remove existing selection
+					attr.comparison.nav.querySelectorAll('.selected').forEach(function(e){ e.classList.remove('selected'); });
+					// Select this nav item
+					e.target.classList.add('selected');
+					for(c = 0; c < cards.length; c++) cards[c].style.display = (cards[c].getAttribute('id')==id) ? '' : 'none';
+				});
+			}
+			// Trigger click of first item
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent('click', true, false);
+			a[0].dispatchEvent(e);
 
 			return this;
 		}
+		this.toggleDialog = function(sh){
+			this.log('MESSAGE','toggleDialog',attr.comparison.dialog);
+			bg = attr.comparison.main;
+			if(sh == "show"){
+				attr.comparison.dialogSubmit.setAttribute('class','');
+				attr.comparison.dialogSubmit.classList.add('series-'+this.compare.length);
+				this.dialogOpen = true;
+				// Show the dialog
+				attr.comparison.dialog.classList.remove('dialog-hidden');
+				// Focus on the first <select> dropdown
+				attr.comparison.dialog.querySelector('select').focus();
+				// Hide the background
+				if(bg){
+					bg.setAttribute("aria-hidden","true");
+					bg.classList.add('background');
+					bg.setAttribute("aria-disabled","true");
+				}
+			}else{
+				this.dialogOpen = false;
+				// Hide the dialog
+				attr.comparison.dialog.classList.add('dialog-hidden');
+				// Show the background
+				if(bg){
+					bg.removeAttribute("aria-hidden");
+					bg.removeAttribute("aria-disabled");
+					bg.classList.remove('background');
+				}
+				attr.comparison.add.focus();				
+			}
+			return this;
+		}
+		function formatEmployer(o,d,l,date){
 
-		function formatEmployer(o,d){
-			return (o ? o+(d && d!="_none" ? ' ('+d+')' : '') : "");
+			return (o ? o+(d && d!="_none" ? ', '+d : '')+(l && l!="_none" ? ', '+l : '')+(date ? ' ('+date+')' : '') : "");
 		}
 		function sortObj(obj,rev){
 			if(rev){
@@ -407,7 +492,6 @@
 				}, {});
 			}
 		}
-		
 		function addOption(el,value,txt,sel){
 			o = document.createElement('option');
 			o.value = value;
@@ -416,7 +500,6 @@
 			el.appendChild(o);
 			return o;
 		}
-
 		this.updateOptions = function(){
 			this.log('MESSAGE','updateOptions',this.selected);
 
@@ -502,12 +585,15 @@
 		this.loadGeography = function(cb){
 			var geocode = this.attr.comparison.geography.value;
 			this.log('MESSAGE','loadGeography',geocode);
+
+			if(!this.loader.geography) this.loader.geography = new Loader(this.attr.comparison['geography-error']);
+			
 			if(!this.cache) this.cache = {};
 			if(this.cache[geocode]){
 				if(this.cache[geocode].loaded && typeof cb==="function") cb.call(this,geocode);
 			}else{
 				// Create a loading animation after the <select>
-				this.cache[geocode] = {'loaded':false,'loader':new Loader(this.attr.comparison.geography)};
+				this.cache[geocode] = {'loaded':false};
 
 				// Load the data from a file
 				ODI.ajax('data/'+geocode+'.json',{
@@ -520,13 +606,13 @@
 						this.cache[geocode].loaded = true;
 						this.cache[geocode].json = d;
 						// Remove the loading animation
-						this.cache[geocode].loader.remove();
+						this.loader.geography.remove();
 						// Do something
 						if(typeof a.data.callback==="function") a.data.callback.call(this,geocode);
 					},
 					"error": function(e,a){
 						this.log('ERROR','Failed to load '+a.url);
-						this.cache[a.data.geocode].loader.error('Failed to load geography')
+						this.loader.geography.error('Failed to load '+geocode)
 					}
 				});
 			}
@@ -651,6 +737,7 @@
 					}
 				}
 				d2.URL = url;
+				d2.total = total;
 				d[r].data = JSON.parse(JSON.stringify(d2));
 				
 				org = d[r].organisation;
@@ -676,12 +763,24 @@
 			return this;
 		}
 		
+		function addKey(txt,el){
+			var key = el.querySelector('.key');
+			if(!key){
+				key = document.createElement('div');
+				key.classList.add('key');
+				el.appendChild(key);
+			}
+			key.innerHTML = keytxt;
+			return true;
+		}
+		
 		this.update = function(){
 			
 			this.log('MESSAGE','update');
 
 
-			data = JSON.parse(JSON.stringify(this.format));
+			fmt = JSON.stringify(this.format);
+			data = JSON.parse(fmt);
 			
 			n = this.compare.length;
 
@@ -705,7 +804,7 @@
 			for(var i = 0; i < this.compare.length; i++){
 				o = this.compare[i];
 				if(o.org){
-					this.compare[i].name = formatEmployer(o.org,o.div,o.lvl);
+					this.compare[i].name = formatEmployer(o.org,o.div,o.lvl,o.date);
 					d = this.orgs[o.org][o.div][o.lvl][o.date];
 					dt = new Date(o.date);
 					summary += '<li><a href="'+d.URL+'">'+this.compare[i].name+'</a> updated <time datetime="'+o.date+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time></li>';
@@ -723,20 +822,22 @@
 						}
 					}
 				}else{
-					d = this.cache[this.attr.comparison.geography.value].json.data;
-					this.compare[i].name = this.cache[this.attr.comparison.geography.value].json.name;
-					for(r in d){
-						if(typeof d[r]==="object"){
-							for(p in d[r]){
-								if(data[r][p]){
-									data[r][p][i] = d[r][p];
+					if(this.cache[this.attr.comparison.geography.value].json){
+						d = this.cache[this.attr.comparison.geography.value].json.data;
+						this.compare[i].name = this.cache[this.attr.comparison.geography.value].json.name;
+						for(r in d){
+							if(typeof d[r]==="object"){
+								for(p in d[r]){
+									if(data[r][p]){
+										data[r][p][i] = d[r][p];
+									}
 								}
 							}
 						}
-					}					
+					}
 				}
 			}
-
+			/*
 			var horizpanel = {
 				'chart':{
 					'label':'Barchart',
@@ -764,7 +865,7 @@
 					}
 				},
 				'table':{'label':'Data','class':'output'}
-			}
+			}*/
 			var barpanel = {
 				'chart':{
 					'label':'Barchart',
@@ -772,7 +873,7 @@
 					'chart': {
 						'type': 'bar',
 						'formatY': function(v){
-							if(!v) return "";
+							if(!v) return "0%";
 							return v.toFixed(1).replace(/\.0/,"")+'%';
 						}
 					},
@@ -782,8 +883,11 @@
 							info = document.createElement('div');
 							info.classList.add('balloon');
 							i = (this.data[e.cluster].data[e.series].data) ? this.data[e.cluster].data[e.series].data[e.bin] : this.data[e.cluster].data[e.series];
-							info.innerHTML = i.label+": "+this.attr.formatY(i.v);
+							txt = i.label+": "+this.data[e.cluster].label+" = "+this.attr.formatY(i.v);
+							info.innerHTML = txt;
 							e.event.originalTarget.appendChild(info);
+							// Update title text
+							e.event.originalTarget.setAttribute('title',txt);
 						},
 						'mouseleave':function(e){
 							removeBalloons();
@@ -800,104 +904,112 @@
 			this.cards.disability.addPanels(barpanel);
 			this.cards.ethnicity.addPanels(barpanel);
 			this.cards.gender.addPanels(barpanel);
+			this.cards.religion.addPanels(barpanel);
+			this.cards.sexuality.addPanels(barpanel);
 			
 			g = {
-				'age':{'html':'','data': []},
-				'carer':{'html':'','data': []},
-				'disability':{'html':'','data': []},
-				'ethnicity':{'html':'','data': []},
-				'gender':{'html':'','data': []}
+				'age':{'table':'','th':'','data': []},
+				'carer':{'table':'','th':'','data': []},
+				'disability':{'table':'','th':'','data': []},
+				'ethnicity':{'table':'','th':'','data': []},
+				'gender':{'table':'','th':'','data': []},
+				'religion':{'table':'','th':'','data': []},
+				'sexuality':{'table':'','th':'','data': []}
 			}
 
+			fmt = JSON.parse(fmt);
 			for(s in data){
-				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender"){
+				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender" || s=="religion" || s=="sexuality"){
+					for(i = 0; i < this.compare.length; i++){
+						g[s].th += '<th>'+this.compare[i].name+' #</th><th>'+this.compare[i].name+' %</th>';
+					}
 					for(a in data[s]){
-						gd = {'label':a,'data':new Array(this.compare.length)};
-						g[s].html += '<tr><td>'+a+'</td>';
+						gd = {'label':(fmt[s][a]._label||a),'data':new Array(this.compare.length)};
+						g[s].table += '<tr><td>'+gd.label+'</td>';
 						for(i = 0; i < this.compare.length; i++){
 							pc = (100*data[s][a][i]/data[s].total[i])||0;
-							g[s].html += '<td>'+data[s][a][i]+'</td><td>'+(pc).toFixed(1)+'</td>';
+							g[s].table += '<td>'+data[s][a][i]+'</td><td>'+(pc).toFixed(1)+'</td>';
 							gd.data[i] = {'v':pc,'label':this.compare[i].name};
 						}
-						g[s].html += '</tr>';
+						g[s].table += '</tr>';
 						if(a!="total" && a!="undisclosed" && a!="prefernottosay") g[s].data.push(gd);
 					}
 				}
-
 			}
 
-			if(g.age.html){
-				this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th><th>Leeds #</th><th>Leeds %</th><th><span class="employer">Employer</span> #</th><th><span class="employer">Employer</span> %</th></tr>'+g.age.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+			keytxt = '<ul>';
+			for(var i = 0; i < this.compare.length; i++) keytxt += '<li><span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' people</span></li>';
+			keytxt += '</ul><p class="extranotes"></p>';
+
+
+			if(g.age.table){
+				this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th>'+g.age.th+'</tr>'+g.age.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.log('MESSAGE','Data',g.age.data);
 				this.cards.age.chart.setData(g.age.data).draw();
 				for(e in this.cards.age.panels.chart.events) this.cards.age.chart.on(e,this.cards.age.panels.chart.events[e]);
-				key = this.cards.age.el.querySelector('.key');
-				if(!key){
-					key = document.createElement('div');
-					key.classList.add('key');
-					key.innerHTML = '<ul></ul><p class="extranotes"></p>';
-					this.cards.age.panels.chart.el.appendChild(key);
-				}
-				ul = key.querySelector('ul');
-				ul.innerHTML = "";
-				for(var i = 0; i < this.compare.length; i++){
-					li = document.createElement('li');
-					li.innerHTML = '<span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' employee'+(data.age.total==1?"":"s")+' total</span>';
-					ul.appendChild(li);
-				}
+				addKey(keytxt,this.cards.age.panels.chart.el);
 				//key.querySelector('.extranotes').innerHTML = (employees>data.age.total.n.total ? '<p>There are '+(employees-data.age.total.n.total).toLocaleString()+' employees without age data':'');
 			}
-			if(g.carer.html){
-				this.cards.carer.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Carer #</th><th>Carer %</th><th>Not a carer #</th><th>Not a carer %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.carer.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+			if(g.carer.table){
+				this.cards.carer.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Carer status</th>'+g.carer.th+'</tr>'+g.carer.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.carer.chart.setData(g.carer.data).draw();
 				for(e in this.cards.carer.panels.chart.events) this.cards.carer.chart.on(e,this.cards.carer.panels.chart.events[e]);
-				key = this.cards.carer.el.querySelector('.key');
-				if(!key){
-					key = document.createElement('div');
-					key.classList.add('key');
-					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
-					this.cards.carer.panels.chart.el.appendChild(key);
-				}
+				addKey(keytxt,this.cards.carer.panels.chart.el);
 				//key.querySelector('.extranotes').innerHTML = (employees>data.carer.total.n.total ? '<p>There are '+(employees-data.carer.total.n.total).toLocaleString()+' employees without carer data':'');
 			}
-			if(g.disability.html){
-				this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Disability #</th><th>Disability %</th><th>No disability #</th><th>No disability %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.disability.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+			if(g.disability.table){
+				this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Disability status</th>'+g.disability.th+'</tr>'+g.disability.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.disability.chart.setData(g.disability.data).draw();
 				for(e in this.cards.disability.panels.chart.events) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
-				key = this.cards.disability.el.querySelector('.key');
+				addKey(keytxt,this.cards.disability.panels.chart.el);
+/*
 				if(!key){
 					key = document.createElement('div');
 					key.classList.add('key');
 					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 					this.cards.disability.panels.chart.el.appendChild(key);
 				}
+*/
 				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
 			}
-			if(g.ethnicity.html){
-				this.cards.ethnicity.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Ethnicity #</th><th>Disability %</th><th>No disability #</th><th>No disability %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.disability.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+			if(g.ethnicity.table){
+				this.cards.ethnicity.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Ethnicity</th>'+g.ethnicity.th+'</tr>'+g.ethnicity.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.ethnicity.chart.setData(g.ethnicity.data).draw();
 				for(e in this.cards.ethnicity.panels.chart.events) this.cards.ethnicity.chart.on(e,this.cards.ethnicity.panels.chart.events[e]);
-				key = this.cards.ethnicity.el.querySelector('.key');
+				addKey(keytxt,this.cards.ethnicity.panels.chart.el);
+				/*
 				if(!key){
 					key = document.createElement('div');
 					key.classList.add('key');
 					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 					this.cards.ethnicity.panels.chart.el.appendChild(key);
-				}
+				}*/
 				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
 			}
-			if(g.gender.html){
-				this.cards.gender.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Type</th><th>Female #</th><th>Female %</th><th>Male #</th><th>Male %</th><th>Prefer not to say #</th><th>Prefer not to say %</th><th>Undisclosed #</th><th>Undisclosed %</th></tr>'+g.gender.html+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+			if(g.gender.table){
+				this.cards.gender.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Gender</th>'+g.gender.th+'</tr>'+g.gender.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.gender.chart.setData(g.gender.data).draw();
 				for(e in this.cards.gender.panels.chart.events) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
-				key = this.cards.gender.el.querySelector('.key');
-				if(!key){
+				addKey(keytxt,this.cards.gender.panels.chart.el);
+/*				if(!key){
 					key = document.createElement('div');
 					key.classList.add('key');
 					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Female</span></li><li><span class="series-1 key-item"></span> <span class="label">Male</span></li><li><span class="series-2 key-item"></span> <span class="label">Other</span></li><li><span class="series-3 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-4 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
 					this.cards.gender.panels.chart.el.appendChild(key);
-				}
+				}*/
 				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+			}
+			if(g.religion.table){
+				this.cards.religion.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Religion</th>'+g.religion.th+'</tr>'+g.religion.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+				this.cards.religion.chart.setData(g.religion.data).draw();
+				for(e in this.cards.religion.panels.chart.events) this.cards.religion.chart.on(e,this.cards.religion.panels.chart.events[e]);
+				addKey(keytxt,this.cards.religion.panels.chart.el);
+			}
+			if(g.sexuality.table){
+				this.cards.sexuality.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.sexuality.th+'</tr>'+g.sexuality.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+				this.cards.sexuality.chart.setData(g.sexuality.data).draw();
+				for(e in this.cards.sexuality.panels.chart.events) this.cards.sexuality.chart.on(e,this.cards.sexuality.panels.chart.events[e]);
+				addKey(keytxt,this.cards.sexuality.panels.chart.el);
 			}
 			
 			// Make tables sortable
@@ -905,9 +1017,8 @@
 
 			// Update numbers
 			document.querySelector('.lastupdated').innerHTML = (new Date(this.lastupdate).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-//			document.querySelector('#employees .number').innerHTML = employees.toLocaleString();
-			document.querySelector('#organisations .number').innerHTML = this.compare.length.toLocaleString();
-//			document.querySelectorAll('.employer').forEach(function(e){ if(employer){ e.innerHTML = formatEmployer(employer.org,employer.div)||"No employer selected"; } });
+		//	document.querySelector('#population .number').innerHTML = (this.cache[this.attr.comparison.geography.value].json.data.age.total||0).toLocaleString();
+			document.querySelector('#organisations .number').innerHTML = Object.keys(dash.orgs).length;
 			if(summary) document.querySelector('#sources ul').innerHTML = summary;
 
 			return this;
