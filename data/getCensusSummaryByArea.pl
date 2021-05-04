@@ -22,7 +22,7 @@ $lookupfile = "Census2011/OA/OA-lookup-sorted.csv";
 				"Total Age"=>"total"
 			},
 			"group"=>{
-				#"0-14"=>["Age 0","Age 1","Age 2","Age 3","Age 4","Age 5","Age 6","Age 7","Age 8","Age 9","Age 10","Age 11","Age 12","Age 13","Age 14"],
+				"0-14"=>["Age 0","Age 1","Age 2","Age 3","Age 4","Age 5","Age 6","Age 7","Age 8","Age 9","Age 10","Age 11","Age 12","Age 13","Age 14"],
 				"15-24"=>["Age 15","Age 16","Age 17","Age 18","Age 19","Age 20","Age 21","Age 22","Age 23","Age 24"],
 				"25-34"=>["Age 25","Age 26","Age 27","Age 28","Age 29","Age 30","Age 31","Age 32","Age 33","Age 34"],
 				"35-44"=>["Age 35","Age 36","Age 37","Age 38","Age 39","Age 40","Age 41","Age 42","Age 43","Age 44"],
