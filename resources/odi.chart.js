@@ -185,10 +185,32 @@
 		// Draw the grid
 		if(this.attr.ymax && this.attr.ymax > mx) mx = this.attr.ymax;
 		grid = this.getGrid(mn,mx);
-		output = "";
-
-		for(g = 0; g <= grid.max; g+= grid.inc) output += '<div class="line" style="'+(this.attr.dir=="horizontal" ? 'left':'bottom')+':'+(h*(g-mn)/r).toFixed(4)+'%;"><span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,g) : this.formatNumber(g))+'</span></div>';
-		this.el.querySelector('.barchart-grid').innerHTML = output;
+		
+		if(!this.grid) this.grid = {};
+		for(g in this.grid) this.grid[g].keep = false;
+		for(g = 0; g <= grid.max; g+= grid.inc){
+			if(!this.grid[g]) this.grid[g] = {};
+			this.grid[g].keep = true;
+			this.grid[g].value = g;
+		}
+		bgrid = el.querySelector('.barchart-grid');
+		for(g in this.grid){
+			if(!this.grid[g].keep){
+				// Remove this grid line
+				bgrid.removeChild(this.grid[g].el);
+				delete this.grid[g];
+			}else{
+				if(!this.grid[g].el){
+					// Add this grid line
+					line = document.createElement('div');
+					line.classList.add('line');
+					line.innerHTML = '<span>'+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,this.grid[g].value) : this.formatNumber(this.grid[g].value))+'</span>';
+					bgrid.appendChild(line);
+					this.grid[g].el = line;
+				}
+				this.grid[g].el.style[(this.attr.dir=="horizontal" ? 'left':'bottom')] = (h*(this.grid[g].value-mn)/r).toFixed(4)+'%';
+			}
+		}
 
 		clusters = el.querySelectorAll('.barchart-cluster-inner');
 
@@ -301,6 +323,7 @@
 				}
 				// Set attributes
 				series[s].setAttribute('title',key+': '+(typeof this.attr.formatY==="function" ? this.attr.formatY.call(this,value) : this.parent.formatNumber(value)));
+				series[s].setAttribute('tabindex',0);
 				//series[s].setAttribute('data-bin',i);
 				series[s].setAttribute('data-series',s);
 				// Set style
@@ -320,13 +343,15 @@
 					dir = (d[c].stacked ? "rows" : "columns");
 				}
 			}
-			clusters[c].style['grid-template-'+dir] = splits;
+			clusters[c].style['grid-template-'+dir] = 'repeat('+d[c].data.length+',1fr)';
 		}
 
 		// Get the maximum label height
 		lbls = el.querySelectorAll('.barchart-data .category-label');
 		lh = 0;
 		lbls.forEach(function(e){ lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? e.offsetWidth-parseInt(getStyle(e,'left')) : e.offsetHeight)); });
+		// If we haven't got a value the element may be hidden so we'll guess a value
+		if(lh == 0) lh = parseInt(getStyle(lbls[0],'line-height'))+parseInt(getStyle(lbls[0],'padding-top'));
 		// Padding for labels
 		el.querySelector('.barchart-grid').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";
 		el.querySelector('.barchart-data').style["margin-"+(this.attr.dir=="horizontal" ? "left":"bottom")] = lh+"px";

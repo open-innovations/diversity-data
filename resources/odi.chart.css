@@ -19,7 +19,7 @@
 .barchart.horizontal .barchart-data .barchart-cluster-inner .category-label { top: 50%; left: -5px; height: auto; width: auto; transform: translate3d(-100%,-50%,0); }
 .barchart .barchart-data .label { position: absolute; left: 0px; border-left: 1px solid #5b5b5b; padding-left: 0.25em; padding-top: 0.25em; line-height: 1em; }
 .barchart .barchart-grid { position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; }
-.barchart .barchart-grid .line { width: 100%; border-bottom: 1px solid #5b5b5b; color: #5b5b5b; opacity: 0.3; position: absolute; text-align: right; }
+.barchart .barchart-grid .line { width: 100%; border-bottom: 1px solid #5b5b5b; color: #5b5b5b; opacity: 0.3; position: absolute; text-align: right; transition: all 0.3s ease-in; animation: appear 0s ease-in 0.3s forwards; animation-fill-mode: forwards; visibility: hidden; }
 .barchart.horizontal .barchart-grid .line { width: auto; height: 100%; border-bottom: 0px; border-left: 1px solid #5b5b5b; }
 .barchart.horizontal .barchart-grid .line span { display: block; position: relative; top: 100%; transform: translate3d(0,-100%,0); margin-left:2px; }
 .barchart:hover .barchart-grid .line { opacity: 1; }
@@ -60,4 +60,7 @@
 	border-right-color: white;
 	left: auto;
 	right: 0;
+}
+@keyframes appear {
+    to { visibility: visible; }
 }
