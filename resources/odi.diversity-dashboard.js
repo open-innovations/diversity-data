@@ -313,7 +313,12 @@
 				'total':{'_total':0,'_label':'Total'}
 			},
 			'seb':{
-				
+				"lower": {'_total':0,'_label':'Lower'},
+				"intermediate": {'_total':0,'_label':'Intermediate'},
+				"professional": {'_total':0,'_label':'Professional'},
+				'prefernottosay': {'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
 			},
 			'sexuality':{
 				'bisexual':{'_total':0,'_label':'Bisexual'},
@@ -905,6 +910,7 @@
 			this.cards.ethnicity.addPanels(barpanel);
 			this.cards.gender.addPanels(barpanel);
 			this.cards.religion.addPanels(barpanel);
+			this.cards.seb.addPanels(barpanel);
 			this.cards.sexuality.addPanels(barpanel);
 			
 			g = {
@@ -914,12 +920,13 @@
 				'ethnicity':{'table':'','th':'','data': []},
 				'gender':{'table':'','th':'','data': []},
 				'religion':{'table':'','th':'','data': []},
+				'seb':{'table':'','th':'','data': []},
 				'sexuality':{'table':'','th':'','data': []}
 			}
 
 			fmt = JSON.parse(fmt);
 			for(s in data){
-				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender" || s=="religion" || s=="sexuality"){
+				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender" || s=="religion" || s=="sexuality" || s=="seb"){
 					for(i = 0; i < this.compare.length; i++){
 						g[s].th += '<th>'+this.compare[i].name+' #</th><th>'+this.compare[i].name+' %</th>';
 					}
@@ -1010,6 +1017,12 @@
 				this.cards.sexuality.chart.setData(g.sexuality.data).draw();
 				for(e in this.cards.sexuality.panels.chart.events) this.cards.sexuality.chart.on(e,this.cards.sexuality.panels.chart.events[e]);
 				addKey(keytxt,this.cards.sexuality.panels.chart.el);
+			}
+			if(g.seb.table){
+				this.cards.seb.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.seb.th+'</tr>'+g.seb.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+				this.cards.seb.chart.setData(g.seb.data).draw();
+				for(e in this.cards.seb.panels.chart.events) this.cards.seb.chart.on(e,this.cards.seb.panels.chart.events[e]);
+				addKey(keytxt,this.cards.seb.panels.chart.el);
 			}
 			
 			// Make tables sortable
