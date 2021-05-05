@@ -257,14 +257,14 @@
 					'pakistani':{'_total':0},
 					'other':{'_total':0},
 					'_total':0,
-					'_label':'Asian'
+					'_label':'Asian or Asian British'
 				},
 				'black':{
 					'african':{'_total':0},
 					'caribbean':{'_total':0},
 					'other':{'_total':0},
 					'_total':0,
-					'_label':'Black'
+					'_label':'Black, African, Caribbean or Black British'
 				},
 				'mixed':{
 					'african':{'_total':0},
@@ -272,13 +272,13 @@
 					'caribbean':{'_total':0},
 					'other':{'_total':0},
 					'_total':0,
-					'_label':'Mixed'
+					'_label':'Mixed or Multiple ethnic groups'
 				},
 				'other':{
 					'arab':{'_total':0},
 					'anyother':{'_total':0},
 					'_total':0,
-					'_label':'Other'
+					'_label':'Other ethnic group'
 				},
 				'white':{
 					'british':{'_total':0},
@@ -323,8 +323,8 @@
 			},
 			'sexuality':{
 				'bisexual':{'_total':0,'_label':'Bisexual'},
-				'heterosexual':{'_total':0,'_label':'Heterosexual/straight'},
-				'homosexual':{'_total':0,'_label':'Gay/Lesbian'},
+				'heterosexual':{'_total':0,'_label':'Heterosexual / Straight'},
+				'homosexual':{'_total':0,'_label':'Gay / Lesbian'},
 				'useanotherterm':{'_total':0,'_label':'Use another term'},
 				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
 				'undisclosed':{'_total':0,'_label':'Undisclosed'},
@@ -470,9 +470,9 @@
 				if(i==0){
 					str += 'area='+this.attr.comparison.geography.value;
 				}else{
-					str += (str ? '&':'')+'org'+i+'='+this.compare[i].org;
-					if(this.compare[i].div && this.compare[i].div!="_none") str += (str ? '&':'')+'div'+i+'='+this.compare[i].div;
-					if(this.compare[i].lvl && this.compare[i].lvl!="_none") str += (str ? '&':'')+'lvl'+i+'='+this.compare[i].lvl;
+					str += (str ? '&':'')+'org'+i+'='+encodeURIComponent(this.compare[i].org);
+					if(this.compare[i].div && this.compare[i].div!="_none") str += (str ? '&':'')+'div'+i+'='+encodeURIComponent(this.compare[i].div);
+					if(this.compare[i].lvl && this.compare[i].lvl!="_none") str += (str ? '&':'')+'lvl'+i+'='+encodeURIComponent(this.compare[i].lvl);
 					if(this.compare[i].date) str += (str ? '&':'')+'date'+i+'='+this.compare[i].date;
 				}
 			}
@@ -505,14 +505,13 @@
 					if(bits[b][0]=="area"){
 						rtn.compare[0] = {'area':bits[b][1]};
 					}else{
-						
 						i = bits[b][0].replace(/[\D]/g,"");
 						key = bits[b][0].replace(/[0-9]/g,"");
 						if(key=="org" || key=="div" || key=="lvl" || key=="date"){
 							if(!rtn.compare[i]) rtn.compare[i] = {};
-							rtn.compare[i][key] = bits[b][1].replace(/%20/g," ");
+							rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
 						}else{
-							rtn[key] = bits[b][1].replace(/%20/g," ");
+							rtn[key] = decodeURIComponent(bits[b][1]);
 						}
 					}
 				}
@@ -548,10 +547,7 @@
 			}
 
 			// Set the geography
-			if(qs.compare[0] && qs.compare[0].area){
-				console.log('set area');
-				this.setGeography(qs.compare[0].area);
-			}
+			if(qs.compare[0] && qs.compare[0].area) this.setGeography(qs.compare[0].area);
 
 			n = Object.keys(qs.compare).length;
 
@@ -568,8 +564,6 @@
 		
 		this.setGeography = function(geocode){
 			if(!geocode) return this;
-			
-			console.log('setGeography',attr.comparison.geography.value);
 			attr.comparison.geography.value = geocode;
 			this.loadGeography(this.change);
 
@@ -889,6 +883,10 @@
 							if(!d2[a].total){
 								if(total) d2[a].total = total;
 								else this.log('WARNING','No total for '+a+' in '+d[r].organisation);
+							}else{
+								if(!d2[a].total._total){
+									d2[a].total._total = total;
+								}
 							}
 						}else{
 							this.log('WARNING','Unknown column heading %c'+p+'%c in %c'+d[r].organisation+'%c'+(d[r].organisation_division ? ' / '+d[r].organisation_division:'')+(d[r].organisation_level ? ' / '+d[r].organisation_level:'')+' '+url,'font-style:italic','','font-style:italic','');
@@ -1065,8 +1063,6 @@
 				'table':{'label':'Data','class':'output'}
 			};
 
-
-
 			this.cards.age.addPanels(barpanel);
 			this.cards.carer.addPanels(barpanel);
 			this.cards.disability.addPanels(barpanel);
@@ -1099,10 +1095,14 @@
 						for(i = 0; i < this.compare.length; i++){
 							pc = (100*data[s][a][i]/data[s].total[i])||0;
 							g[s].table += '<td>'+data[s][a][i]+'</td><td>'+(pc).toFixed(1)+'</td>';
-							gd.data[i] = {'v':pc,'label':this.compare[i].name};
+							gd.data[i] = {'v':pc,'label':this.compare[i].name,'class':(a=="prefernottosay" || a=="undisclosed" ? 'prefernottosay':'')};
 						}
 						g[s].table += '</tr>';
-						if(a!="total" && a!="undisclosed" && a!="prefernottosay") g[s].data.push(gd);
+						if(s=="age"){
+							if(a!="total" && a!="undisclosed" && a!="prefernottosay") g[s].data.push(gd);
+						}else{
+							if(a!="total") g[s].data.push(gd);
+						}
 					}
 				}
 			}

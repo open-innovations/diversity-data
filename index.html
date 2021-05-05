@@ -26,8 +26,10 @@
 							<select id="area">
 								<option value="E08000032">Bradford</option>
 								<option value="E08000033">Calderdale</option>
-								<option value="E08000035" selected="selected">Leeds</option>
-								<option value="E37000050">Leeds City Region</option>
+								<option value="E06000010">Hull</option>
+								<option value="E08000035">Leeds</option>
+								<option value="E37000050" selected="selected">Leeds City Region</option>
+								<option value="E08000019">Sheffield</option>
 								<option value="E12000003">Yorkshire and The Humber</option>
 							</select>
 							<div id="area-error"></div>
@@ -58,7 +60,7 @@
 				<article class="facet" id="age">
 					<div class="doublepadded grey">
 						<header><h2>Age</h2></header>
-						<summary>Number of people in each age bracket for the selected year. If no employers report data in the selected year, this will be blank. The number of employees included in this may differ from the total at the top - it depends of the level of reporting by each employer.</summary>
+						<summary>Number of people by age bracket. Where organisations don't employ anyone in an age bracket the value will be zero.</summary>
 					</div>
 				</article>
 
@@ -71,12 +73,14 @@
 				<article class="facet" id="disability">
 					<div class="doublepadded grey">
 						<header><h2>Disability</h2></header>
+						<summary>Number of people with or without a disability (or prefering not to say or undisclosed). The options are from the <a href="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Government Statistical Service guidance on measuring disability</a> (2019; and used by the 2021 Census) which asks <q cite="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Do you have any physical or mental health conditions or illnesses lasting or expected to last 12 months or more?</q></summary>
 					</div>
 				</article>
 
 				<article class="facet" id="ethnicity">
 					<div class="doublepadded grey">
 						<header><h2>Ethnicity</h2></header>
+						<summary>This section groups people into one of the <a href="https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups">5 ethnic groups used by the 2011 Census</a>.</summary>
 					</div>
 				</article>
 
@@ -89,19 +93,23 @@
 				<article class="facet" id="religion">
 					<div class="doublepadded grey">
 						<header><h2>Religion</h2></header>
+						<summary>This section shows religions as collected by the <a href="https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires">2021 Census in England</a> which asks: <q cite="https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf">What is your religion?</q>. <em>Christian</em> includes Church of England, Catholic, Protestant and all other Christian denominations. <em>Other</em> includes any other religions not otherwise listed.</summary>
 					</div>
 				</article>
 
 				<article class="facet" id="seb">
 					<div class="doublepadded grey">
 						<header><h2>Socio-economic background</h2></header>
+						<summary>This section uses categories from the <a href="https://socialmobilityworks.org/toolkit/measurement/">Social Mobility Commission toolkit</a> which suggests employers ask the key question <q cite="https://socialmobilityworks.org/toolkit/measurement/">"What was the occupation of your main household earner when you were about aged 14?"</q>. The options include: <em>lower socio-economic background</em> (e.g. technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed); <em>intermediate background</em> (e.g. clerical and intermediate occupations; small business owners); <em>professional background</em> (e.g. modern professional &amp; traditional occupations; senior or junior managers or administrators).</summary>
+						<p>Reference area values come from <a href="https://www.nomisweb.co.uk/census/2011/qs611ew">2011 Census data for approximated social grade</a>. We have grouped <em>C2</em> and <em>DE</em> as <em>Lower</em>, <em>C1</em> as <em>Intermediate</em>, and <em>AB</em> as <em>Professional</em>.</p>
 					</div>
 				</article>
 
 				<article class="facet" id="sexuality">
 					<div class="doublepadded grey">
 						<header><h2>Sexuality</h2></header>
-						<p>The "Reference area" <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2018">sexuality figures come from the ONS Population Survey (2018)</a> which is only published by UK Region (e.g. Yorkshire and The Humber) so we have used the regional values in place of the reference area.</p>
+						<summary>This section has options limited to those offered by the <a href="https://gss.civilservice.gov.uk/policy-store/sexual-orientation/">Government Statistical Service guidance on reporting statistics about sexual orientation</a>. </summary>
+						<p>The 2011 Census doesn't provide data on sexuality so the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2018">sexuality figures come from the ONS Population Survey (2018)</a>. This is only published by UK Region (e.g. Yorkshire and The Humber) so we have used the regional values.</p>
 					</div>
 				</article>
 			</section>

@@ -53,6 +53,7 @@ footer h2 + p { margin-top: 1em; }
 header a { line-height: 0; }
 .msg { text-align:center; padding: 0.5em; }
 #main { padding: 1em; }
+q { font-style: italic; font-weight: 500; }
 
 .holder { position: relative; width: 1080px; max-width: 100%; margin: auto; }
 button, .button { margin-top: 0.25em; border: 0px; font-size: 1em; background-color: #efefef; color: black; text-decoration: none!important; display: inline-block; padding: 0.5em 1em; cursor: pointer; }
@@ -152,8 +153,9 @@ article article p { margin-top: 1em; }
 .series-2, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-2 { background-color: #67E767; }
 .series-3, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-3 { background-color: #EF3AAB; }
 .series-4, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-4 { background-color: #FF6700; }
+.barchart-series-inner.prefernottosay { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px)!important; }
 
-.key li { line-height: 1.5em; display: inline-block; margin-right: 1em; }
+.key li { line-height: 1.5em; display: inline-block; margin-right: 1em; margin-bottom: 0.25em; }
 .key li .key-item { width: 1.5em; height: 1.5em; float: left; margin-right: 0.25em; border-radius: 100%; }
 
 table { width: 100%; }
@@ -219,6 +221,6 @@ footer a,footer a:visited { color: inherit; }
 @media only screen and (max-width: 740px) {
 	.doublepadded { padding: 1em; }
 }
-@media only screen and (max-width: 740px) {
+@media only screen and (max-width: 650px) {
 	.grid.links { grid-template-columns: repeat(2, 1fr); }
 }
