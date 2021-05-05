@@ -98,7 +98,7 @@ table td, table th { border:1px solid #444; border-collapse: collapse; padding: 
 form label { margin-right: 0.25em; }
 input,select { font: inherit; line-height: 2em; height: 2em; border: 2px solid #444; }
 input:focus, select:focus { outline: 4px solid #00B6FF; }
-button:focus, input[type=submit]:focus, button:hover, input[type=submit]:hover { background:#F9BC26; }
+button:focus, input[type=submit]:focus, button:hover, input[type=submit]:hover { background:black; color: white; }
 form + section { margin-top: 1em; }
 form .item { display: inline-block; margin-right: 1em; }
 .facet { padding-top: 1em; }

@@ -181,8 +181,9 @@
 		this.data = {};
 		if(!attr) attr = {};
 		this.attr = attr;
+		var qs = parseHREF(location.href);
 
-		this.logging = (location.search.indexOf('debug=true') >= 0);
+		this.logging = (qs.debug=="true");
 		this.log = function(){
 			// Version 1.1
 			if(this.logging || arguments[0]=="ERROR" || arguments[0]=="WARNING"){
@@ -340,6 +341,10 @@
 				this.log('ERROR','No index file provided');
 				return this;
 			}
+			
+			// Update the state of the area (it won't process orgs just yet)
+			this.setStateFromHREF();
+
 			// Load the index file
 			ODI.ajax(attr.index,{
 				"this": this,
@@ -388,8 +393,6 @@
 				if(attr.comparison.geography){
 					// Load the new geography
 					attr.comparison.geography.addEventListener('change',function(e){ _obj.loadGeography(_obj.update); });
-					// Load the initially selected geography
-					this.loadGeography();
 				}
 				this.dialogOpen = false;
 				if(attr.comparison.dialog){
@@ -397,7 +400,7 @@
 					if(!attr.comparison.dialogDefault) attr.comparison.dialogDefault = attr.comparison.dialog.querySelector('select'); // Default form element to focus on
 					cls = attr.comparison.dialog.querySelector('.close');
 
-					attr.comparison.dialogSubmit.addEventListener('click',function(e){ e.preventDefault(); console.log('add comparison'); _obj.addComparison(); _obj.toggleDialog(); });
+					attr.comparison.dialogSubmit.addEventListener('click',function(e){ e.preventDefault(); console.log('add comparison'); _obj.addComparison(); _obj.update(); _obj.toggleDialog(); _obj.updateHistory(); });
 					if(!cls){
 						cls = document.createElement('button');
 						cls.classList.add('close');
@@ -429,6 +432,7 @@
 			}
 
 			// Add click events to navigation links
+			var aid = (location.href.indexOf(/#/) > 0 ) ? location.href.replace(/.*\#/,"") : "age";
 			var a = attr.comparison.nav.querySelectorAll('li a');
 			for(var i = 0; i < a.length; i++){
 				id = a[i].getAttribute('href').substr(1,);
@@ -440,15 +444,138 @@
 					// Select this nav item
 					e.target.classList.add('selected');
 					for(c = 0; c < cards.length; c++) cards[c].style.display = (cards[c].getAttribute('id')==id) ? '' : 'none';
+
+					// If this wasn't a triggered event we add it to the history
+					if(!e.triggered) _obj.updateHistory();
 				});
+				if(id==aid){
+					// Trigger click of the current anchor
+					var e = document.createEvent('HTMLEvents');
+					e.triggered = true;
+					e.initEvent('click', true, false);
+					a[i].dispatchEvent(e);
+				}
 			}
-			// Trigger click of first item
-			var e = document.createEvent('HTMLEvents');
-			e.initEvent('click', true, false);
-			a[0].dispatchEvent(e);
+
+			// Update page when history changes
+			window.onpopstate = function(event){ _obj.setStateFromHREF(); _obj.update(); };
 
 			return this;
 		}
+
+		this.makeQueryString = function(){
+			var sel = attr.comparison.nav.querySelector('.selected');
+			var str = '';
+			for(i = 0; i < this.compare.length;i++){
+				if(i==0){
+					str += 'area='+this.attr.comparison.geography.value;
+				}else{
+					str += (str ? '&':'')+'org'+i+'='+this.compare[i].org;
+					if(this.compare[i].div && this.compare[i].div!="_none") str += (str ? '&':'')+'div'+i+'='+this.compare[i].div;
+					if(this.compare[i].lvl && this.compare[i].lvl!="_none") str += (str ? '&':'')+'lvl'+i+'='+this.compare[i].lvl;
+					if(this.compare[i].date) str += (str ? '&':'')+'date'+i+'='+this.compare[i].date;
+				}
+			}
+			if(qs.debug) str += (str ? '&':'')+'debug=true';
+			if(sel){
+				id = sel.getAttribute('href').substr(1,);
+				str += '#'+id;
+			}
+			return (str ? '?':'')+str;
+		}
+
+		function parseHREF(h){
+			var q,a,rtn,i,bits,b;
+			h = h.replace(/.*\?/,"");
+			q = "";
+			a = "age";
+			i = h.indexOf("#");
+			if(i >= 0){
+				q = h.substr(0,i);
+				a = h.substr(i+1,);
+			}else{
+				q = h;
+			}
+			rtn = {'anchor':a,'compare':{}};
+			if(q.indexOf('&') >= 0){
+				bits = q.split(/\&/);
+				
+				for(b = 0; b < bits.length; b++){
+					bits[b] = bits[b].split(/=/);
+					if(bits[b][0]=="area"){
+						rtn.compare[0] = {'area':bits[b][1]};
+					}else{
+						
+						i = bits[b][0].replace(/[\D]/g,"");
+						key = bits[b][0].replace(/[0-9]/g,"");
+						if(key=="org" || key=="div" || key=="lvl" || key=="date"){
+							if(!rtn.compare[i]) rtn.compare[i] = {};
+							rtn.compare[i][key] = bits[b][1].replace(/%20/g," ");
+						}else{
+							rtn[key] = bits[b][1].replace(/%20/g," ");
+						}
+					}
+				}
+			}else{
+				bits = q.split(/=/);
+				if(bits[0]=="area") rtn.compare[0] = {'area':bits[1]};
+			}
+			return rtn;
+		}
+		
+		this.updateHistory = function(){
+			id = attr.comparison.nav.querySelector('.selected').getAttribute('href').substr(1,);
+			console.log('updateHistory (not active)',id);
+			history.pushState({'card':id}, 'Diversity Data Dashboard', this.makeQueryString())
+			return this;
+		}
+
+		this.setStateFromHREF = function(){
+			var i,a,id,e,n;
+			qs = parseHREF(location.href);
+			this.log('MESSAGE','setStateFromHREF',qs);
+			
+			// Trigger panel change
+			a = attr.comparison.nav.querySelectorAll('li a');
+			for(i = 0; i < a.length; i++){
+				id = a[i].getAttribute('href').substr(1,);
+				if(id==qs['anchor']){
+					e = document.createEvent('HTMLEvents');
+					e.triggered = true;
+					e.initEvent('click', true, false);
+					a[i].dispatchEvent(e);
+				}
+			}
+
+			// Set the geography
+			if(qs.compare[0] && qs.compare[0].area){
+				console.log('set area');
+				this.setGeography(qs.compare[0].area);
+			}
+
+			n = Object.keys(qs.compare).length;
+
+			// Remove existing comparisons
+			this.removeComparisonAll();
+
+			if(n > 1){
+				// Loop over comparisons and add them
+				for(var i = 1; i < n; i++) this.addComparison(qs.compare[i]);
+			}
+
+			return this;
+		}
+		
+		this.setGeography = function(geocode){
+			if(!geocode) return this;
+			
+			console.log('setGeography',attr.comparison.geography.value);
+			attr.comparison.geography.value = geocode;
+			this.loadGeography(this.change);
+
+			return this;
+		}
+
 		this.toggleDialog = function(sh){
 			this.log('MESSAGE','toggleDialog',attr.comparison.dialog);
 			bg = attr.comparison.main;
@@ -581,14 +708,19 @@
 		this.loaded = function(){
 			this.log('MESSAGE','loaded');
 
-			this.updateOptions();
-			this.update();
+			// Update the state of the orgs now that we've loaded them
+			this.setStateFromHREF();
+			
+			this.loadGeography(function(){
+				_obj.updateOptions();
+				_obj.update();
+			})
 
 			return this;
 		}
 
 		this.loadGeography = function(cb){
-			var geocode = this.attr.comparison.geography.value;
+			var geocode = attr.comparison.geography.value;
 			this.log('MESSAGE','loadGeography',geocode);
 
 			if(!this.loader.geography) this.loader.geography = new Loader(this.attr.comparison['geography-error']);
@@ -625,15 +757,29 @@
 		}
 		
 		// Use the "Add an organisation" form to add a comparison organisation
-		this.addComparison = function(){
-			this.log('MESSAGE','addComparison');
+		this.addComparison = function(comp){
+			this.log('MESSAGE','addComparison',comp);
 			if(this.attr.comparison.el){
-				org =  this.selected.org||"";
-				date = this.selected.date||"";
-				div = this.selected.div||"";
-				lvl = this.selected.lvl||"";
+				if(!comp) comp = {};
+				
+				
+				org =  comp.org||this.selected.org||"";
+				date = comp.date||this.selected.date||"";
+				div = comp.div||this.selected.div||"";
+				lvl = comp.lvl||this.selected.lvl||"";
+				
+				if(!div) div = "_none";
+				if(!lvl) lvl = "_none";
+
+				// Check if the values are possible
+				if(!this.orgs[org] || !this.orgs[org][div] || !this.orgs[org][div][lvl] || !this.orgs[org][div][lvl][date]){
+					this.log('ERROR','The organisation/division/level/date does not seem to exist in the data.',org,div,lvl,date);
+					return this;
+				}
+
 				if(div == "_none") div = "";
 				if(lvl == "_none") lvl = "";
+
 				if(org){
 					// Find how many we already have
 					cur = this.attr.comparison.el.querySelectorAll('.comparator');
@@ -663,10 +809,18 @@
 
 					// Add comparison to our array
 					this.compare.push({'org':org,'div':div||"_none",'lvl':lvl||"_none",'date':date});
-					
-					// Update the dashboard
-					this.update();
 				}
+			}
+			return this;
+		}
+
+		this.removeComparisonAll = function(){
+			cur = this.attr.comparison.el.querySelectorAll('.comparator');
+			len = cur.length;
+			this.log('MESSAGE','removeComparisonAll',cur,len);
+			if(len > 1){
+				// Remove existing comparisons starting from the end
+				for(i = len; i > 1; i--) this.removeComparison(i-1);
 			}
 			return this;
 		}
@@ -832,7 +986,11 @@
 						}
 					}
 				}else{
-					if(this.cache[this.attr.comparison.geography.value].json){
+					if(!this.cache[attr.comparison.geography.value]){
+						this.log('ERROR','No geography loaded for '+attr.comparison.geography.value);
+						return this;
+					}
+					if(this.cache[attr.comparison.geography.value].json){
 						d = this.cache[this.attr.comparison.geography.value].json.data;
 						this.compare[i].name = this.cache[this.attr.comparison.geography.value].json.name;
 						for(r in d){
