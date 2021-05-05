@@ -366,6 +366,7 @@ sub encodeJSON {
 	my ($str,$p,$a);
 	my (%props) = @_;
 	print "encodeJSON\n";
+	$props{'name'} =~ s/(^\"|\"$)//g;
 	$str = "{\n";
 	$str .= "\t\"name\":\"$props{'name'}\",\n";
 	$str .= "\t\"id\": \"$props{'id'}\",\n";

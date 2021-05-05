@@ -1,0 +1,67 @@
+{
+	"name":"Kingston upon Hull, City of",
+	"id": "E06000010",
+	"OAs": 853,
+	"data":{
+		"age":{
+			"0-14": 45276,
+			"15-24": 41456,
+			"25-34": 37577,
+			"35-44": 34805,
+			"45-54": 33971,
+			"55-64": 27590,
+			"65-69": 9635,
+			"70+": 26096,
+			"total": 256406
+		},
+		"carer":{
+			"no": 232770,
+			"yes": 23636,
+			"total": 256406
+		},
+		"disability":{
+			"no": 206015,
+			"yes": 50391,
+			"total": 256406
+		},
+		"ethnicity":{
+			"asian": 6471,
+			"black": 2996,
+			"mixed": 3454,
+			"other": 2164,
+			"white": 241321,
+			"total": 256406
+		},
+		"gender":{
+			"female": 94078,
+			"male": 96532,
+			"total": 190610
+		},
+		"religion":{
+			"buddhist": 771,
+			"christian": 140753,
+			"hindu": 439,
+			"jewish": 172,
+			"muslim": 5447,
+			"no": 89336,
+			"other": 794,
+			"sikh": 289,
+			"undisclosed": 18405,
+			"total": 256406
+		},
+		"seb":{
+			"intermediate": 23000,
+			"lower": 55909,
+			"professional": 9032,
+			"total": 87941
+		},
+		"sexuality":{
+			"bisexual": 45000,
+			"heterosexual": 4106000,
+			"homosexual": 56000,
+			"prefernottosay": 135000,
+			"useanotherterm": 20000,
+			"total": 4362000
+		}
+	}
+}
