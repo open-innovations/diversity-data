@@ -43,61 +43,58 @@
 			</section>
 			<section>
 				<nav>
-					<ul class="grid links">
-						<li><a href="#age" class="grey padded">Age</a></li>
-						<li><a href="#carer" class="grey padded">Carers</a></li>
-						<li><a href="#disability" class="grey padded">Disability</a></li>
-						<li><a href="#ethnicity" class="grey padded">Ethnicity</a></li>
-						<li><a href="#gender" class="grey padded">Gender</a></li>
-						<li><a href="#religion" class="grey padded">Religion</a></li>
-						<li><a href="#seb" class="grey padded">Socio-economic</a></li>
-						<li><a href="#sexuality" class="grey padded">Sexuality</a></li>
-					</ul>
+					<div class="grid links" role="tablist" aria-label="Diversity attributes">
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="age">Age</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="carer">Carers</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="disability">Disability</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="ethnicity">Ethnicity</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="gender">Gender</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="religion">Religion</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="seb">Socio-economic</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="sexuality">Sexuality</button>
+					</div>
 				</nav>
-			</section>
-			
-			<section>
-				<article class="facet" id="age">
+				<article class="facet" id="age" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Age</h2></header>
 						<summary>Number of people by age bracket. Where organisations don't employ anyone in an age bracket the value will be zero.</summary>
 					</div>
 				</article>
 
-				<article class="facet" id="carer">
+				<article class="facet" id="carer" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Carers</h2></header>
 					</div>
 				</article>
 
-				<article class="facet" id="disability">
+				<article class="facet" id="disability" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Disability</h2></header>
 						<summary>Number of people with or without a disability (or prefering not to say or undisclosed). The options are from the <a href="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Government Statistical Service guidance on measuring disability</a> (2019; and used by the 2021 Census) which asks <q cite="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Do you have any physical or mental health conditions or illnesses lasting or expected to last 12 months or more?</q></summary>
 					</div>
 				</article>
 
-				<article class="facet" id="ethnicity">
+				<article class="facet" id="ethnicity" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Ethnicity</h2></header>
 						<summary>This section groups people into one of the <a href="https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups">5 ethnic groups used by the 2011 Census</a>.</summary>
 					</div>
 				</article>
 
-				<article class="facet" id="gender">
+				<article class="facet" id="gender" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Gender</h2></header>
 					</div>
 				</article>
 
-				<article class="facet" id="religion">
+				<article class="facet" id="religion" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Religion</h2></header>
 						<summary>This section shows religions as collected by the <a href="https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires">2021 Census in England</a> which asks: <q cite="https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf">What is your religion?</q>. <em>Christian</em> includes Church of England, Catholic, Protestant and all other Christian denominations. <em>Other</em> includes any other religions not otherwise listed.</summary>
 					</div>
 				</article>
 
-				<article class="facet" id="seb">
+				<article class="facet" id="seb" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Socio-economic background</h2></header>
 						<summary>This section uses categories from the <a href="https://socialmobilityworks.org/toolkit/measurement/">Social Mobility Commission toolkit</a> which suggests employers ask the key question <q cite="https://socialmobilityworks.org/toolkit/measurement/">"What was the occupation of your main household earner when you were about aged 14?"</q>. The options include: <em>lower socio-economic background</em> (e.g. technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed); <em>intermediate background</em> (e.g. clerical and intermediate occupations; small business owners); <em>professional background</em> (e.g. modern professional &amp; traditional occupations; senior or junior managers or administrators).</summary>
@@ -105,7 +102,7 @@
 					</div>
 				</article>
 
-				<article class="facet" id="sexuality">
+				<article class="facet" id="sexuality" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Sexuality</h2></header>
 						<summary>This section has options limited to those offered by the <a href="https://gss.civilservice.gov.uk/policy-store/sexual-orientation/">Government Statistical Service guidance on reporting statistics about sexual orientation</a>. </summary>

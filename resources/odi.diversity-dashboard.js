@@ -6,47 +6,34 @@
 			// Version 1.1
 			if(document.readyState != 'loading') fn();
 			else document.addEventListener('DOMContentLoaded', fn);
-		}
+		};
 	}
 
-	if(!ODI.ajax){
-		function AJAX(url,opt){
-			// Version 1.2
-			if(!opt) opt = {};
-			var req = new XMLHttpRequest();
-			var responseTypeAware = 'responseType' in req;
-			if(responseTypeAware && opt.dataType) req.responseType = opt.dataType;
-			req.open((opt.method||'GET'),url+(typeof opt.cache===null || (typeof opt.cache==="boolean" && !opt.cache) ? '?'+Math.random() : ''),true);
-			req.onload = function(e){
-				if(this.status >= 200 && this.status < 400) {
-					// Success!
-					var resp = this.response;
-					if(typeof opt.success==="function") opt.success.call((opt['this']||this),resp,{'url':url,'data':opt,'originalEvent':e});
-				}else{
-					// We reached our target server, but it returned an error
-					if(typeof opt.error==="function") opt.error.call((opt['this']||this),e,{'url':url,'data':opt});
-				}
-			};
-			if(typeof opt.error==="function"){
-				// There was a connection error of some sort
-				req.onerror = function(err){ opt.error.call((opt['this']||this),err,{'url':url,'data':opt}); };
+	function AJAX(url,opt){
+		// Version 1.2
+		if(!opt) opt = {};
+		var req = new XMLHttpRequest();
+		var responseTypeAware = 'responseType' in req;
+		if(responseTypeAware && opt.dataType) req.responseType = opt.dataType;
+		req.open((opt.method||'GET'),url+(typeof opt.cache===null || (typeof opt.cache==="boolean" && !opt.cache) ? '?'+Math.random() : ''),true);
+		req.onload = function(e){
+			if(this.status >= 200 && this.status < 400) {
+				// Success!
+				var resp = this.response;
+				if(typeof opt.success==="function") opt.success.call((opt['this']||this),resp,{'url':url,'data':opt,'originalEvent':e});
+			}else{
+				// We reached our target server, but it returned an error
+				if(typeof opt.error==="function") opt.error.call((opt['this']||this),e,{'url':url,'data':opt});
 			}
-			req.send();
-			return this;
+		};
+		if(typeof opt.error==="function"){
+			// There was a connection error of some sort
+			req.onerror = function(err){ opt.error.call((opt['this']||this),err,{'url':url,'data':opt}); };
 		}
-		ODI.ajax = AJAX;
+		req.send();
+		return this;
 	}
-
-	// A non-jQuery dependent function to get a style
-	function getStyle(el, styleProp) {
-		if (typeof window === 'undefined') return;
-		var style;
-		if(!el) return style;
-		if (el.currentStyle) style = el.currentStyle[styleProp];
-		else if (window.getComputedStyle) style = document.defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
-		if (style && style.length === 0) style = null;
-		return style;
-	}
+	if(!ODI.ajax) ODI.ajax = AJAX;
 
 	/**
 	 * CSVToArray parses any String of Data including '\r' '\n' characters,
@@ -67,10 +54,10 @@
 				"([^\"\\" + delimiter + "\\r\\n]*))"
 			), "gi"
 		);
-
-		var rows = [[]];  // array to hold our data. First row is column headers.
+		var r,c,row,rows,matches,data;
+		rows = [[]];  // array to hold our data. First row is column headers.
 		// array to hold our individual pattern matching groups:
-		var matches = false; // false if we don't find any matches
+		matches = false; // false if we don't find any matches
 		// Loop until we no longer find a regular expression match
 		while (matches = pattern.exec( CSV_string )) {
 			var matched_delimiter = matches[1]; // Get the matched delimiter
@@ -94,9 +81,8 @@
 			// it to the data array.
 			rows[rows.length - 1].push(matched_value);
 		}
-		var data = [];
-		var r,c,row;
-		for(var r = 1; r < rows.length; r++){
+		data = [];
+		for(r = 1; r < rows.length; r++){
 			row = r-1;
 			data[row] = {};
 			for(c = 0; c < rows[0].length; c++){
@@ -111,77 +97,223 @@
 		if(attr.el) this.el = attr.el;
 		this.o = this.el.querySelector('.output');
 		this.header = this.el.querySelector('header');
+		var _obj = this;
+		function togglePanels(e){
+			var pid,id;
+			id = e.target.getAttribute('data-id');
+			_obj.el.querySelectorAll('.open').forEach(function(e){ e.setAttribute('aria-selected',false); e.classList.remove('open'); });
+			for(pid in _obj.panels){
+				if(pid==id){
+					_obj.nav.tabs[pid].el.classList.add('open');
+					_obj.nav.tabs[pid].el.setAttribute('aria-selected',true);
+					_obj.panels[pid].el.classList.add('open');
+				}else{
+					_obj.nav.tabs[pid].el.setAttribute('aria-selected',false);
+				}
+			}
+			return;
+		}
 		this.addPanels = function(panels){
-			var i,c,end,_obj;
+			var i,b,c,o,end,id,cls;
 			if(!this.nav && panels){
-				this.nav = {'el':document.createElement('ul'),'tabs':{}};
+				this.nav = {'el':document.createElement('div'),'tabs':{}};
 				this.panels = {};
 				this.nav.el.classList.add('tabs');
+				this.nav.el.setAttribute('role','tablist');
 				end = this.header;
 				if(this.el.querySelector('summary')) end = this.el.querySelector('summary');
 				end.insertAdjacentElement('afterend', this.nav.el);
 				end = this.nav.el;
 				i = 0;
-				_obj = this;
-				function togglePanels(e){
-					id = e.target.getAttribute('data-id');
-					_obj.el.querySelectorAll('.open').forEach(function(e){ e.classList.remove('open') });
-					for(pid in _obj.panels){
-						if(pid==id){
-							_obj.nav.tabs[pid].el.classList.add('open');
-							_obj.panels[pid].el.classList.add('open');
-						}								
-					}
-				}
 				for(id in panels){
-					b = document.createElement('li');
-					b.innerHTML = '<button>'+panels[id].label+'</button>';
-					b.querySelector('button').setAttribute('data-id',id);
-					this.nav.tabs[id] = {'el':b};
-					this.nav.el.appendChild(b);
-					if(i==0) b.classList.add('open');
-					// Create an output area
-					o = document.createElement('article');
-					// Add classes to the output area
-					if(panels[id]['class']){
-						cls = panels[id]['class'].split(/ /);
-						for(c = 0; c < cls.length; c++) o.classList.add(cls[c]);
+					if(panels[id]){
+						b = document.createElement('button');
+						b.innerHTML = panels[id].label;
+						b.setAttribute('data-id',id);
+						b.setAttribute('role','tab');
+						b.setAttribute('tabindex',0);
+						this.nav.tabs[id] = {'el':b};
+						this.nav.el.appendChild(b);
+						if(i==0){
+							b.classList.add('open');
+							b.setAttribute('aria-selected',true);
+						}else{
+							b.setAttribute('aria-selected',false);
+						}
+						// Create an output area
+						o = document.createElement('article');
+						// Add classes to the output area
+						if(panels[id]['class']){
+							cls = panels[id]['class'].split(/ /);
+							for(c = 0; c < cls.length; c++) o.classList.add(cls[c]);
+						}
+						if(i==0) o.classList.add('open');
+						b.addEventListener('click',togglePanels);
+						this.panels[id] = {'el':o};
+						if(panels[id].events) this.panels[id].events = panels[id].events;
+						// Add it after the header or previously added output areas
+						end.insertAdjacentElement('afterend',o);
+						end = o;
+						
+						if(panels[id].chart) this.chart = new ODI.chart(this.panels[id].el,panels[id].chart);
+						
+						i++;
 					}
-					if(i==0) o.classList.add('open');
-					b.addEventListener('click',togglePanels);
-					this.panels[id] = {'el':o};
-					if(panels[id].events) this.panels[id].events = panels[id].events;
-					// Add it after the header or previously added output areas
-					end.insertAdjacentElement('afterend',o);
-					end = o;
-					
-					if(panels[id].chart) this.chart = new ODI.chart(this.panels[id].el,panels[id].chart);
-					
-					i++;
 				}
 			}
 			return this;
-		}
+		};
 		return this;
 	}
 
 	function Loader(_parent){
-		var _obj = this;
-		el = document.createElement('div');
+		var el = document.createElement('div');
 		el.classList.add('spinner');
 		el.innerHTML = '<img src="https://odileeds.org/resources/images/odi.svg" alt="Loading..." />';
 		_parent.appendChild(el);
-		this.remove = function(){ _parent.innerHTML = ''; }
-		this.error = function(msg){ _parent.innerHTML = '<span class="error">'+msg+'</span>'; }
+		this.remove = function(){ _parent.innerHTML = ''; };
+		this.error = function(msg){ _parent.innerHTML = '<span class="error">'+msg+'</span>'; };
 		return this;
 	}
+
+	// Following advice from https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/Tab_Role
+	function TabbedNav(opt){
+		if(!opt) return this;
+		if(!opt.el) return this;
+		var tabs,tabList,tabFocus,tabPanels,keys,i,id,_obj;
+		
+		tabs = opt.el.querySelectorAll('[role="tab"]');
+		tabList = opt.el.querySelector('[role="tablist"]');
+		tabPanels = opt.panels;
+		tabFocus = 0;
+		this.selected = null;
+		this.selectedID = "";
+		
+		keys = {
+			end: 35,
+			home: 36,
+			left: 37,
+			up: 38,
+			right: 39,
+			down: 40,
+			delete: 46
+		};
+		_obj = this;
+
+		this.selectTab = function(e,triggered){
+			var i,sel,t,p,tabid;
+			if(typeof e==="number") e = {'target':tabs[i]};
+			else if(typeof e==="string"){
+				sel = -1;
+				for(i = 0; i < tabs.length; i++){
+					if(tabs[i].getAttribute('aria-controls')==e) sel = i;
+				}
+				if(sel >= 0) e = {'target':tabs[sel]};
+				else{
+					console.error('Not a valid string '+e);
+					return;
+				}
+			}
+			t = e.target;
+			p = t.parentNode;
+
+			// Update selection
+			_obj.selected = t;
+			_obj.selectedID = t.getAttribute('aria-controls');
+
+			// Remove all current selected tabs
+			p.querySelectorAll('[aria-selected="true"]').forEach(function(tab){ tab.setAttribute("aria-selected", false); });
+
+			// Set this tab as selected
+			t.setAttribute("aria-selected", true);
+
+			tabid = t.getAttribute('aria-controls');
+
+			// Hide all tab panels except for the active one
+			tabPanels.forEach(function(e){
+				var id = e.getAttribute('id');
+				if(id==tabid) e.removeAttribute('hidden');
+				else e.setAttribute("hidden", true);
+			});
+
+			// If this wasn't a triggered event we add it to the history
+			if(!triggered && typeof opt.callback==="function") opt.callback.call(opt.this||this);
+			return this;
+		};
+
+		for(i = 0; i < tabs.length; i++){
+			id = tabs[i].getAttribute('aria-controls');
+			tabs[i].addEventListener('focus',this.selectTab);
+			if(opt.selected && id==opt.selected) this.selectTab(i,true);
+		}
+		tabList.addEventListener("keydown",function(e){
+			tabs[tabFocus].setAttribute('tabindex',-1);
+			if(e.keyCode === keys.left || e.keyCode === keys.right){
+				// Move right
+				if(e.keyCode === keys.right){
+					tabFocus++;
+					// If we're at the end, go to the start
+					if(tabFocus >= tabs.length) tabFocus = 0;
+					// Move left
+				}else if(e.keyCode === keys.left){
+					tabFocus--;
+					// If we're at the start, move to the end
+					if(tabFocus < 0) tabFocus = tabs.length - 1;
+				}
+
+				tabs[tabFocus].setAttribute("tabindex", 0);
+				tabs[tabFocus].focus();
+			}
+		});
+		return this;
+	}
+
+	function parseHREF(h){
+		var q,a,rtn,i,bits,b,key;
+		h = h.replace(/.*\?/,"");
+		q = "";
+		a = "age";
+		i = h.indexOf("#");
+		if(i >= 0){
+			q = h.substr(0,i);
+			a = h.substr(i+1);
+		}else{
+			q = h;
+		}
+		rtn = {'anchor':a,'compare':{}};
+		if(q.indexOf('&') >= 0){
+			bits = q.split(/\&/);
+			
+			for(b = 0; b < bits.length; b++){
+				bits[b] = bits[b].split(/=/);
+				if(bits[b][0]=="area"){
+					rtn.compare[0] = {'area':bits[b][1]};
+				}else{
+					i = bits[b][0].replace(/[\D]/g,"");
+					key = bits[b][0].replace(/[0-9]/g,"");
+					if(key=="org" || key=="div" || key=="lvl" || key=="date"){
+						if(!rtn.compare[i]) rtn.compare[i] = {};
+						rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
+					}else{
+						rtn[key] = decodeURIComponent(bits[b][1]);
+					}
+				}
+			}
+		}else{
+			bits = q.split(/=/);
+			if(bits[0]=="area") rtn.compare[0] = {'area':bits[1]};
+		}
+		return rtn;
+	}
+	
+	var qs = parseHREF(location.href);
+
 
 	function Dashboard(attr){
 		this.el = document.getElementById('dashboard');
 		this.data = {};
 		if(!attr) attr = {};
 		this.attr = attr;
-		var qs = parseHREF(location.href);
 
 		this.logging = (qs.debug=="true");
 		this.log = function(){
@@ -335,12 +467,25 @@
 		var _obj = this;
 
 		this.init = function(attr){
+			var i,cards,cls,id;
 			if(!attr) attr = {};
 			this.log('MESSAGE','init',attr);
 			if(!attr.index){
 				this.log('ERROR','No index file provided');
 				return this;
 			}
+			
+			// Build the cards
+			cards = this.el.querySelectorAll(attr.cards||'.facet');
+			this.cards = {};
+			for(i = 0; i < cards.length; i++){
+				id = cards[i].getAttribute('id');
+				if(id) this.cards[id] = new Card({'el':cards[i]});
+			}
+			// Make navigation accessible
+			this.nav = new TabbedNav({'el':attr.comparison.nav,'panels':cards,'this':this,'callback': this.updateHistory });
+
+
 			
 			// Update the state of the area (it won't process orgs just yet)
 			this.setStateFromHREF();
@@ -350,35 +495,37 @@
 				"this": this,
 				"dataType": "text",
 				"success": function(d){
-					var d = CSVToArray(d);
+					d = CSVToArray(d);
 					this.index = d.data;
-					var urls = {};
-					var toload = 0;
-					var loaded = 0;
-					for(var i = 0; i < d.data.length; i++){
+					var i,u,urls,toload,loaded;
+					urls = {};
+					toload = 0;
+					loaded = 0;
+					for(i = 0; i < d.data.length; i++){
 						if(d.data[i].URL && !urls[d.data[i].URL]){
 							toload++;
 							urls[d.data[i].URL] = true;
 						}
 					}
 					// Load each URL in the index
-					for(var u in urls){
-						this.data[u] = {};
-						ODI.ajax(u,{
-							"this": this,
-							"dataType": "text",
-							"url": u,
-							"success": function(d,attr){
-								var r,o;
-								this.cache[attr.data.url] = {'csv':d,'loaded':true};
-								// Store the data
-								this.addData(attr.data.url,CSVToArray(d).data);
-								// Increment the loaded counter
-								loaded++;
-								// If we've loaded them all we finish up
-								if(toload == loaded) this.loaded();
-							}
-						});
+					for(u in urls){
+						if(urls[u]){
+							this.data[u] = {};
+							ODI.ajax(u,{
+								"this": this,
+								"dataType": "text",
+								"url": u,
+								"success": function(d,attr){
+									this.cache[attr.data.url] = {'csv':d,'loaded':true};
+									// Store the data
+									this.addData(attr.data.url,CSVToArray(d).data);
+									// Increment the loaded counter
+									loaded++;
+									// If we've loaded them all we finish up
+									if(toload == loaded) this.loaded();
+								}
+							});
+						}
 					}
 				}
 			});
@@ -421,51 +568,16 @@
 					});
 				}
 			}
-			
-			// Build the cards
-			var cards = this.el.querySelectorAll(attr.cards||'.facet');
-			this.cards = {};
-			for(var i = 0; i < cards.length; i++){
-				id = cards[i].getAttribute('id');
-				if(id) this.cards[id] = new Card({'el':cards[i]});
-				//if(i>0) cards[i].style.display = 'none';
-			}
-
-			// Add click events to navigation links
-			var aid = (location.href.indexOf(/#/) > 0 ) ? location.href.replace(/.*\#/,"") : "age";
-			var a = attr.comparison.nav.querySelectorAll('li a');
-			for(var i = 0; i < a.length; i++){
-				id = a[i].getAttribute('href').substr(1,);
-				a[i].addEventListener('click',function(e){
-					e.preventDefault();
-					id = e.target.getAttribute('href').substr(1,);
-					// Remove existing selection
-					attr.comparison.nav.querySelectorAll('.selected').forEach(function(e){ e.classList.remove('selected'); });
-					// Select this nav item
-					e.target.classList.add('selected');
-					for(c = 0; c < cards.length; c++) cards[c].style.display = (cards[c].getAttribute('id')==id) ? '' : 'none';
-
-					// If this wasn't a triggered event we add it to the history
-					if(!e.triggered) _obj.updateHistory();
-				});
-				if(id==aid){
-					// Trigger click of the current anchor
-					var e = document.createEvent('HTMLEvents');
-					e.triggered = true;
-					e.initEvent('click', true, false);
-					a[i].dispatchEvent(e);
-				}
-			}
 
 			// Update page when history changes
 			window.onpopstate = function(event){ _obj.setStateFromHREF(); _obj.update(); };
 
 			return this;
-		}
+		};
 
 		this.makeQueryString = function(){
-			var sel = attr.comparison.nav.querySelector('.selected');
-			var str = '';
+			var str,i;
+			str = '';
 			for(i = 0; i < this.compare.length;i++){
 				if(i==0){
 					str += 'area='+this.attr.comparison.geography.value;
@@ -477,74 +589,22 @@
 				}
 			}
 			if(qs.debug) str += (str ? '&':'')+'debug=true';
-			if(sel){
-				id = sel.getAttribute('href').substr(1,);
-				str += '#'+id;
-			}
+			if(this.nav.selectedID) str += '#'+this.nav.selectedID;
 			return (str ? '?':'')+str;
-		}
+		};
 
-		function parseHREF(h){
-			var q,a,rtn,i,bits,b;
-			h = h.replace(/.*\?/,"");
-			q = "";
-			a = "age";
-			i = h.indexOf("#");
-			if(i >= 0){
-				q = h.substr(0,i);
-				a = h.substr(i+1,);
-			}else{
-				q = h;
-			}
-			rtn = {'anchor':a,'compare':{}};
-			if(q.indexOf('&') >= 0){
-				bits = q.split(/\&/);
-				
-				for(b = 0; b < bits.length; b++){
-					bits[b] = bits[b].split(/=/);
-					if(bits[b][0]=="area"){
-						rtn.compare[0] = {'area':bits[b][1]};
-					}else{
-						i = bits[b][0].replace(/[\D]/g,"");
-						key = bits[b][0].replace(/[0-9]/g,"");
-						if(key=="org" || key=="div" || key=="lvl" || key=="date"){
-							if(!rtn.compare[i]) rtn.compare[i] = {};
-							rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
-						}else{
-							rtn[key] = decodeURIComponent(bits[b][1]);
-						}
-					}
-				}
-			}else{
-				bits = q.split(/=/);
-				if(bits[0]=="area") rtn.compare[0] = {'area':bits[1]};
-			}
-			return rtn;
-		}
-		
 		this.updateHistory = function(){
-			id = attr.comparison.nav.querySelector('.selected').getAttribute('href').substr(1,);
-			console.log('updateHistory (not active)',id);
-			history.pushState({'card':id}, 'Diversity Data Dashboard', this.makeQueryString())
+			history.pushState({}, 'Diversity Data Dashboard', this.makeQueryString());
 			return this;
-		}
+		};
 
 		this.setStateFromHREF = function(){
-			var i,a,id,e,n;
+			var i,n;
 			qs = parseHREF(location.href);
 			this.log('MESSAGE','setStateFromHREF',qs);
 			
 			// Trigger panel change
-			a = attr.comparison.nav.querySelectorAll('li a');
-			for(i = 0; i < a.length; i++){
-				id = a[i].getAttribute('href').substr(1,);
-				if(id==qs['anchor']){
-					e = document.createEvent('HTMLEvents');
-					e.triggered = true;
-					e.initEvent('click', true, false);
-					a[i].dispatchEvent(e);
-				}
-			}
+			this.nav.selectTab(qs.anchor,true);
 
 			// Set the geography
 			if(qs.compare[0] && qs.compare[0].area) this.setGeography(qs.compare[0].area);
@@ -556,11 +616,11 @@
 
 			if(n > 1){
 				// Loop over comparisons and add them
-				for(var i = 1; i < n; i++) this.addComparison(qs.compare[i]);
+				for(i = 1; i < n; i++) this.addComparison(qs.compare[i]);
 			}
 
 			return this;
-		}
+		};
 		
 		this.setGeography = function(geocode){
 			if(!geocode) return this;
@@ -568,11 +628,11 @@
 			this.loadGeography(this.change);
 
 			return this;
-		}
+		};
 
 		this.toggleDialog = function(sh){
 			this.log('MESSAGE','toggleDialog',attr.comparison.dialog);
-			bg = attr.comparison.main;
+			var bg = attr.comparison.main;
 			if(sh == "show"){
 				attr.comparison.dialogSubmit.setAttribute('class','');
 				attr.comparison.dialogSubmit.classList.add('series-'+this.compare.length);
@@ -600,9 +660,8 @@
 				attr.comparison.add.focus();				
 			}
 			return this;
-		}
+		};
 		function formatEmployer(o,d,l,date){
-
 			return (o ? o+(d && d!="_none" ? ', '+d : '')+(l && l!="_none" ? ', '+l : '')+(date ? ' ('+date+')' : '') : "");
 		}
 		function sortObj(obj,rev){
@@ -619,7 +678,7 @@
 			}
 		}
 		function addOption(el,value,txt,sel){
-			o = document.createElement('option');
+			var o = document.createElement('option');
 			o.value = value;
 			o.innerHTML = txt;
 			if(value==sel) o.setAttribute('selected','selected');
@@ -638,7 +697,11 @@
 			this.attr.comparison.org.innerHTML = '<option value="">Select organisation</option>';
 			// Sort the organisations
 			this.orgs = sortObj(this.orgs);
-			for(org in this.orgs) addOption(this.attr.comparison.org,org,org,this.selected.org);
+			for(org in this.orgs){
+				if(org){
+					addOption(this.attr.comparison.org,org,org,this.selected.org);
+				}
+			}
 
 
 			// Update division <select>
@@ -687,8 +750,10 @@
 					// Sort the levels
 					this.orgs[this.selected.org][this.selected.div][this.selected.lvl] = sortObj(this.orgs[this.selected.org][this.selected.div][this.selected.lvl],true);
 					for(dt in this.orgs[this.selected.org][this.selected.div][this.selected.lvl]){
-						addOption(this.attr.comparison.date,dt,dt,this.selected.date);
-						added++;
+						if(dt){
+							addOption(this.attr.comparison.date,dt,dt,this.selected.date);
+							added++;
+						}
 					}
 				}
 			}else this.log('ERROR','No division <select> is provided');
@@ -696,7 +761,7 @@
 			else this.attr.comparison.date.removeAttribute('disabled');
 
 			return this;
-		}
+		};
 
 		// Get the data into a JSON format
 		this.loaded = function(){
@@ -708,10 +773,10 @@
 			this.loadGeography(function(){
 				_obj.updateOptions();
 				_obj.update();
-			})
+			});
 
 			return this;
-		}
+		};
 
 		this.loadGeography = function(cb){
 			var geocode = attr.comparison.geography.value;
@@ -743,16 +808,17 @@
 					},
 					"error": function(e,a){
 						this.log('ERROR','Failed to load '+a.url);
-						this.loader.geography.error('Failed to load '+geocode)
+						this.loader.geography.error('Failed to load '+geocode);
 					}
 				});
 			}
 			return this;
-		}
+		};
 		
 		// Use the "Add an organisation" form to add a comparison organisation
 		this.addComparison = function(comp){
 			this.log('MESSAGE','addComparison',comp);
+			var org,div,lvl,date,cur,n,html,cls;
 			if(this.attr.comparison.el){
 				if(!comp) comp = {};
 				
@@ -783,7 +849,7 @@
 					comp.classList.add('comparator');
 					comp.classList.add('series-'+n);
 					comp.setAttribute('data',n);
-					html = '<div class="inner"><button class="close" aria-label="Remove '+org+'">&times;</button><h3>'+org+'</h3>';
+					html = '<div class="inner"><button class="close" aria-label="Remove '+formatEmployer(org,div,lvl,date)+'">&times;</button><h3>'+org+'</h3>';
 					if(div) html += '<p>'+div+'</p>';
 					if(lvl) html += '<p>'+lvl+'</p>';
 					if(date) html += '<p>'+date+'</p>';
@@ -806,9 +872,10 @@
 				}
 			}
 			return this;
-		}
+		};
 
 		this.removeComparisonAll = function(){
+			var cur,len,i;
 			cur = this.attr.comparison.el.querySelectorAll('.comparator');
 			len = cur.length;
 			this.log('MESSAGE','removeComparisonAll',cur,len);
@@ -817,12 +884,13 @@
 				for(i = len; i > 1; i--) this.removeComparison(i-1);
 			}
 			return this;
-		}
+		};
 
 		// Remove an organisation that has been added as a comparison
 		this.removeComparison = function(n){
 			this.log('MESSAGE','removeComparison',n);
-			cur = this.attr.comparison.el.querySelectorAll('.comparator');
+			var cur,len,c;
+			cur = attr.comparison.el.querySelectorAll('.comparator');
 			len = cur.length;
 			if(len >= 1){
 				if(n > 0){
@@ -841,23 +909,26 @@
 			this.compare.splice(n,1);
 
 			// Show adding form
-			if(len <= (this.attr.comparison.max||3)){
-				this.attr.comparison.el.querySelector('.add').style.display = "";
-			}
+			if(len <= (attr.comparison.max||3)) attr.comparison.el.querySelector('.add').style.display = "";
 			
 			this.update();
+			
+			if(attr.comparison.add) attr.comparison.add.focus();
 			return this;
-		}
+		};
 
 		this.addData = function(url,d){
 			this.log('MESSAGE','addData',url,d);
+			var a,b,c,o,p,r,v,d2,pt,total,org,div,lvl,pubdate;
 
 			// Restructure the CSV into JSON
 			for(r = 0; r < d.length; r++){
 				for(o in d[r]){
-					// Convert numbers into numbers
-					v = parseFloat(d[r][o])
-					if(typeof v==="number" && v==d[r][o]) d[r][o] = v;
+					if(o){
+						// Convert numbers into numbers
+						v = parseFloat(d[r][o]);
+						if(typeof v==="number" && v==d[r][o]) d[r][o] = v;
+					}
 				}
 				// Define the data structure
 				d2 = JSON.parse(JSON.stringify(this.format));
@@ -867,29 +938,31 @@
 				else total = d[r].employees;
 
 				for(p in d[r]){
-					pt = p.split(/\_/);
-					a = (pt.length >= 1) ? pt[0] : p;
-					b = (pt.length >= 2) ? pt[1] : "";
-					c = (pt.length >= 3) ? pt[2] : "";
-					if(a && typeof d2[a]!=="undefined"){
-						if(b && typeof d2[a][b]!=="undefined"){
-							if(c && typeof d2[a][b][c]!=="undefined"){
-								if(d2[a][b][c].hasOwnProperty('_total')) d2[a][b][c]._total = d[r][p];
-								else d2[a][b][c] = d[r][p];
-							}else{
-								if(d2[a][b].hasOwnProperty('_total')) d2[a][b]._total = d[r][p];
-								else d2[a][b] = d[r][p];
-							}
-							if(!d2[a].total){
-								if(total) d2[a].total = total;
-								else this.log('WARNING','No total for '+a+' in '+d[r].organisation);
-							}else{
-								if(!d2[a].total._total){
-									d2[a].total._total = total;
+					if(p){
+						pt = p.split(/\_/);
+						a = (pt.length >= 1) ? pt[0] : p;
+						b = (pt.length >= 2) ? pt[1] : "";
+						c = (pt.length >= 3) ? pt[2] : "";
+						if(a && typeof d2[a]!=="undefined"){
+							if(b && typeof d2[a][b]!=="undefined"){
+								if(c && typeof d2[a][b][c]!=="undefined"){
+									if(d2[a][b][c].hasOwnProperty('_total')) d2[a][b][c]._total = d[r][p];
+									else d2[a][b][c] = d[r][p];
+								}else{
+									if(d2[a][b].hasOwnProperty('_total')) d2[a][b]._total = d[r][p];
+									else d2[a][b] = d[r][p];
 								}
+								if(!d2[a].total){
+									if(total) d2[a].total = total;
+									else this.log('WARNING','No total for '+a+' in '+d[r].organisation);
+								}else{
+									if(!d2[a].total._total){
+										d2[a].total._total = total;
+									}
+								}
+							}else{
+								this.log('WARNING','Unknown column heading %c'+p+'%c in %c'+d[r].organisation+'%c'+(d[r].organisation_division ? ' / '+d[r].organisation_division:'')+(d[r].organisation_level ? ' / '+d[r].organisation_level:'')+' '+url,'font-style:italic','','font-style:italic','');
 							}
-						}else{
-							this.log('WARNING','Unknown column heading %c'+p+'%c in %c'+d[r].organisation+'%c'+(d[r].organisation_division ? ' / '+d[r].organisation_division:'')+(d[r].organisation_level ? ' / '+d[r].organisation_level:'')+' '+url,'font-style:italic','','font-style:italic','');
 						}
 					}
 				}
@@ -918,7 +991,7 @@
 			this.data[url] = d;
 
 			return this;
-		}
+		};
 		
 		function addKey(txt,el){
 			var key = el.querySelector('.key');
@@ -927,14 +1000,14 @@
 				key.classList.add('key');
 				el.appendChild(key);
 			}
-			key.innerHTML = keytxt;
+			key.innerHTML = txt;
 			return true;
 		}
 		
 		this.update = function(){
 			
 			this.log('MESSAGE','update');
-
+			var fmt,data,dt,sli,gd,pc,keytxt,a,d,e,g,i,n,o,p,r,s;
 
 			fmt = JSON.stringify(this.format);
 			data = JSON.parse(fmt);
@@ -943,14 +1016,16 @@
 
 			// Loop over data structure turning values into empty arrays
 			for(r in data){
-				for(p in data[r]){
-					if(typeof data[r][p]==="number"){
-						data[r][p] = new Array(n);
-						for(i=0; i<n; ++i) data[r][p][i] = 0;
-					}else{
-						if(data[r][p].hasOwnProperty('_total')){
+				if(r){
+					for(p in data[r]){
+						if(typeof data[r][p]==="number"){
 							data[r][p] = new Array(n);
 							for(i=0; i<n; ++i) data[r][p][i] = 0;
+						}else{
+							if(data[r][p].hasOwnProperty('_total')){
+								data[r][p] = new Array(n);
+								for(i=0; i<n; ++i) data[r][p][i] = 0;
+							}
 						}
 					}
 				}
@@ -960,7 +1035,7 @@
 			document.querySelectorAll('#sources ul li.org').forEach(function(e){ e.remove(); });
 
 			// Work out percentages
-			for(var i = 0; i < this.compare.length; i++){
+			for(i = 0; i < this.compare.length; i++){
 				o = this.compare[i];
 				if(o.org){
 					this.compare[i].name = formatEmployer(o.org,o.div,o.lvl,o.date);
@@ -1003,35 +1078,6 @@
 					}
 				}
 			}
-			/*
-			var horizpanel = {
-				'chart':{
-					'label':'Barchart',
-					'class':'output chart',
-					'chart': {
-						'type': 'bar',
-						'dir': 'horizontal',
-						'formatY': function(v,attr){
-							if(!v) return "";
-							return v.toFixed(1).replace(/\.0/,"")+'%';
-						}
-					},
-					'events':{
-						'barover':function(e,a){
-							removeBalloons();
-							info = document.createElement('div');
-							info.classList.add('balloon');
-							i = this.data[e.cluster].data[e.series];
-							info.innerHTML = i.label+": "+this.attr.formatY(i.v);
-							e.event.originalTarget.appendChild(info);
-						},
-						'mouseleave':function(e){
-							removeBalloons();
-						}
-					}
-				},
-				'table':{'label':'Data','class':'output'}
-			}*/
 			var barpanel = {
 				'chart':{
 					'label':'Barchart',
@@ -1046,6 +1092,7 @@
 					'events':{
 						'barover':function(e,a){
 							removeBalloons();
+							var info,i,txt;
 							info = document.createElement('div');
 							info.classList.add('balloon');
 							i = (this.data[e.cluster].data[e.series].data) ? this.data[e.cluster].data[e.series].data[e.bin] : this.data[e.cluster].data[e.series];
@@ -1081,7 +1128,7 @@
 				'religion':{'table':'','th':'','data': []},
 				'seb':{'table':'','th':'','data': []},
 				'sexuality':{'table':'','th':'','data': []}
-			}
+			};
 
 			fmt = JSON.parse(fmt);
 			for(s in data){
@@ -1090,25 +1137,27 @@
 						g[s].th += '<th>'+this.compare[i].name+' #</th><th>'+this.compare[i].name+' %</th>';
 					}
 					for(a in data[s]){
-						gd = {'label':(fmt[s][a]._label||a),'data':new Array(this.compare.length)};
-						g[s].table += '<tr><td>'+gd.label+'</td>';
-						for(i = 0; i < this.compare.length; i++){
-							pc = (100*data[s][a][i]/data[s].total[i])||0;
-							g[s].table += '<td>'+data[s][a][i]+'</td><td>'+(pc).toFixed(1)+'</td>';
-							gd.data[i] = {'v':pc,'label':this.compare[i].name,'class':(a=="prefernottosay" || a=="undisclosed" ? 'prefernottosay':'')};
-						}
-						g[s].table += '</tr>';
-						if(s=="age"){
-							if(a!="total" && a!="undisclosed" && a!="prefernottosay") g[s].data.push(gd);
-						}else{
-							if(a!="total") g[s].data.push(gd);
+						if(a){
+							gd = {'label':(fmt[s][a]._label||a),'data':new Array(this.compare.length)};
+							g[s].table += '<tr><td>'+gd.label+'</td>';
+							for(i = 0; i < this.compare.length; i++){
+								pc = (100*data[s][a][i]/data[s].total[i])||0;
+								g[s].table += '<td>'+data[s][a][i]+'</td><td>'+(pc).toFixed(1)+'</td>';
+								gd.data[i] = {'v':pc,'label':this.compare[i].name,'class':(a=="prefernottosay" || a=="undisclosed" ? 'prefernottosay':'')};
+							}
+							g[s].table += '</tr>';
+							if(s=="age"){
+								if(a!="total" && a!="undisclosed" && a!="prefernottosay") g[s].data.push(gd);
+							}else{
+								if(a!="total") g[s].data.push(gd);
+							}
 						}
 					}
 				}
 			}
 
 			keytxt = '<ul>';
-			for(var i = 0; i < this.compare.length; i++) keytxt += '<li><span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' people</span></li>';
+			for(i = 0; i < this.compare.length; i++) keytxt += '<li><span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' people</span></li>';
 			keytxt += '</ul><p class="extranotes"></p>';
 
 
@@ -1116,94 +1165,86 @@
 				this.cards.age.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Age bracket</th>'+g.age.th+'</tr>'+g.age.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.log('MESSAGE','Data',g.age.data);
 				this.cards.age.chart.setData(g.age.data).draw();
-				for(e in this.cards.age.panels.chart.events) this.cards.age.chart.on(e,this.cards.age.panels.chart.events[e]);
+				for(e in this.cards.age.panels.chart.events){
+					if(e) this.cards.age.chart.on(e,this.cards.age.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.age.panels.chart.el);
 				//key.querySelector('.extranotes').innerHTML = (employees>data.age.total.n.total ? '<p>There are '+(employees-data.age.total.n.total).toLocaleString()+' employees without age data':'');
 			}
 			if(g.carer.table){
 				this.cards.carer.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Carer status</th>'+g.carer.th+'</tr>'+g.carer.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.carer.chart.setData(g.carer.data).draw();
-				for(e in this.cards.carer.panels.chart.events) this.cards.carer.chart.on(e,this.cards.carer.panels.chart.events[e]);
+				for(e in this.cards.carer.panels.chart.events){
+					if(e) this.cards.carer.chart.on(e,this.cards.carer.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.carer.panels.chart.el);
 				//key.querySelector('.extranotes').innerHTML = (employees>data.carer.total.n.total ? '<p>There are '+(employees-data.carer.total.n.total).toLocaleString()+' employees without carer data':'');
 			}
 			if(g.disability.table){
 				this.cards.disability.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Disability status</th>'+g.disability.th+'</tr>'+g.disability.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.disability.chart.setData(g.disability.data).draw();
-				for(e in this.cards.disability.panels.chart.events) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
-				addKey(keytxt,this.cards.disability.panels.chart.el);
-/*
-				if(!key){
-					key = document.createElement('div');
-					key.classList.add('key');
-					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
-					this.cards.disability.panels.chart.el.appendChild(key);
+				for(e in this.cards.disability.panels.chart.events){
+					if(e) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
 				}
-*/
-				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
+				addKey(keytxt,this.cards.disability.panels.chart.el);
 			}
 			if(g.ethnicity.table){
 				this.cards.ethnicity.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Ethnicity</th>'+g.ethnicity.th+'</tr>'+g.ethnicity.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.ethnicity.chart.setData(g.ethnicity.data).draw();
-				for(e in this.cards.ethnicity.panels.chart.events) this.cards.ethnicity.chart.on(e,this.cards.ethnicity.panels.chart.events[e]);
+				for(e in this.cards.ethnicity.panels.chart.events){
+					if(e) this.cards.ethnicity.chart.on(e,this.cards.ethnicity.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.ethnicity.panels.chart.el);
-				/*
-				if(!key){
-					key = document.createElement('div');
-					key.classList.add('key');
-					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Yes</span></li><li><span class="series-1 key-item"></span> <span class="label">No</span></li><li><span class="series-2 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-3 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
-					this.cards.ethnicity.panels.chart.el.appendChild(key);
-				}*/
-				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
 			}
 			if(g.gender.table){
 				this.cards.gender.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Gender</th>'+g.gender.th+'</tr>'+g.gender.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.gender.chart.setData(g.gender.data).draw();
-				for(e in this.cards.gender.panels.chart.events) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
+				for(e in this.cards.gender.panels.chart.events){
+					if(e) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.gender.panels.chart.el);
-/*				if(!key){
-					key = document.createElement('div');
-					key.classList.add('key');
-					key.innerHTML = '<ul><li><span class="series-0 key-item"></span> <span class="label">Female</span></li><li><span class="series-1 key-item"></span> <span class="label">Male</span></li><li><span class="series-2 key-item"></span> <span class="label">Other</span></li><li><span class="series-3 key-item"></span> <span class="label">Prefer not to say</span></li><li><span class="series-4 key-item"></span> <span class="label">Undisclosed</span></li></ul><p class="extranotes"></p>';
-					this.cards.gender.panels.chart.el.appendChild(key);
-				}*/
-				//key.querySelector('.extranotes').innerHTML = (employees>data.ages.total.n.total ? '<p>There are '+(employees-data.ages.total.n.total).toLocaleString()+' employees without age data':'');
 			}
 			if(g.religion.table){
 				this.cards.religion.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Religion</th>'+g.religion.th+'</tr>'+g.religion.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.religion.chart.setData(g.religion.data).draw();
-				for(e in this.cards.religion.panels.chart.events) this.cards.religion.chart.on(e,this.cards.religion.panels.chart.events[e]);
+				for(e in this.cards.religion.panels.chart.events){
+					if(e) this.cards.religion.chart.on(e,this.cards.religion.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.religion.panels.chart.el);
 			}
 			if(g.sexuality.table){
 				this.cards.sexuality.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.sexuality.th+'</tr>'+g.sexuality.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.sexuality.chart.setData(g.sexuality.data).draw();
-				for(e in this.cards.sexuality.panels.chart.events) this.cards.sexuality.chart.on(e,this.cards.sexuality.panels.chart.events[e]);
+				for(e in this.cards.sexuality.panels.chart.events){
+					if(e) this.cards.sexuality.chart.on(e,this.cards.sexuality.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.sexuality.panels.chart.el);
 			}
 			if(g.seb.table){
 				this.cards.seb.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.seb.th+'</tr>'+g.seb.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
 				this.cards.seb.chart.setData(g.seb.data).draw();
-				for(e in this.cards.seb.panels.chart.events) this.cards.seb.chart.on(e,this.cards.seb.panels.chart.events[e]);
+				for(e in this.cards.seb.panels.chart.events){
+					if(e) this.cards.seb.chart.on(e,this.cards.seb.panels.chart.events[e]);
+				}
 				addKey(keytxt,this.cards.seb.panels.chart.el);
 			}
 			
 			// Make tables sortable
-			tableSortJs();
+			if(typeof root.tableSortJs==="function") root.tableSortJs();
 
 			// Update numbers
 			document.querySelector('.lastupdated').innerHTML = (new Date(this.lastupdate).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 		//	document.querySelector('#population .number').innerHTML = (this.cache[this.attr.comparison.geography.value].json.data.age.total||0).toLocaleString();
-			document.querySelector('#organisations .number').innerHTML = Object.keys(dash.orgs).length;
+			document.querySelector('#organisations .number').innerHTML = Object.keys(_obj.orgs).length;
 
 			return this;
-		}
+		};
 
 		return this.init(attr);
 	}
 
 	function removeBalloons(){
-		b = document.querySelectorAll('.balloon');
+		var b = document.querySelectorAll('.balloon');
 		if(b) b.forEach(function(e){ e.remove(); });
 		return;
 	}
