@@ -1,0 +1,67 @@
+{
+	"name":"Kirklees",
+	"id": "E08000034",
+	"OAs": 1311,
+	"data":{
+		"age":{
+			"0-14": 80535,
+			"15-24": 56373,
+			"25-34": 54429,
+			"35-44": 59939,
+			"45-54": 57186,
+			"55-64": 49846,
+			"65-69": 19323,
+			"70+": 44827,
+			"total": 422458
+		},
+		"carer":{
+			"no": 378793,
+			"yes": 43665,
+			"total": 422458
+		},
+		"disability":{
+			"no": 347495,
+			"yes": 74963,
+			"total": 422458
+		},
+		"ethnicity":{
+			"asian": 67782,
+			"black": 7905,
+			"mixed": 9790,
+			"other": 2711,
+			"white": 334270,
+			"total": 422458
+		},
+		"gender":{
+			"female": 153544,
+			"male": 153650,
+			"total": 307194
+		},
+		"religion":{
+			"buddhist": 845,
+			"christian": 225751,
+			"hindu": 1544,
+			"jewish": 189,
+			"muslim": 61280,
+			"no": 100829,
+			"other": 1300,
+			"sikh": 3330,
+			"undisclosed": 27390,
+			"total": 422458
+		},
+		"seb":{
+			"intermediate": 38151,
+			"lower": 67636,
+			"professional": 25171,
+			"total": 130958
+		},
+		"sexuality":{
+			"bisexual": 45000,
+			"gaylesbian": 56000,
+			"prefernottosay": 135000,
+			"straight": 4106000,
+			"usedifferentterm": 20000,
+			"total": 4362000
+		}
+	}
+}

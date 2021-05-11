@@ -57,10 +57,10 @@
 		},
 		"sexuality":{
 			"bisexual": 45000,
-			"heterosexual": 4106000,
-			"homosexual": 56000,
+			"gaylesbian": 56000,
 			"prefernottosay": 135000,
-			"useanotherterm": 20000,
+			"straight": 4106000,
+			"usedifferentterm": 20000,
 			"total": 4362000
 		}
 	}

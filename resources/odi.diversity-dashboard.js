@@ -455,9 +455,9 @@
 			},
 			'sexuality':{
 				'bisexual':{'_total':0,'_label':'Bisexual'},
-				'heterosexual':{'_total':0,'_label':'Heterosexual / Straight'},
-				'homosexual':{'_total':0,'_label':'Gay / Lesbian'},
-				'useanotherterm':{'_total':0,'_label':'Use another term'},
+				'gaylesbian':{'_total':0,'_label':'Gay or Lesbian'},
+				'straight':{'_total':0,'_label':'Straight (heterosexual)'},
+				'usedifferentterm':{'_total':0,'_label':'Use a different term'},
 				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
 				'undisclosed':{'_total':0,'_label':'Undisclosed'},
 				'total':{'_total':0,'_label':'Total'}
