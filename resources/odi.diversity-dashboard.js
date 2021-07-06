@@ -291,7 +291,7 @@
 				}else{
 					i = bits[b][0].replace(/[\D]/g,"");
 					key = bits[b][0].replace(/[0-9]/g,"");
-					if(key=="org" || key=="div" || key=="lvl" || key=="date"){
+					if(key=="org" || key=="grp" || key=="lvl" || key=="date"){
 						if(!rtn.compare[i]) rtn.compare[i] = {};
 						rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
 					}else{
@@ -533,8 +533,8 @@
 			// Add events to comparison form
 			if(attr.comparison){
 				if(attr.comparison.add) attr.comparison.add.addEventListener('click',function(e){ e.preventDefault(); _obj.toggleDialog("show"); });
-				if(attr.comparison.org) attr.comparison.org.addEventListener('change', function(e){ _obj.selected.org = e.currentTarget.value; _obj.selected.div = "_none"; _obj.selected.lvl = "_none"; _obj.selected.date = ""; _obj.updateOptions(); });
-				if(attr.comparison.division) attr.comparison.division.addEventListener('change', function(e){ _obj.selected.div = e.currentTarget.value||"_none"; _obj.updateOptions(); });
+				if(attr.comparison.org) attr.comparison.org.addEventListener('change', function(e){ _obj.selected.org = e.currentTarget.value; _obj.selected.grp = "_none"; _obj.selected.lvl = "_none"; _obj.selected.date = ""; _obj.updateOptions(); });
+				if(attr.comparison.grouping) attr.comparison.grouping.addEventListener('change', function(e){ _obj.selected.grp = e.currentTarget.value||"_none"; _obj.updateOptions(); });
 				if(attr.comparison.level) attr.comparison.level.addEventListener('change', function(e){ _obj.selected.lvl = e.currentTarget.value||"_none"; _obj.updateOptions(); });
 				if(attr.comparison.date) attr.comparison.date.addEventListener('change', function(e){ _obj.selected.date = e.currentTarget.value; });
 				if(attr.comparison.geography){
@@ -583,7 +583,7 @@
 					str += 'area='+this.attr.comparison.geography.value;
 				}else{
 					str += (str ? '&':'')+'org'+i+'='+encodeURIComponent(this.compare[i].org);
-					if(this.compare[i].div && this.compare[i].div!="_none") str += (str ? '&':'')+'div'+i+'='+encodeURIComponent(this.compare[i].div);
+					if(this.compare[i].grp && this.compare[i].grp!="_none") str += (str ? '&':'')+'grp'+i+'='+encodeURIComponent(this.compare[i].grp);
 					if(this.compare[i].lvl && this.compare[i].lvl!="_none") str += (str ? '&':'')+'lvl'+i+'='+encodeURIComponent(this.compare[i].lvl);
 					if(this.compare[i].date) str += (str ? '&':'')+'date'+i+'='+this.compare[i].date;
 				}
@@ -688,9 +688,9 @@
 		this.updateOptions = function(){
 			this.log('MESSAGE','updateOptions',this.selected);
 
-			var added,org,div,lvl,dt;
+			var added,org,grp,lvl,dt;
 			
-			if(!this.selected.div) this.selected.div = "_none";
+			if(!this.selected.grp) this.selected.grp = "_none";
 			if(!this.selected.lvl) this.selected.lvl = "_none";
 
 			// Update organisation <select>
@@ -704,41 +704,41 @@
 			}
 
 
-			// Update division <select>
+			// Update grouping <select>
 			added = 0;
-			if(this.attr.comparison.division){
-				this.attr.comparison.division.innerHTML = '<option value="_none">Select division</option>';
+			if(this.attr.comparison.grouping){
+				this.attr.comparison.grouping.innerHTML = '<option value="_none">Select grouping</option>';
 				if(this.selected.org && this.orgs[this.selected.org]){
-					// Sort the divisions
+					// Sort the groupings
 					this.orgs[this.selected.org] = sortObj(this.orgs[this.selected.org]);
 					added = 0;
-					for(div in this.orgs[this.selected.org]){
-						if(div != "_none"){
-							addOption(this.attr.comparison.division,div,div,this.selected.div);
+					for(grp in this.orgs[this.selected.org]){
+						if(grp != "_none"){
+							addOption(this.attr.comparison.grouping,grp,grp,this.selected.grp);
 							added++;
-						}else addOption(this.attr.comparison.division,div,'No division',this.selected.div);
+						}else addOption(this.attr.comparison.grouping,grp,'No grouping',this.selected.grp);
 					}
 				}
-			}else this.log('ERROR','No division <select> is provided');
-			if(added==0) this.attr.comparison.division.setAttribute('disabled','disabled');
-			else this.attr.comparison.division.removeAttribute('disabled');
+			}else this.log('ERROR','No grouping <select> is provided');
+			if(added==0) this.attr.comparison.grouping.setAttribute('disabled','disabled');
+			else this.attr.comparison.grouping.removeAttribute('disabled');
 
 
 			// Update level <select>
 			added = 0;
 			if(this.attr.comparison.level){
 				this.attr.comparison.level.innerHTML = '<option value="_none">Select level</option>';
-				if(this.selected.org && this.selected.div && this.orgs[this.selected.org] && this.orgs[this.selected.org][this.selected.div]){
+				if(this.selected.org && this.selected.grp && this.orgs[this.selected.org] && this.orgs[this.selected.org][this.selected.grp]){
 					// Sort the levels
-					this.orgs[this.selected.org][this.selected.div] = sortObj(this.orgs[this.selected.org][this.selected.div]);
-					for(lvl in this.orgs[this.selected.org][this.selected.div]){
+					this.orgs[this.selected.org][this.selected.grp] = sortObj(this.orgs[this.selected.org][this.selected.grp]);
+					for(lvl in this.orgs[this.selected.org][this.selected.grp]){
 						if(lvl != "_none"){
 							addOption(this.attr.comparison.level,lvl,lvl,this.selected.level);
 							added++;
 						}else addOption(this.attr.comparison.level,lvl,'No level',this.selected.level);
 					}
 				}
-			}else this.log('ERROR','No division <select> is provided');
+			}else this.log('ERROR','No grouping <select> is provided');
 			if(added==0) this.attr.comparison.level.setAttribute('disabled','disabled');
 			else this.attr.comparison.level.removeAttribute('disabled');
 
@@ -746,17 +746,17 @@
 			added = 0;
 			if(this.attr.comparison.date){
 				this.attr.comparison.date.innerHTML = '<option value="">Select date</option>';
-				if(this.selected.org && this.selected.div && this.selected.lvl && this.orgs[this.selected.org] && this.orgs[this.selected.org][this.selected.div] && this.orgs[this.selected.org][this.selected.div][this.selected.lvl]){
+				if(this.selected.org && this.selected.grp && this.selected.lvl && this.orgs[this.selected.org] && this.orgs[this.selected.org][this.selected.grp] && this.orgs[this.selected.org][this.selected.grp][this.selected.lvl]){
 					// Sort the levels
-					this.orgs[this.selected.org][this.selected.div][this.selected.lvl] = sortObj(this.orgs[this.selected.org][this.selected.div][this.selected.lvl],true);
-					for(dt in this.orgs[this.selected.org][this.selected.div][this.selected.lvl]){
+					this.orgs[this.selected.org][this.selected.grp][this.selected.lvl] = sortObj(this.orgs[this.selected.org][this.selected.grp][this.selected.lvl],true);
+					for(dt in this.orgs[this.selected.org][this.selected.grp][this.selected.lvl]){
 						if(dt){
 							addOption(this.attr.comparison.date,dt,dt,this.selected.date);
 							added++;
 						}
 					}
 				}
-			}else this.log('ERROR','No division <select> is provided');
+			}else this.log('ERROR','No grouping <select> is provided');
 			if(added==0) this.attr.comparison.date.setAttribute('disabled','disabled');
 			else this.attr.comparison.date.removeAttribute('disabled');
 
@@ -818,26 +818,26 @@
 		// Use the "Add an organisation" form to add a comparison organisation
 		this.addComparison = function(comp){
 			this.log('MESSAGE','addComparison',comp);
-			var org,div,lvl,date,cur,n,html,cls;
+			var org,grp,lvl,date,cur,n,html,cls;
 			if(this.attr.comparison.el){
 				if(!comp) comp = {};
 				
 				
 				org =  comp.org||this.selected.org||"";
 				date = comp.date||this.selected.date||"";
-				div = comp.div||this.selected.div||"";
+				grp = comp.grp||this.selected.grp||"";
 				lvl = comp.lvl||this.selected.lvl||"";
 				
-				if(!div) div = "_none";
+				if(!grp) grp = "_none";
 				if(!lvl) lvl = "_none";
 
 				// Check if the values are possible
-				if(!this.orgs[org] || !this.orgs[org][div] || !this.orgs[org][div][lvl] || !this.orgs[org][div][lvl][date]){
-					this.log('ERROR','The organisation/division/level/date does not seem to exist in the data.',org,div,lvl,date);
+				if(!this.orgs[org] || !this.orgs[org][grp] || !this.orgs[org][grp][lvl] || !this.orgs[org][grp][lvl][date]){
+					this.log('ERROR','The organisation/grouping/level/date does not seem to exist in the data.',org,grp,lvl,date);
 					return this;
 				}
 
-				if(div == "_none") div = "";
+				if(grp == "_none") grp = "";
 				if(lvl == "_none") lvl = "";
 
 				if(org){
@@ -849,8 +849,8 @@
 					comp.classList.add('comparator');
 					comp.classList.add('series-'+n);
 					comp.setAttribute('data',n);
-					html = '<div class="inner"><button class="close" aria-label="Remove '+formatEmployer(org,div,lvl,date)+'">&times;</button><h3>'+org+'</h3>';
-					if(div) html += '<p>'+div+'</p>';
+					html = '<div class="inner"><button class="close" aria-label="Remove '+formatEmployer(org,grp,lvl,date)+'">&times;</button><h3>'+org+'</h3>';
+					if(grp) html += '<p>'+grp+'</p>';
 					if(lvl) html += '<p>'+lvl+'</p>';
 					if(date) html += '<p>'+date+'</p>';
 					html += '</div>';
@@ -868,7 +868,7 @@
 					}
 
 					// Add comparison to our array
-					this.compare.push({'org':org,'div':div||"_none",'lvl':lvl||"_none",'date':date});
+					this.compare.push({'org':org,'grp':grp||"_none",'lvl':lvl||"_none",'date':date});
 				}
 			}
 			return this;
@@ -919,7 +919,7 @@
 
 		this.addData = function(url,d){
 			this.log('MESSAGE','addData',url,d);
-			var a,b,c,o,p,r,v,d2,pt,total,org,div,lvl,pubdate;
+			var a,b,c,o,p,r,v,d2,pt,total,org,grp,lvl,pubdate;
 
 			// Restructure the CSV into JSON
 			for(r = 0; r < d.length; r++){
@@ -961,7 +961,7 @@
 									}
 								}
 							}else{
-								this.log('WARNING','Unknown column heading %c'+p+'%c in %c'+d[r].organisation+'%c'+(d[r].organisation_division ? ' / '+d[r].organisation_division:'')+(d[r].organisation_level ? ' / '+d[r].organisation_level:'')+' '+url,'font-style:italic','','font-style:italic','');
+								this.log('WARNING','Unknown column heading %c'+p+'%c in %c'+d[r].organisation+'%c'+(d[r].organisation_g ? ' / '+d[r].organisation_grouping:'')+(d[r].organisation_level ? ' / '+d[r].organisation_level:'')+' '+url,'font-style:italic','','font-style:italic','');
 							}
 						}
 					}
@@ -971,19 +971,19 @@
 				d[r].data = JSON.parse(JSON.stringify(d2));
 				
 				org = d[r].organisation;
-				div = lvl = "";
+				grp = lvl = "";
 				if(org){
-					div = d[r].organisation_division||"_none";
+					grp = d[r].organisation_grouping||"_none";
 					lvl = d[r].organisation_level||"_none";
 
 					if(!this.orgs[org]) this.orgs[org] = {};
-					if(!this.orgs[org][div]) this.orgs[org][div] = {};
-					if(!this.orgs[org][div][lvl]) this.orgs[org][div][lvl] = {};
+					if(!this.orgs[org][grp]) this.orgs[org][grp] = {};
+					if(!this.orgs[org][grp][lvl]) this.orgs[org][grp][lvl] = {};
 					
 					pubdate = d[r].published;
 					if(pubdate > this.lastupdate) this.lastupdate = pubdate;
 	
-					this.orgs[org][div][lvl][pubdate] = JSON.parse(JSON.stringify(d2));
+					this.orgs[org][grp][lvl][pubdate] = JSON.parse(JSON.stringify(d2));
 				}
 			}
 
@@ -1038,8 +1038,8 @@
 			for(i = 0; i < this.compare.length; i++){
 				o = this.compare[i];
 				if(o.org){
-					this.compare[i].name = formatEmployer(o.org,o.div,o.lvl,o.date);
-					d = this.orgs[o.org][o.div][o.lvl][o.date];
+					this.compare[i].name = formatEmployer(o.org,o.grp,o.lvl,o.date);
+					d = this.orgs[o.org][o.grp][o.lvl][o.date];
 					dt = new Date(o.date);
 					sli = document.createElement('li');
 					sli.classList.add('org');

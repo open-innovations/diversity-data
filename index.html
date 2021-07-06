@@ -12,9 +12,6 @@
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 </head>
 <body class="b1-bg">
-	<div class="c14-bg">
-		<div class="padded">Note that this is very much a work in progress and is subject to change. The <a href="https://docs.google.com/document/d/1_j0_ukOySTbYlz9P4MAGWOlnh8ceL-p2yQvJ9EeSVLE/edit#">format is currently in draft</a>. Things may break.</div>
-	</div>
 	<div id="dashboard">
 		<header class="padded b1-bg">
 			<h1>Leeds Diversity Dashboard<span class="alpha">alpha</span></h1>
@@ -118,16 +115,22 @@
 
 		</div>
 		
-		<footer class="b1-bg doublepadded">
-			<section id="sources">
-				<h2>Data sources</h2>
-				<ul>
-					<li><a href="https://geoportal.statistics.gov.uk/datasets/output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-december-2020-lookup-in-england-and-wales">Lookup from Output Area to Local Authority District and Region</a> updated December 2020 (OGL)</li>
-					<li><a href="http://infuse2011gf.ukdataservice.ac.uk/infusewizgeo.aspx">Census 2011 data</a> updated 2011 (OGL)</li>
-					<li><a href="https://www.nomisweb.co.uk/census/2011/ks601ew">Sex data by economic activity</a> updated 2011 (OGL)</li>
-					<li><a href="https://www.nomisweb.co.uk/census/2011/qs611ew">Approximated Social Grade for all Household Reference Persons aged 16 to 64</a> updated 2011 (OGL)</li>
-				</ul>
-			</section>
+		<footer class="b1-bg">
+			<div class="doublepadded">
+				<section id="sources">
+					<h2>About the dashboard</h2>
+					<p>This Leeds City Region Diversity Dashboard is a work-in-progress project for the Leeds Anchors Network. It uses data published in our agreed <a href="https://docs.google.com/document/d/1_j0_ukOySTbYlz9P4MAGWOlnh8ceL-p2yQvJ9EeSVLE/edit#">diversity data standard (version 1.0.1; 2021-07-06)</a>. This data standard was drawn from existing diversity data published by members of the Leeds Anchor but has attempted to map characteristics to existing national standards as much as possible so that we can make comparisons with nationally curated data sets e.g. the UK Census.</p> 
+					<h2>Adding your data to the dashboard</h2>
+					<p>If you publish diversity data about your organisation within the Leeds City Region you can get your data included. First make sure that you create a CSV file with column headings that match those in our data standard. There should be a row per date/group/level within your organisation (which could be as simple as one row giving figures for your entire organisation). The data should be published openly on the web at a fixed URL. For ease, we suggest that you publish the file on <a href="https://datamillnorth.org/">Data Mill North</a> with the tag #DiversityData. Once your data is published openly, it needs to be added to <a href="https://github.com/odileeds/diversity-data/blob/main/leeds.csv">the dashboard index</a>. If you have a Github account you can create a pull request directly or you <a href="mailto:hello@odileeds.org?subject=Diversity Dashboard&body=Please add our organisation to your Leeds City Region Diversity Dashboard.%0A%0AOrgansiation name:%0A%0AURL of data published to the data standard:">may contact us at ODI Leeds to get it added manually</a>.</p>
+					<h2>Data sources</h2>
+					<ul>
+						<li><a href="https://geoportal.statistics.gov.uk/datasets/output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-december-2020-lookup-in-england-and-wales">Lookup from Output Area to Local Authority District and Region</a> updated December 2020 (OGL)</li>
+						<li><a href="http://infuse2011gf.ukdataservice.ac.uk/infusewizgeo.aspx">Census 2011 data</a> updated 2011 (OGL)</li>
+						<li><a href="https://www.nomisweb.co.uk/census/2011/ks601ew">Sex data by economic activity</a> updated 2011 (OGL)</li>
+						<li><a href="https://www.nomisweb.co.uk/census/2011/qs611ew">Approximated Social Grade for all Household Reference Persons aged 16 to 64</a> updated 2011 (OGL)</li>
+					</ul>
+				</section>
+			</div>
 		</footer>
 	</div>
 	<div id="add" class="dialog dialog-hidden" role="dialog" aria-labelledby="addTitle">
@@ -135,7 +138,7 @@
 			<legend><h3 id="addTitle">Add an organisation</h3></legend>
 			<div class="option-block">
 				<label for="org">Name</label><select id="org"><option value="">Select organisation</option></select>
-				<label for="div">Division</label><select id="div"><option value="">Select division</option></select>
+				<label for="div">Grouping</label><select id="grp"><option value="">Select grouping</option></select>
 				<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
 				<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
 			</div>
@@ -157,7 +160,7 @@
 				'geography-error':document.getElementById('area-error'),
 				'add': document.getElementById('add-comparison'),
 				'org': document.getElementById('org'),
-				'division': document.getElementById('div'),
+				'grouping': document.getElementById('grp'),
 				'level': document.getElementById('lvl'),
 				'date': document.getElementById('dat'),
 				'dialog': document.getElementById('add')
