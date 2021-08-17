@@ -98,8 +98,8 @@ body > * { background: white; color: #222; }
 table td, table th { border:1px solid #444; border-collapse: collapse; padding: 0.25em 0.5em; }
 form label { margin-right: 0.25em; }
 input,select { font: inherit; line-height: 2em; height: 2em; border: 2px solid #444; }
-input:focus, select:focus { outline: 4px solid #00B6FF; }
-button:focus, input[type=submit]:focus, button:hover, input[type=submit]:hover { background:black; color: white; }
+input:focus, select:focus, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner:focus { outline: 4px solid #00B6FF; }
+button:focus, input[type=submit]:focus, button:hover, input[type=submit]:hover { background:black; color: white; outline: 4px solid #00B6FF; }
 form + section { margin-top: 1em; }
 form .item { display: inline-block; margin-right: 1em; }
 .facet { padding-top: 1em; }
@@ -137,7 +137,7 @@ form .item { display: inline-block; margin-right: 1em; }
 .grid.links button:hover, .grid.links button:focus { background: black; color: white; }
 .tabs button { background: transparent; }
 .tabs button.open, .tabs button:focus, .tabs button:hover { border-bottom-color: #1DD3A7; outline: none; background: transparent; }
-.tabs button:focus, .tabs button:hover { outline: 1px solid #1DD3A7; background: transparent!important; color: inherit!important; }
+.tabs button:focus, .tabs button:hover { outline: 4px solid #1DD3A7; background: transparent!important; color: inherit!important; }
 ul.tabs > li { display: inline-block; margin-right: 0.5em; }
 article[hidden=true] { display: none; }
 article article { display: none; padding: 1em 0 0 0; height: 0; }
@@ -193,6 +193,11 @@ footer a,footer a:visited { color: inherit; }
 	max-height: 100%;
 	overflow: hidden;
 	opacity: 0.1;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
 .dialog { 
 	position: absolute;

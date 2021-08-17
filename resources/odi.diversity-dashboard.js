@@ -199,17 +199,22 @@
 			delete: 46
 		};
 		_obj = this;
-
 		this.selectTab = function(e,triggered){
 			var i,sel,t,p,tabid;
-			if(typeof e==="number") e = {'target':tabs[i]};
-			else if(typeof e==="string"){
+			if(typeof e==="number"){
+				if(e > tabs.length-1) e = 0;
+				if(e < 0) e = tabs.length-1;
+				tabFocus = e;
+				e = {'target':tabs[e]};
+			}else if(typeof e==="string"){
 				sel = -1;
 				for(i = 0; i < tabs.length; i++){
 					if(tabs[i].getAttribute('aria-controls')==e) sel = i;
 				}
-				if(sel >= 0) e = {'target':tabs[sel]};
-				else{
+				if(sel >= 0){
+					e = {'target':tabs[sel]};
+					tabFocus = sel;
+				}else{
 					console.error('Not a valid string '+e);
 					return;
 				}
@@ -224,17 +229,23 @@
 			// Remove all current selected tabs
 			p.querySelectorAll('[aria-selected="true"]').forEach(function(tab){ tab.setAttribute("aria-selected", false); });
 
-			// Set this tab as selected
-			t.setAttribute("aria-selected", true);
-
 			tabid = t.getAttribute('aria-controls');
 
 			// Hide all tab panels except for the active one
 			tabPanels.forEach(function(e){
 				var id = e.getAttribute('id');
-				if(id==tabid) e.removeAttribute('hidden');
-				else e.setAttribute("hidden", true);
+				if(id==tabid){
+					e.removeAttribute('hidden');
+				}else{
+					e.setAttribute("hidden", true);
+				}
 			});
+
+			// Update tab id
+			for(i = 0; i < tabs.length; i++){
+				tabs[i].setAttribute("aria-selected",(i==tabFocus ? "true":"false"));
+				tabs[i].setAttribute('tabindex',(i==tabFocus ? 0 : -1));
+			}
 
 			// If this wasn't a triggered event we add it to the history
 			if(!triggered && typeof opt.callback==="function") opt.callback.call(opt.this||this);
@@ -243,22 +254,18 @@
 
 		for(i = 0; i < tabs.length; i++){
 			id = tabs[i].getAttribute('aria-controls');
+			tabs[i].setAttribute('tabindex',-1);
 			tabs[i].addEventListener('focus',this.selectTab);
 			if(opt.selected && id==opt.selected) this.selectTab(i,true);
 		}
 		tabList.addEventListener("keydown",function(e){
-			tabs[tabFocus].setAttribute('tabindex',-1);
 			if(e.keyCode === keys.left || e.keyCode === keys.right){
-				// Move right
 				if(e.keyCode === keys.right){
-					tabFocus++;
-					// If we're at the end, go to the start
-					if(tabFocus >= tabs.length) tabFocus = 0;
-					// Move left
+					// Move right
+					_obj.selectTab(tabFocus + 1,true);
 				}else if(e.keyCode === keys.left){
-					tabFocus--;
-					// If we're at the start, move to the end
-					if(tabFocus < 0) tabFocus = tabs.length - 1;
+					// Move left
+					_obj.selectTab(tabFocus - 1,true);
 				}
 
 				tabs[tabFocus].setAttribute("tabindex", 0);
@@ -556,7 +563,7 @@
 						attr.comparison.dialog.insertBefore(cls, attr.comparison.dialog.firstChild);
 					}
 					cls.addEventListener('click',function(e){
-						e.preventDefault(); console.log('add comparison'); 
+						e.preventDefault();
 						_obj.toggleDialog();
 					});
 					cls.addEventListener('blur',function(e){
