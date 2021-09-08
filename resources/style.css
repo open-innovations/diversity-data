@@ -221,6 +221,7 @@ footer a,footer a:visited { color: inherit; }
 .dialog .option-block select { min-width: 250px; }
 .dialog input { height: 3em; border: 0; font-weight: bold; cursor: pointer; padding: 0 1em; }
 
+.error { padding: 1em; color: #D8000C; background-color: #FFD2D2; margin-bottom: 1em; }
 
 @media only screen and (max-width: 1080px) {
 	.grid.links { grid-template-columns: repeat(4, auto); }

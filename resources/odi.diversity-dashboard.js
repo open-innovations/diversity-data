@@ -10,12 +10,18 @@
 	}
 
 	function AJAX(url,opt){
-		// Version 1.2
+		// Version 1.3
 		if(!opt) opt = {};
-		var req = new XMLHttpRequest();
+		var req = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 		var responseTypeAware = 'responseType' in req;
-		if(responseTypeAware && opt.dataType) req.responseType = opt.dataType;
 		req.open((opt.method||'GET'),url+(typeof opt.cache===null || (typeof opt.cache==="boolean" && !opt.cache) ? '?'+Math.random() : ''),true);
+		if(responseTypeAware && opt.dataType!=="undefined"){
+			try{
+				req.responseType = opt.dataType;
+			}catch(err){
+				console.error('Problem setting response type',err);
+			}
+		}
 		req.onload = function(e){
 			if(this.status >= 200 && this.status < 400) {
 				// Success!
@@ -99,9 +105,13 @@
 		this.header = this.el.querySelector('header');
 		var _obj = this;
 		function togglePanels(e){
-			var pid,id;
+			var pid,id,opened,o;
 			id = e.target.getAttribute('data-id');
-			_obj.el.querySelectorAll('.open').forEach(function(e){ e.setAttribute('aria-selected',false); e.classList.remove('open'); });
+			opened = _obj.el.querySelectorAll('.open');
+			for(o = 0; o < opened.length; o++){
+				opened[o].setAttribute('aria-selected',false);
+				opened[o].classList.remove('open');
+			}
 			for(pid in _obj.panels){
 				if(pid==id){
 					_obj.nav.tabs[pid].el.classList.add('open');
@@ -200,7 +210,7 @@
 		};
 		_obj = this;
 		this.selectTab = function(e,triggered){
-			var i,sel,t,p,tabid;
+			var i,sel,t,p,tabid,ps;
 			if(typeof e==="number"){
 				if(e > tabs.length-1) e = 0;
 				if(e < 0) e = tabs.length-1;
@@ -227,19 +237,17 @@
 			_obj.selectedID = t.getAttribute('aria-controls');
 
 			// Remove all current selected tabs
-			p.querySelectorAll('[aria-selected="true"]').forEach(function(tab){ tab.setAttribute("aria-selected", false); });
+			ps = p.querySelectorAll('[aria-selected="true"]');
+			for(i = 0; i < ps.length; i++) ps[i].setAttribute("aria-selected", false);
 
 			tabid = t.getAttribute('aria-controls');
 
 			// Hide all tab panels except for the active one
-			tabPanels.forEach(function(e){
-				var id = e.getAttribute('id');
-				if(id==tabid){
-					e.removeAttribute('hidden');
-				}else{
-					e.setAttribute("hidden", true);
-				}
-			});
+			for(i = 0; i < tabPanels.length; i++){
+				var id = tabPanels[i].getAttribute('id');
+				if(id==tabid) tabPanels[i].removeAttribute('hidden');
+				else tabPanels[i].setAttribute("hidden", true);
+			}
 
 			// Update tab id
 			for(i = 0; i < tabs.length; i++){
@@ -805,6 +813,7 @@
 					"callback": cb,
 					"dataType": "json",
 					"success": function(d,a){
+						if(typeof d==="string") d = JSON.parse(d);
 						geocode = a.data.geocode;
 						this.cache[geocode].loaded = true;
 						this.cache[geocode].json = d;
@@ -1014,7 +1023,7 @@
 		this.update = function(){
 			
 			this.log('MESSAGE','update');
-			var fmt,data,dt,sli,gd,pc,keytxt,a,d,e,g,i,n,o,p,r,s;
+			var fmt,data,dt,sli,gd,pc,keytxt,a,d,e,g,i,n,o,p,r,s,els;
 
 			fmt = JSON.stringify(this.format);
 			data = JSON.parse(fmt);
@@ -1039,7 +1048,8 @@
 			}
 
 			// Clear sources
-			document.querySelectorAll('#sources ul li.org').forEach(function(e){ e.remove(); });
+			els = document.querySelectorAll('#sources ul li.org');
+			for(i = 0; i < els.length; i++) els[i].parentNode.removeChild(els[i]);
 
 			// Work out percentages
 			for(i = 0; i < this.compare.length; i++){
@@ -1105,9 +1115,11 @@
 							i = (this.data[e.cluster].data[e.series].data) ? this.data[e.cluster].data[e.series].data[e.bin] : this.data[e.cluster].data[e.series];
 							txt = i.label+": "+this.data[e.cluster].label+" = "+this.attr.formatY(i.v);
 							info.innerHTML = txt;
-							e.event.originalTarget.appendChild(info);
-							// Update title text
-							e.event.originalTarget.setAttribute('title',txt);
+							if(e.event.originalTarget){
+								e.event.originalTarget.appendChild(info);
+								// Update title text
+								e.event.originalTarget.setAttribute('title',txt);
+							}
 						},
 						'mouseleave':function(e){
 							removeBalloons();
@@ -1252,7 +1264,9 @@
 
 	function removeBalloons(){
 		var b = document.querySelectorAll('.balloon');
-		if(b) b.forEach(function(e){ e.remove(); });
+		if(b){
+			for(var i = 0; i < b.length; i++) b[i].parentNode.removeChild(b[i]);
+		}
 		return;
 	}
 	

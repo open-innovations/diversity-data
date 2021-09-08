@@ -26,7 +26,7 @@
 	}
 
 	function Chart(target,attr){
-		var ver = "0.1.0";
+		var ver = "0.1.1";
 		if(!target) return {};
 		this.target = target;
 		this.attr = attr || {};
@@ -255,7 +255,7 @@
 				l = document.createElement('span');
 				l.classList.add('category-label');
 				l.innerHTML = (typeof this.attr.formatX==="function" ? this.attr.formatX.call(this,d[c].label) : d[c].label);
-				clusters[c].append(l);
+				clusters[c].appendChild(l);
 
 				// Add series
 				if(d[c].data){
@@ -344,12 +344,15 @@
 				}
 			}
 			clusters[c].style['grid-template-'+dir] = 'repeat('+d[c].data.length+',1fr)';
+			//clusters[c].style['-ms-grid-'+(dir)] = '(1fr)['+d[c].data.length+']';
 		}
 
 		// Get the maximum label height
 		lbls = el.querySelectorAll('.barchart-data .category-label');
 		lh = 0;
-		lbls.forEach(function(e){ lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? e.offsetWidth-parseInt(getStyle(e,'left')) : e.offsetHeight)); });
+		for(i = 0 ; i < lbls.length; i++){
+			lh = Math.max(lh,(_obj.attr.dir=="horizontal" ? lbls[i].offsetWidth-parseInt(getStyle(lbls[i],'left')) : lbls[i].offsetHeight));
+		}
 		// If we haven't got a value the element may be hidden so we'll guess a value
 		if(lh == 0) lh = parseInt(getStyle(lbls[0],'line-height'))+parseInt(getStyle(lbls[0],'padding-top'));
 		// Padding for labels
