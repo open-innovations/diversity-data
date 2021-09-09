@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8" />
+	<title>Diversity Data Dashboard</title>
+	<script src="../resources/odi.chart.js"></script>
+	<script src="../resources/odi.diversity-dashboard.js"></script>
+	<script src="../resources/table-sort.js"></script>
+	<link rel="StyleSheet" href="../resources/fonts/open-sans/open-sans.css" type="text/css">
+	<link rel="StyleSheet" href="../resources/odi.chart.css" type="text/css" />
+	<link rel="StyleSheet" href="../resources/style.css" type="text/css" />
+</head>
+<body class="b1-bg">
+	<div id="dashboard">
+		<header class="padded b1-bg">
+			<h1>Leeds Diversity Dashboard<span class="alpha">alpha</span></h1>
+		</header>
+		<div class="main doublepadded">
+			<section>
+				<noscript class="error">Without Javascript enabled the dashboard cannot currently function. Sorry.</noscript>
+				<p id="organisations">There are <span class="number">0</span> organisation(s) currently included in the dashboard. You can compare them - and groupings and/or levels within them where those are provided - against a reference area below. Data last updated on <span class="lastupdated">?</span>.</p>
+				<form id="comparators" class="comparators">
+					<div class="comparator series-0">
+						<div class="inner">
+							<h3><label for="area">Reference area</label></h3>
+							<select id="area">
+								<option value="E08000032">Bradford</option>
+								<option value="E08000033">Calderdale</option>
+								<option value="E06000010">Hull</option>
+								<option value="E08000034">Kirklees</option>
+								<option value="E08000035">Leeds</option>
+								<option value="E37000050" selected="selected">Leeds City Region</option>
+								<option value="E08000019">Sheffield</option>
+								<option value="E08000036">Wakefield</option>
+								<option value="E12000003">Yorkshire and The Humber</option>
+							</select>
+							<div id="area-error"></div>
+						</div>
+					</div>
+					<div class="add">
+						<button id="add-comparison" type="submit" class="grey" aria-label="Add an organisation to compare with">+</button>
+					</div>
+				</form>
+				<form class="nav"></form>
+			</section>
+			<section>
+				<nav>
+					<div class="grid links" role="tablist" aria-label="Diversity attributes">
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="age">Age</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="carer">Carers</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="disability">Disability</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="ethnicity">Ethnicity</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="gender">Gender</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="religion">Religion</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="seb">Socio-economic</button>
+						<button role="tab" tabindex="0" class="grey padded" aria-selected="false" aria-controls="sexuality">Sexuality</button>
+					</div>
+				</nav>
+				<article class="facet" id="age" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Age</h2></header>
+						<summary>Number of people by age bracket. Where organisations don't employ anyone in an age bracket the value will be zero.</summary>
+					</div>
+				</article>
+
+				<article class="facet" id="carer" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Carers</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="disability" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Disability</h2></header>
+						<summary>Number of people with or without a disability (or prefering not to say or undisclosed). The options are from the <a href="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Government Statistical Service guidance on measuring disability</a> (2019; and used by the 2021 Census) which asks <q cite="https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/">Do you have any physical or mental health conditions or illnesses lasting or expected to last 12 months or more?</q></summary>
+					</div>
+				</article>
+
+				<article class="facet" id="ethnicity" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Ethnicity</h2></header>
+						<summary>This section groups people into one of the <a href="https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups">5 ethnic groups used by the 2011 Census</a>.</summary>
+					</div>
+				</article>
+
+				<article class="facet" id="gender" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Gender</h2></header>
+					</div>
+				</article>
+
+				<article class="facet" id="religion" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Religion</h2></header>
+						<summary>This section shows religions as collected by the <a href="https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires">2021 Census in England</a> which asks: <q cite="https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf">What is your religion?</q>. <em>Christian</em> includes Church of England, Catholic, Protestant and all other Christian denominations. <em>Other</em> includes any other religions not otherwise listed.</summary>
+					</div>
+				</article>
+
+				<article class="facet" id="seb" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Socio-economic background</h2></header>
+						<summary>This section uses categories from the <a href="https://socialmobilityworks.org/toolkit/measurement/">Social Mobility Commission toolkit</a> which suggests employers ask the key question <q cite="https://socialmobilityworks.org/toolkit/measurement/">"What was the occupation of your main household earner when you were about aged 14?"</q>. The options include: <em>lower socio-economic background</em> (e.g. technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed); <em>intermediate background</em> (e.g. clerical and intermediate occupations; small business owners); <em>professional background</em> (e.g. modern professional &amp; traditional occupations; senior or junior managers or administrators).</summary>
+						<p>Reference area values come from <a href="https://www.nomisweb.co.uk/census/2011/qs611ew">2011 Census data for approximated social grade</a>. We have grouped <em>C2</em> and <em>DE</em> as <em>Lower</em>, <em>C1</em> as <em>Intermediate</em>, and <em>AB</em> as <em>Professional</em>.</p>
+					</div>
+				</article>
+
+				<article class="facet" id="sexuality" role="tabpanel">
+					<div class="doublepadded grey">
+						<header><h2>Sexuality</h2></header>
+						<summary>This section has options limited to those offered by the <a href="https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation">Australian Bureau of Statistics</a> / <a href="https://gss.civilservice.gov.uk/policy-store/sexual-orientation/">Government Statistical Service guidance on reporting statistics about sexual orientation</a>.</summary>
+						<p>The 2011 Census doesn't provide data on sexuality so the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2018">sexuality figures come from the ONS Population Survey (2018)</a>. This is only published by UK Region (e.g. Yorkshire and The Humber) so we have used the regional values.</p>
+					</div>
+				</article>
+			</section>
+
+		</div>
+		
+		<footer class="b1-bg">
+			<div class="doublepadded">
+				<section id="sources">
+					<h2>About the dashboard</h2>
+					<p>This Leeds City Region Diversity Dashboard is a work-in-progress project for the Leeds Anchors Network. It uses data published in our agreed <a href="https://docs.google.com/document/d/1_j0_ukOySTbYlz9P4MAGWOlnh8ceL-p2yQvJ9EeSVLE/edit#">diversity data standard (version 1.0.1; 2021-07-06)</a>. This data standard was drawn from existing diversity data published by members of the Leeds Anchor but has attempted to map characteristics to existing national standards as much as possible so that we can make comparisons with nationally curated data sets e.g. the UK Census.</p> 
+					<h2>Adding your data to the dashboard</h2>
+					<p>If you publish diversity data about your organisation within the Leeds City Region you can get your data included. First make sure that you create a CSV file with column headings that match those in our data standard. There should be a row per date/group/level within your organisation (which could be as simple as one row giving figures for your entire organisation). The data should be published openly on the web at a fixed URL. For ease, we suggest that you publish the file on <a href="https://datamillnorth.org/">Data Mill North</a> with the tag #DiversityData. Once your data is published openly, it needs to be added to <a href="https://github.com/odileeds/diversity-data/blob/main/leeds.csv">the dashboard index</a>. If you have a Github account you can create a pull request directly or you <a href="mailto:hello@odileeds.org?subject=Diversity Dashboard&body=Please add our organisation to your Leeds City Region Diversity Dashboard.%0A%0AOrgansiation name:%0A%0AURL of data published to the data standard:">may contact us at ODI Leeds to get it added manually</a>.</p>
+					<h2>Data sources</h2>
+					<ul>
+						<li><a href="https://geoportal.statistics.gov.uk/datasets/output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-december-2020-lookup-in-england-and-wales">Lookup from Output Area to Local Authority District and Region</a> updated December 2020 (OGL)</li>
+						<li><a href="http://infuse2011gf.ukdataservice.ac.uk/infusewizgeo.aspx">Census 2011 data</a> updated 2011 (OGL)</li>
+						<li><a href="https://www.nomisweb.co.uk/census/2011/ks601ew">Sex data by economic activity</a> updated 2011 (OGL)</li>
+						<li><a href="https://www.nomisweb.co.uk/census/2011/qs611ew">Approximated Social Grade for all Household Reference Persons aged 16 to 64</a> updated 2011 (OGL)</li>
+					</ul>
+				</section>
+			</div>
+		</footer>
+	</div>
+	<div id="add" class="dialog dialog-hidden" role="dialog" aria-labelledby="addTitle">
+		<fieldset class="inner">
+			<legend><h3 id="addTitle">Add an organisation</h3></legend>
+			<div class="option-block">
+				<label for="org">Name</label><select id="org"><option value="">Select organisation</option></select>
+				<label for="div">Grouping</label><select id="grp"><option value="">Select grouping</option></select>
+				<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
+				<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
+			</div>
+		</fieldset>
+		<input type="submit" class="grey" aria-label="Add the organisation to the dashboard" value="Add organisation" />
+	</div>
+
+	<script>
+	var dash;
+	ODI.ready(function(){
+		dash = ODI.diversityDashboard({
+			'index':'leeds.csv',
+			'comparison': {
+				'max': 3,
+				'nav':document.querySelector('nav'),
+				'main':document.getElementById('dashboard'),
+				'el':document.getElementById('comparators'),
+				'geography': document.getElementById('area'),
+				'geography-error':document.getElementById('area-error'),
+				'add': document.getElementById('add-comparison'),
+				'org': document.getElementById('org'),
+				'grouping': document.getElementById('grp'),
+				'level': document.getElementById('lvl'),
+				'date': document.getElementById('dat'),
+				'dialog': document.getElementById('add')
+			}
+		});
+		
+	});
+	</script>
+</body>
+</html>

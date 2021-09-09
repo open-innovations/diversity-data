@@ -1,0 +1,67 @@
+{
+	"name":"Bradford",
+	"id": "E08000032",
+	"OAs": 1528,
+	"data":{
+		"age":{
+			"0-14": 114917,
+			"15-24": 71047,
+			"25-34": 75631,
+			"35-44": 71618,
+			"45-54": 65499,
+			"55-64": 54348,
+			"65-69": 18570,
+			"70+": 50822,
+			"total": 522452
+		},
+		"carer":{
+			"no": 471426,
+			"yes": 51026,
+			"total": 522452
+		},
+		"disability":{
+			"no": 431925,
+			"yes": 90527,
+			"total": 522452
+		},
+		"ethnicity":{
+			"asian": 140149,
+			"black": 9267,
+			"mixed": 12979,
+			"other": 7740,
+			"white": 352317,
+			"total": 522452
+		},
+		"gender":{
+			"female": 184595,
+			"male": 181622,
+			"total": 366217
+		},
+		"religion":{
+			"buddhist": 1000,
+			"christian": 239843,
+			"hindu": 4882,
+			"jewish": 299,
+			"muslim": 129041,
+			"no": 108027,
+			"other": 1686,
+			"sikh": 5125,
+			"undisclosed": 32549,
+			"total": 522452
+		},
+		"seb":{
+			"intermediate": 44649,
+			"lower": 83304,
+			"professional": 25791,
+			"total": 153744
+		},
+		"sexuality":{
+			"bisexual": 45000,
+			"gaylesbian": 56000,
+			"prefernottosay": 135000,
+			"straight": 4106000,
+			"usedifferentterm": 20000,
+			"total": 4362000
+		}
+	}
+}
