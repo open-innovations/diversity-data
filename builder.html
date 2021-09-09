@@ -9,12 +9,14 @@
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 	<style>
 	html { scroll-behavior: smooth; }
-	.chooser { margin-bottom: 1em; }
+	.chooser { margin-bottom: 1em; line-height: 2em; }
 	.dropzone {
 		position: relative;
 		padding: 1em;
 		border: 2px dashed #999999;
 	}
+	.dropzone.drop { background: #ddd; border-color: #1DD3A7; }
+	.dropzone.loaded { border: 2px solid #999999; }
 	.dropzone input[type=file] {
 		position: absolute;
 		left: 0px;
@@ -30,7 +32,18 @@
 	.dropzone input[type=url] {
 		position: relative;
 		z-index: 1;
+		font: inherit;
+		height: 2.25em;
+		width: 640px;
 	}
+	.chooser button[type=submit] { background: #1DD3A7; color: black; }
+	.chooser button { position: relative; z-index: 1; margin-top: 0!important; }
+	#preview {
+		max-width: 100%;
+		overflow-x: auto;
+		margin-bottom: 1em;
+	}
+	#preview table td, #preview table th { white-space: nowrap; }
 	#builder {
 		display: grid;
 		grid-template-columns: 260px 1fr;
@@ -70,7 +83,6 @@
 	#builder input:invalid { border: 4px solid red; }
 	#menu { position: sticky; top: 0; width: 100%; }
 	#menu li a { display: block; padding: 0.5em; text-decoration: none; color: inherit; font-weight: 600; }
-	button[type=submit] { background: #1DD3A7; color: black; }
 	@media only screen and (max-width: 1200px) {
 		#builder { grid-template-columns: 200px 1fr; }
 	}
@@ -99,11 +111,14 @@
 			<form class="chooser">
 				<div class="grey dropzone" id="drop_zone">
 					<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv">
-					Drop CSV file here, click to <label for="standard_files">browse files</label>, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://dataworks.calderdale.gov.uk/download/calderdale-business-properties---complete-list/164d66b9-f7f9-40a0-a268-fa7377e46322/Complete_List_Of_Properties_In_calderdale_new.csv" pattern="https://.*">
+					Drop CSV file here, click to <label for="standard_files">browse files</label>, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
+					<button id="submit" type="submit" class="button">Open</button>
+					<button id="reset" type="reset" class="b2-bg">Reset</button>
 				</div>
-				<button id="submit" type="submit" class="button">Open</button>
-				<button id="reset" type="reset" class="b2-bg">Reset</button>
 			</form>
+			<div id="preview">
+			
+			</div>
 			<!-- START GENERATED CODE -->
 			<div id="builder">
 				<div>
