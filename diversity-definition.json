@@ -1,0 +1,875 @@
+{
+	"version": "1.0.1",
+	"title": "Diversity and Inclusion Data",
+	"description": "Sharing data around diversity and inclusion within organisations",
+	"sections": [{
+		"key": "metadata",
+		"title": "Metadata",
+		"description": "",
+		"properties": [{
+			"key": "published",
+			"title": "Publishing date",
+			"description": "The date associated with the row. Should be in YYYY-MM-DD format (ISO 8601) as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This format reduces ambiguity in parsing dates and gives flexibility with time precision. It could be reported as '2021' (just a year), '2021-01' (a month) or '2021-01-26' (a date). This allows an organisation to publish figures as frequently as they need to.",
+			"type": "string",
+			"pattern": "^[0-9]{4}(-[0-9]{2})?(-[0-9]{2})?$",
+			"example": "2021-01-12"
+		},{
+			"key": "organisation",
+			"title": "Organisation",
+			"description": "The name of the organisation.",
+			"type": "string",
+			"example": "Leeds City Council",
+			"properties": [{
+				"key": "grouping",
+				"title": "Grouping",
+				"description": "This allows you to breakdown the data by a sub-division, area, or group within the organisation.",
+				"type": "string",
+				"example": "Waste Management"
+			},{
+				"key": "level",
+				"title": "Level",
+				"description": "This allows you to breakdown the data by a particular salary percentile e.g. 'LowerQuartile', 'LowerMiddleQuartile', 'UpperMiddleQuartile', 'TopQuartile'",
+				"type": "string",
+				"option": ["LowerQuartile","LowerMiddleQuartile","UpperMiddleQuartile","TopQuartile"],
+				"example": "TopQuartile"
+			}]
+		},{
+			"key": "employees",
+			"title": "Employees",
+			"description": "A number representing the total number of employees.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		},{
+			"key": "link_to_dei_info",
+			"title": "Link to DEI info",
+			"description": "A link to a diversity and inclusion policy (similar to the CompanyLinkToGPGInfo field provided in gender pay gap reporting)",
+			"type": "string",
+			"format": "uri",
+			"pattern": "^(http|https)://[^ ]+$",
+			"minLength": 1,
+			"maxLength": 255,
+			"example": "https://a.org/"
+		},{
+			"key": "sic_codes",
+			"title": "SIC codes",
+			"description": "Semi-colon-separated list of <a href='http://resources.companieshouse.gov.uk/sic/'>SIC codes</a> as used by Companies House.",
+			"type": "string",
+			"pattern": "^(?:(^|;)(01110|01120|01130|01140|01150|01160|01190|01210|01220|01230|01240|01250|01260|01270|01280|01290|01300|01410|01420|01430|01440|01450|01460|01470|01490|01500|01610|01621|01629|01630|01640|01700|02100|02200|02300|02400|03110|03120|03210|03220|05101|05102|05200|06100|06200|07100|07210|07290|08110|08120|08910|08920|08930|08990|09100|09900|10110|10120|10130|10200|10310|10320|10390|10410|10420|10511|10512|10519|10520|10611|10612|10620|10710|10720|10730|10810|10821|10822|10831|10832|10840|10850|10860|10890|10910|10920|11010|11020|11030|11040|11050|11060|11070|12000|13100|13200|13300|13910|13921|13922|13923|13931|13939|13940|13950|13960|13990|14110|14120|14131|14132|14141|14142|14190|14200|14310|14390|15110|15120|15200|16100|16210|16220|16230|16240|16290|17110|17120|17211|17219|17220|17230|17240|17290|18110|18121|18129|18130|18140|18201|18202|18203|19100|19201|19209|20110|20120|20130|20140|20150|20160|20170|20200|20301|20302|20411|20412|20420|20510|20520|20530|20590|20600|21100|21200|22110|22190|22210|22220|22230|22290|23110|23120|23130|23140|23190|23200|23310|23320|23410|23420|23430|23440|23490|23510|23520|23610|23620|23630|23640|23650|23690|23700|23910|23990|24100|24200|24310|24320|24330|24340|24410|24420|24430|24440|24450|24460|24510|24520|24530|24540|25110|25120|25210|25290|25300|25400|25500|25610|25620|25710|25720|25730|25910|25920|25930|25940|25990|26110|26120|26200|26301|26309|26400|26511|26512|26513|26514|26520|26600|26701|26702|26800|27110|27120|27200|27310|27320|27330|27400|27510|27520|27900|28110|28120|28131|28132|28140|28150|28210|28220|28230|28240|28250|28290|28301|28302|28410|28490|28910|28921|28922|28923|28930|28940|28950|28960|28990|29100|29201|29202|29203|29310|29320|30110|30120|30200|30300|30400|30910|30920|30990|31010|31020|31030|31090|32110|32120|32130|32200|32300|32401|32409|32500|32910|32990|33110|33120|33130|33140|33150|33160|33170|33190|33200|35110|35120|35130|35140|35210|35220|35230|35300|36000|37000|38110|38120|38210|38220|38310|38320|39000|41100|41201|41202|42110|42120|42130|42210|42220|42910|42990|43110|43120|43130|43210|43220|43290|43310|43320|43330|43341|43342|43390|43910|43991|43999|45111|45112|45190|45200|45310|45320|45400|46110|46120|46130|46140|46150|46160|46170|46180|46190|46210|46220|46230|46240|46310|46320|46330|46341|46342|46350|46360|46370|46380|46390|46410|46420|46431|46439|46440|46450|46460|46470|46480|46491|46499|46510|46520|46610|46620|46630|46640|46650|46660|46690|46711|46719|46720|46730|46740|46750|46760|46770|46900|47110|47190|47210|47220|47230|47240|47250|47260|47290|47300|47410|47421|47429|47430|47510|47520|47530|47540|47591|47599|47610|47620|47630|47640|47650|47710|47721|47722|47730|47741|47749|47750|47760|47770|47781|47782|47789|47791|47799|47810|47820|47890|47910|47990|49100|49200|49311|49319|49320|49390|49410|49420|49500|50100|50200|50300|50400|51101|51102|51210|51220|52101|52102|52103|52211|52212|52213|52219|52220|52230|52241|52242|52243|52290|53100|53201|53202|55100|55201|55202|55209|55300|55900|56101|56102|56103|56210|56290|56301|56302|58110|58120|58130|58141|58142|58190|58210|58290|59111|59112|59113|59120|59131|59132|59133|59140|59200|60100|60200|61100|61200|61300|61900|62011|62012|62020|62030|62090|63110|63120|63910|63990|64110|64191|64192|64201|64202|64203|64204|64205|64209|64301|64302|64303|64304|64305|64306|64910|64921|64922|64929|64991|64992|64999|65110|65120|65201|65202|65300|66110|66120|66190|66210|66220|66290|66300|68100|68201|68202|68209|68310|68320|69101|69102|69109|69201|69202|69203|70100|70210|70221|70229|71111|71112|71121|71122|71129|71200|72110|72190|72200|73110|73120|73200|74100|74201|74202|74203|74209|74300|74901|74902|74909|74990|75000|77110|77120|77210|77220|77291|77299|77310|77320|77330|77341|77342|77351|77352|77390|77400|78101|78109|78200|78300|79110|79120|79901|79909|80100|80200|80300|81100|81210|81221|81222|81223|81229|81291|81299|81300|82110|82190|82200|82301|82302|82911|82912|82920|82990|84110|84120|84130|84210|84220|84230|84240|84250|84300|85100|85200|85310|85320|85410|85421|85422|85510|85520|85530|85590|85600|86101|86102|86210|86220|86230|86900|87100|87200|87300|87900|88100|88910|88990|90010|90020|90030|90040|91011|91012|91020|91030|91040|92000|93110|93120|93130|93191|93199|93210|93290|94110|94120|94200|94910|94920|94990|95110|95120|95210|95220|95230|95240|95250|95290|96010|96020|96030|96040|96090|97000|98000|98100|98200|99000|99999))*$",
+			"patterndesc": "Must be valid SIC codes separated by semi-colons",
+			"example": "46120;46719;46900;47990"
+		}],
+		"required": [ "published", "organisation" ]
+	},{
+		"key":"age",
+		"title": "Age",
+		"description": "This section is about age. It is optional as are each of the columns. A response rate will be calculated using the age_undisclosed value and the total. These were based on an attempt to find common age brackets from the <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>existing employers who had shared data</a>. The <a href='https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest'>ONS use 5-year bands</a> which match with these (mostly) 10 year bands. In under 25s the ONS use 15-17, and 18-24 but none of the existing employers report under 16s.",
+		"properties": [{
+			"key": "0-14",
+			"title": "0-14",
+			"description": "The number of employees aged from 0-14 inclusive ie. not yet 15.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "0"
+		},{
+			"key": "15-24",
+			"title": "15-24",
+			"description": "The number of employees aged from 15 to 24 inclusive ie. not yet 25.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "100"
+		},{
+			"key": "25-34",
+			"title": "25-34",
+			"description": "The number of employees aged from 25 to 34 inclusive ie. not yet 35.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "100"
+		},{
+			"key": "35-44",
+			"title": "35-44",
+			"description": "The number of employees aged from 35 to 44 inclusive ie. not yet 45.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "100"
+		},{
+			"key": "45-54",
+			"title": "45-54",
+			"description": "The number of employees aged from 45 to 54 inclusive ie. not yet 55.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "100"
+		},{
+			"key": "55-64",
+			"title": "55-64",
+			"description": "The number of employees aged from 55 to 64 inclusive ie. not yet 65.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "100"
+		},{
+			"key": "65-69",
+			"title": "65-69",
+			"description": "The number of employees aged from 65 to 69 inclusive ie. not yet 70.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "40"
+		},{
+			"key": "70+",
+			"title": "70+",
+			"description": "The number of employees aged 70 or over.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "10"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "For consistency across categories this can be provided if needed.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "0"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees for whom no age is known. This allows us to calculate “response” rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "0"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people this category applies to. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"carer",
+		"title": "Carers",
+		"description": "This section is about those who are carers for others. It is optional as are each of the columns. A response rate will be calculated using the carers_undisclosed value and the total. These options are based on question 14 of the 2011 Census (which is a super-set of <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf'>question 24 of the 2021 Census</a>).",
+		"properties": [{
+			"key": "yes",
+			"title": "Carers",
+			"description": "The total number of people who look after, or give any help or support to, anyone because they have long-term physical or mental health conditions or illnesses, or problems related to old age (see Q24 Census 2021 Individual).",
+			"type": "integer",
+			"minimum": 0,
+			"example": "50",
+			"properties": [{
+				"key": "1-19",
+				"title": "Carers (1-19 hours/week)",
+				"description": "Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census).",
+				"type": "integer",
+				"minimum": 0,
+				"example": "30"
+			},{
+				"key": "20-49",
+				"title": "Carers (20-49 hours/week)",
+				"description": "Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census).",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "50",
+				"title": "Carers (50+ hours/week)",
+				"description": "Yes, 50 or more hours a week",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "no",
+			"title": "Not carers",
+			"description": "Those who are not a carer",
+			"type": "integer",
+			"minimum": 0,
+			"example": "486"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "10"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "20"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"disability",
+		"title": "Disability",
+		"description": "This section is about disability. It is optional as are each of the columns. A response rate will be calculated using the disability_undisclosed value and the total. These mostly come from <a href='https://www.yorkshirewater.com/media/2770/40906_yw_workplace-diversity_report_web-1.pdf'>the categories that Yorkshire Water currently publish</a> which are <a href='https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/disability/articles/measuringdisabilitycomparingapproaches/2019-08-06#the-equality-act-disability-definition-eadd'>aligned with the Equality Act disability definition answers to Q1 and Q3</a> of the <a href='https://www.ons.gov.uk/aboutus/whatwedo/paidservices/opinions/opinionsandlifestylesurveymethodology'>ONS's Opinion and Lifestyle Survey</a> (OPD). <a href='https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/'>GSS guidance</a>.",
+		"properties": [{
+			"key": "yes",
+			"title": "Has a disability",
+			"description": "The total number of people who have a long-term health problem or disability. In the ONS OPD Q1 is “Do you have any physical or mental health conditions or illnesses?” Answers: yes/no.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "52",
+			"properties":[{
+				"key": "daytodayalot",
+				"title": "Reduce ability to work a lot",
+				"description": "The number of people whose day-to-day activities are limited a lot. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a lot",
+				"type": "integer",
+				"minimum": 0,
+				"example": "9"
+			},{
+				"key": "daytodayalittle",
+				"title": "Reduce ability to work a little",
+				"description": "The number of people whose day-to-day activities are limited a little. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a little",
+				"type": "integer",
+				"minimum": 0,
+				"example": "43"
+			}]
+		},{
+			"key": "no",
+			"title": "No disability",
+			"description": "The number of people with no disability.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "494"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "10"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "20"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"ethnicity",
+		"title": "Ethnicity",
+		"description": "This section is about ethnicity. It is optional as are each of the columns. A response rate will be calculated using the ethnicity_undisclosed value and the total. These come from <a href='https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups'>ONS Census categories</a> so are very UK-centric.",
+		"properties": [{
+			"key": "asian",
+			"title": "Asian or Asian British",
+			"description": "The Census group “Asian/Asian British”.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "45",
+			"properties":[{
+				"key": "bangladeshi",
+				"title": "Bangladeshi",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Bangladeshi”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "chinese",
+				"title": "Chinese",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Chinese”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "indian",
+				"title": "Indian",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Indian”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "pakistani",
+				"title": "Pakistani",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Pakistani”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "other",
+				"title": "Other",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Other”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "black",
+			"title": "Black, African, Caribbean or Black British",
+			"description": "The Census group “Black, African, Caribbean or Black British”.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "45",
+			"properties":[{
+				"key": "african",
+				"title": "African",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “African”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "caribbean",
+				"title": "Caribbean",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Caribbean”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "other",
+				"title": "Any other Black, African or Caribbean background",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Black, African or Caribbean background”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "mixed",
+			"title": "Mixed or Multiple ethnic groups",
+			"description": "The Census group “Mixed or Multiple ethnic groups”.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "45",
+			"properties":[{
+				"key": "african",
+				"title": "White and Black African",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "asian",
+				"title": "White and Asian",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Asian”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "caribbean",
+				"title": "White and Black Caribbean",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black Caribbean”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "other",
+				"title": "Any other Mixed or Multiple ethnic background",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Mixed or Multiple ethnic background”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "other",
+			"title": "Other ethnic group",
+			"description": "The Census group “Other ethnic group”.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "45",
+			"properties":[{
+				"key": "arab",
+				"title": "Arab",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Arab”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "anyother",
+				"title": "Any other ethnic group",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other ethnic group”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "white",
+			"title": "White",
+			"description": "The Census group “White”.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "45",
+			"properties":[{
+				"key": "british",
+				"title": "English, Welsh, Scottish, Northern Irish or British",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “English, Welsh, Scottish, Northern Irish or British”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "irish",
+				"title": "Irish",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Irish”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "traveller",
+				"title": "Gypsy or Irish Traveller",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Gypsy or Irish Traveller”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			},{
+				"key": "other",
+				"title": "Any other White background",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other White background”.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "10"
+			}]
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "10"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "20"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"gender",
+		"title": "Gender",
+		"description": "This section is about sex and gender identity. It is optional as are each of the columns. A response rate will be calculated using the gender_undisclosed value and the gender_total. These are based on what <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>some existing employers currently report</a>.",
+		"properties": [{
+			"key": "female",
+			"title": "Female",
+			"description": "The number of employees who are female (including trans).",
+			"type": "integer",
+			"minimum": 0,
+			"example": "271"
+		},{
+			"key": "male",
+			"title": "Male",
+			"description": "The number of employees who are male (including trans).",
+			"type": "integer",
+			"minimum": 0,
+			"example": "260"
+		},{
+			"key": "other",
+			"title": "Other",
+			"description": "Diverse and other genders including non-binary.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "5"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "10"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "20"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"trans",
+		"title": "Gender identity",
+		"properties": [{
+			"key": "no",
+			"title": "Matches that assigned at birth",
+			"description": "The number of employees whose gender matches that assigned at birth",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "yes",
+			"title": "Doesn't match that assigned at birth",
+			"description": "The number of employees whose gender doesn’t match that assigned at birth",
+			"type": "integer",
+			"minimum": 0,
+			"example": "5"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "11"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "30"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"religion",
+		"title": "Religion",
+		"description": "This section is about religion. It is optional as are each of the columns. A response rate will be calculated using the religion_undisclosed value and the total. These are based on the categories used by the ONS in the <a href='https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires'>2021 Census</a>. The sum of individual responses may add up to more than the total number of people.",
+		"properties": [{
+			"key": "buddhist",
+			"title": "Buddhist",
+			"description": "The number of employees who are Buddhist",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "christian",
+			"title": "Christian",
+			"description": "The number of employees who are Christian",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "hindu",
+			"title": "Hindu",
+			"description": "The number of employees who are Hindu",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "jewish",
+			"title": "Jewish",
+			"description": "The number of employees who are Jewish",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "muslim",
+			"title": "Muslim",
+			"description": "The number of employees who are Muslim",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "no",
+			"title": "No religion",
+			"description": "The number of employees who are “No Religion”",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "other",
+			"title": "Other",
+			"description": "The number of employees who are “Other”",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "sikh",
+			"title": "Sikh",
+			"description": "The number of employees who are “Sikh”",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "11"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "30"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"sexuality",
+		"title": "Sexuality",
+		"description": "This section is about sexuality. It is optional as are each of the columns. A response rate will be calculated using the sexuality_undisclosed value and the total. These are based on <a href='https://gss.civilservice.gov.uk/policy-store/sexual-orientation/'>guidance from the Government Statistical Service</a> (17 April 2019) and similar to the <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/householdenglandpdf.pdf'>2021 Census</a> but using <a href='https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation'>language from the Australian Bureau of Statistics</a> (GSS are drawing on ABS’s approach soon).",
+		"properties": [{
+			"key": "bisexual",
+			"title": "Bisexual",
+			"description": "The number of employees who are bisexual",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "gaylesbian",
+			"title": "Gay or lesbian",
+			"description": "The number of employees who are gay or lesbian",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "straight",
+			"title": "Straight (heterosexual)",
+			"description": "The number of employees who are heterosexual/straight",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "usedifferentterm",
+			"title": "Use a different term",
+			"description": "The number of employees who would use a different term - this may be done in the form of a write-in box.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
+			"key": "prefernottosay",
+			"title": "Prefer not to say",
+			"description": "The number of people who prefer not to say",
+			"type": "integer",
+			"minimum": 0,
+			"example": "11"
+		},{
+			"key": "undisclosed",
+			"title": "Undisclosed",
+			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "30"
+		},{
+			"key": "total",
+			"title": "Total",
+			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"type": "integer",
+			"minimum": 0,
+			"example": "546"
+		}]
+	},{
+		"key":"seb",
+		"title": "Socio-economic background",
+		"description": "This section is about socio-economic background (SEB). Measuring or estimating socio-economic background is hard including <a href='https://www.theguardian.com/commentisfree/2021/jan/18/why-professional-middle-class-brits-insist-working-class'>when you ask people to self-identify</a>. All measures are going to be proxies to a complicated question. We have chosen to use the four questions used by <a href='https://socialmobilityworks.org/toolkit/measurement/'>The Social Mobility Commission toolkit</a>.",
+		"properties": [{
+			"key": "at14",
+			"title": "Q1. What was the occupation of your main household earner when you were about aged 14?",
+			"description": "<a href='https://socialmobilityworks.org/toolkit/measurement/'>The Social Mobility Commission toolkit</a> suggests this is a key question employers could ask because: <blockquote>“[T]his question is the best measure to assess someone’s socio-economic background. Not only that but it’s easy to understand, it gets the highest response rates in testing, and it’s applicable to those from all ages and from all countries.”</blockquote>",
+			"properties": [{
+				"key": "lower",
+				"title": "Lower",
+				"description": "The number of employees who, at about 14, had their main household earner from a lower socio-economic background – technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "intermediate",
+				"title": "Intermediate",
+				"description": "The number of employees who, at about 14, had their main household earner from an intermediate background – clerical and intermediate occupations; small business owners",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "professional",
+				"title": "Professional",
+				"description": "The number of employees who, at about 14, had their main household earner from a professional background – modern professional & traditional occupations; senior or junior managers or administrators.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "prefernottosay",
+				"title": "Prefer not to say",
+				"description": "The number of people who prefer not to say",
+				"type": "integer",
+				"minimum": 0,
+				"example": "11"
+			},{
+				"key": "undisclosed",
+				"title": "Undisclosed",
+				"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "30"
+			},{
+				"key": "total",
+				"title": "Total",
+				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			}]
+		},{
+			"key": "school",
+			"title": "Q2. Which type of school did you attend for the most time between the ages of 11 and 16?",
+			"properties": [{
+				"key": "independent",
+				"title": "Independent",
+				"description": "The number of employees who attended an Independent or fee-paying school",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "independent+bursary",
+				"title": "Independent with bursary",
+				"description": "The number of employees who attended an Independent or fee-paying school, where they received a means tested bursary covering 90% or more of the total cost of attending throughout their time there. ",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "outsideuk",
+				"title": "Outside the UK",
+				"description": "The number of employees who attended a school outside the UK",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "staterun",
+				"title": "State-run",
+				"description": "The number of employees who attended a state-run or state-funded school",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "prefernottosay",
+				"title": "Prefer not to say",
+				"description": "The number of people who prefer not to say",
+				"type": "integer",
+				"minimum": 0,
+				"example": "11"
+			},{
+				"key": "undisclosed",
+				"title": "Undisclosed",
+				"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "30"
+			},{
+				"key": "total",
+				"title": "Total",
+				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			}]
+		},{
+			"key": "fsm",
+			"title": "Q3. If you finished school after 1980, were you eligible for free school meals at any point during your school years?",
+			"properties": [{
+				"key": "no",
+				"title": "No",
+				"description": "The number of employees who didn’t receive free school meals at any point during their school years.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "notapplicable",
+				"title": "Not applicable",
+				"description": "The number of employees who to whom this doesn’t apply because finished school before 1980 or went to school overseas.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "yes",
+				"title": "Yes",
+				"description": "The number of employees who received free school meals at any point during their school years.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "prefernottosay",
+				"title": "Prefer not to say",
+				"description": "The number of people who prefer not to say",
+				"type": "integer",
+				"minimum": 0,
+				"example": "11"
+			},{
+				"key": "undisclosed",
+				"title": "Undisclosed",
+				"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "30"
+			},{
+				"key": "total",
+				"title": "Total",
+				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			}]
+		},{
+			"key": "parentuni",
+			"title": "Q4. Did either of your parents attend university and gain a degree (e.g. BA/BSc or equivalent) by the time you were 18?",
+			"description": "Surveys such as the <a href='https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=2000030'>Longitudinal Survey of Young People in England</a> answer questions such as “are you first in your family to go to university” but this isn’t open data so comparisons at geographies such as “Leeds City Region” won’t be possible. The <a href='http://blog.ukdataservice.ac.uk/first-in-family-students/'>UK Data Service estimates 15%</a> of those born in 1990 were first-in-family to attend university.",
+			"properties": [{
+				"key": "no",
+				"title": "No",
+				"description": "The number of employees for whom neither parent attended university.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "notsure",
+				"title": "Not sure",
+				"description": "The number of employees who are unsure if their parents attended university.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "yes",
+				"title": "Yes",
+				"description": "The number of employees who had at least one parent attend university.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			},{
+				"key": "prefernottosay",
+				"title": "Prefer not to say",
+				"description": "The number of people who prefer not to say",
+				"type": "integer",
+				"minimum": 0,
+				"example": "11"
+			},{
+				"key": "undisclosed",
+				"title": "Undisclosed",
+				"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "30"
+			},{
+				"key": "total",
+				"title": "Total",
+				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"type": "integer",
+				"minimum": 0,
+				"example": "546"
+			}]
+		}]
+	}]
+}

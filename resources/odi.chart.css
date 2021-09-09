@@ -11,7 +11,7 @@
 .barchart .barchart-data .barchart-cluster-inner { position: relative; height: 100%; }
 .barchart.horizontal .barchart-data .barchart-cluster-inner { width: 100%; }
 .barchart .barchart-data .barchart-series:hover { background: rgba(0,0,0,0.1); }
-.barchart .barchart-data .barchart-cluster-inner .barchart-series-inner { background: #FF7F29; transition: all 0.3s ease-in; transition: outline 0s; }
+.barchart .barchart-data .barchart-cluster-inner .barchart-series-inner { background: #FF7F29; transition: all 0.3s ease-in, outline 0s ease-in; }
 .barchart .barchart-data .barchart-cluster-inner .barchart-series { width: 100%; height: 100%; }
 .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-0 { background-color: #FF6700; }
 .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-1 { background-color: #F9BC26; }
