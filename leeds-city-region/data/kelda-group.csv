@@ -1,13 +1,13 @@
-published,organisation,organisation_grouping,employees,age_15-24,age_25-34,age_35-44,age_45-54,age_55-64,age_65-69,age_70+,gender_female,gender_male,gender_total,ethnicity_asian,ethnicity_white,ethnicity_prefernottosay,disability_yes,disability_undisclosed
-2020-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",221,20,56,65,56,24,0,0,124,97,221,26,128,67,1,220
-2020-03-31,Kelda Group plc,Loop,651,65,198,169,134,81,4,0,450,201,651,164,402,85,19,632
-2020-03-31,Kelda Group plc,Yorkshire Water,3514,260,991,832,840,555,35,0,815,2699,3514,176,2541,798,21,3493
-2020-03-31,Kelda Group plc,,4386,342,1246,1070,1030,658,40,,1386,3000,4386,364,3070,952,39,4347
-2019-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",261,18,73,80,59,30,1,0,127,134,261,30,176,55,2,259
-2019-03-31,Kelda Group plc,Loop,665,88,218,156,131,66,6,0,453,212,665,186,425,54,21,644
-2019-03-31,Kelda Group plc,Yorkshire Water,3076,277,858,698,781,446,17,0,717,2359,3076,154,2433,489,22,3054
-2019-03-31,Kelda Group plc,,4002,380,1148,932,968,540,24,0,1297,2705,4002,368,3033,596,44,3958
-2018-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",345,10,85,105,95,47,3,0,108,237,345,16,265,64,4,341
-2018-03-31,Kelda Group plc,Loop,715,88,245,171,134,69,7,0,484,231,715,180,468,67,21,694
-2018-03-31,Kelda Group plc,Yorkshire Water,2741,195,693,680,740,417,16,0,660,2081,2741,140,2212,389,30,2711
-2018-03-31,Kelda Group plc,,3801,293,1022,954,969,532,27,0,1250,2551,3801,334,2946,521,57,3744
+published,organisation,organisation_grouping,employees,age_15-24,age_25-34,age_35-44,age_45-54,age_55-64,age_65-69,age_70+,disability_yes,disability_undisclosed,ethnicity_asian,ethnicity_white,ethnicity_prefernottosay,gender_female,gender_male,gender_total
+2020-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",221,20,56,65,56,24,0,0,1,220,26,128,67,124,97,221
+2020-03-31,Kelda Group plc,Loop,651,65,198,169,134,81,4,0,19,632,164,402,85,450,201,651
+2020-03-31,Kelda Group plc,Yorkshire Water,3514,260,991,832,840,555,35,0,21,3493,176,2541,798,815,2699,3514
+2020-03-31,Kelda Group plc,,4386,342,1246,1070,1030,658,40,,39,4347,364,3070,952,1386,3000,4386
+2019-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",261,18,73,80,59,30,1,0,2,259,30,176,55,127,134,261
+2019-03-31,Kelda Group plc,Loop,665,88,218,156,131,66,6,0,21,644,186,425,54,453,212,665
+2019-03-31,Kelda Group plc,Yorkshire Water,3076,277,858,698,781,446,17,0,22,3054,154,2433,489,717,2359,3076
+2019-03-31,Kelda Group plc,,4002,380,1148,932,968,540,24,0,44,3958,368,3033,596,1297,2705,4002
+2018-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",345,10,85,105,95,47,3,0,4,341,16,265,64,108,237,345
+2018-03-31,Kelda Group plc,Loop,715,88,245,171,134,69,7,0,21,694,180,468,67,484,231,715
+2018-03-31,Kelda Group plc,Yorkshire Water,2741,195,693,680,740,417,16,0,30,2711,140,2212,389,660,2081,2741
+2018-03-31,Kelda Group plc,,3801,293,1022,954,969,532,27,0,57,3744,334,2946,521,1250,2551,3801

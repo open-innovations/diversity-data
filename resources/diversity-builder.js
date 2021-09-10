@@ -188,7 +188,7 @@
 		for(i = 0; i < this.fields.length; i++){
 			if(this.fields[i].count > 0){
 				row.innerHTML += '<th>'+this.fields[i].id+'</th>';	// contenteditable="true"
-				this.csv += (this.csv ? ',':'')+this.fields[i].id;
+				this.csv += (this.csv ? ',':'')+(this.fields[i].id.indexOf(",") >= 0 ? '"':'')+this.fields[i].id+(this.fields[i].id.indexOf(",") >= 0 ? '"':'');
 			}
 		}
 		this.csv += '\n';
@@ -202,7 +202,7 @@
 				if(this.fields[i].count > 0){
 					v = (this.data.data[r][this.fields[i].id]||"");
 					row.innerHTML += '<td>'+v+'</td>';	// contenteditable="true"
-					csvrow += (csvrow ? ',':'')+v;
+					csvrow += (csvrow ? ',':'')+(v.indexOf(",") >= 0 ? '"':'')+v+(v.indexOf(",") >= 0 ? '"':'');
 				}
 				if(this.fields[i].el.getAttribute('required') && !this.data.data[r][this.fields[i].id]) valid = false;
 			}
