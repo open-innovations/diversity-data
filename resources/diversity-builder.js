@@ -52,7 +52,7 @@
 		window.addEventListener('scroll',function(e){
 			var ok = -1;
 			for(var s = 0; s < _obj.sections.length; s++){
-				if(_obj.sections[s].offsetTop <= window.scrollY+_obj.buttons.el.offsetHeight) ok = s;
+				if(_obj.sections[s].offsetTop <= window.scrollY+_obj.buttons.el.offsetHeight+5) ok = s;
 			}
 			// Remove any previous selection
 			for(var i = 0; i < menu.length; i++){
