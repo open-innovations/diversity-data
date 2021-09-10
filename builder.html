@@ -36,7 +36,7 @@
 		height: 2.25em;
 		width: 640px;
 	}
-	.chooser button[type=submit] { background: #1DD3A7; color: black; }
+	button.button { background: #1DD3A7; color: black; }
 	.chooser button { position: relative; z-index: 1; margin-top: 0!important; }
 	#preview {
 		max-width: 100%;
@@ -44,10 +44,13 @@
 		margin-bottom: 1em;
 	}
 	#preview table td, #preview table th { white-space: nowrap; }
+	#preview table .selected { background: #DFF2BF; color: #4F8A10; }
+	.invalid { background: #FFD2D2; color: #D8000C; }
 	#builder {
 		display: grid;
 		grid-template-columns: 260px 1fr;
 		grid-gap: 2em;
+		margin-top: 1em;
 	}
 	.doublepadded { padding: 2em; }
 	#builder > div { display: relative; }
@@ -75,13 +78,16 @@
 	}
 	#builder .row .col *:last-child { margin-bottom: 0; }
 	#builder code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.5em; }
-	#builder h2 { text-transform: uppercase; }
-	#builder h3 { font-weight: 600; margin-top: 0; }
-	#builder h3 + p { margin-top: 0.25em; }
+	#builder h3 { text-transform: uppercase; margin-top: 0; font-weight: 600; }
+	#builder h4 { font-weight: 600; margin-top: 0; }
+	#builder h4 + p { margin-top: 0.25em; }
 	#builder .required label::after { content: "*"; position: relative; color: #D8000C; }
 	#builder input { width: 320px; font: inherit; height: 3em; padding: 0 0.5em; }
 	#builder input:invalid { border: 4px solid red; }
-	#menu { position: sticky; top: 0; width: 100%; }
+	#menu, #buttons { position: sticky; top: 0; width: 100%; }
+	#buttons { background: white; z-index: 1000; box-shadow: 0 4px 4px -2px rgba(0,0,0,0.2); padding: 1em; background: #ddd; }
+	#buttons button { margin-top: 0; margin-right: 0.5em; }
+	button[type=reset] { float: right; }
 	#menu li a { display: block; padding: 0.5em; text-decoration: none; color: inherit; font-weight: 600; }
 	@media only screen and (max-width: 1200px) {
 		#builder { grid-template-columns: 200px 1fr; }
@@ -111,14 +117,18 @@
 			<form class="chooser">
 				<div class="grey dropzone" id="drop_zone">
 					<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv">
-					Drop CSV file here, click to <label for="standard_files">browse files</label>, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
-					<button id="submit" type="submit" class="button">Open</button>
+					Drop CSV file here or click to <label for="standard_files">browse files</label>...<!--, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
+					<button id="open" type="submit" class="button">Open</button>-->
 					<button id="reset" type="reset" class="b2-bg">Reset</button>
 				</div>
 			</form>
 			<div id="preview">
 			
 			</div>
+			
+			<p>To add a row, fill in the form below. To update an existing row select the row, update the values in the form below, then click the "Update row" button when finished.</p>
+			<form class="builder">
+			
 			<!-- START GENERATED CODE -->
 			<div id="builder">
 				<div>
@@ -140,12 +150,13 @@
 				<div>
 					<section id="metadata" class="grey">
 						<div class="heading doublepadded">
-							<h2>Metadata</h2>
+							<h3>Metadata</h3>
 						</div>
 						<div class="row required doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="published">Publishing date</label> <code>published</code></h3>
-								<p>The date associated with the row. Should be in YYYY-MM-DD format (ISO 8601) as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This format reduces ambiguity in parsing dates and gives flexibility with time precision. It could be reported as '2021' (just a year), '2021-01' (a month) or '2021-01-26' (a date). This allows an organisation to publish figures as frequently as they need to.</p>
+								<h4><label for="published">Publishing date</label> <code>published</code></h4>
+								<p>The date associated with the row in ISO 8601 format as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This reduces ambiguity in parsing dates and gives flexibility with time precision. It can be reported as just a year (e.g. '2021'), a month (e.g. '2021-01'), or a full date (e.g. '2021-01-26'). This allows an organisation to publish figures as frequently as they need to.</p>
+								<p class="pattern">Format: Must by an ISO 8601 date.</p>
 							</div>
 							<div class="col">
 								<input type="text" id="published" placeholder="e.g. 2021-01-12" pattern="^[0-9]{4}(-[0-9]{2})?(-[0-9]{2})?$" required="required" />
@@ -153,7 +164,7 @@
 						</div>
 						<div class="row required doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="organisation">Organisation</label> <code>organisation</code></h3>
+								<h4><label for="organisation">Organisation</label> <code>organisation</code></h4>
 								<p>The name of the organisation.</p>
 							</div>
 							<div class="col">
@@ -162,7 +173,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="organisation_grouping">Grouping</label> <code>organisation_grouping</code></h3>
+								<h4><label for="organisation_grouping">Grouping</label> <code>organisation_grouping</code></h4>
 								<p>This allows you to breakdown the data by a sub-division, area, or group within the organisation.</p>
 							</div>
 							<div class="col">
@@ -171,7 +182,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="organisation_level">Level</label> <code>organisation_level</code></h3>
+								<h4><label for="organisation_level">Level</label> <code>organisation_level</code></h4>
 								<p>This allows you to breakdown the data by a particular salary percentile e.g. 'LowerQuartile', 'LowerMiddleQuartile', 'UpperMiddleQuartile', 'TopQuartile'</p>
 							</div>
 							<div class="col">
@@ -180,7 +191,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="employees">Employees</label> <code>employees</code></h3>
+								<h4><label for="employees">Employees</label> <code>employees</code></h4>
 								<p>A number representing the total number of employees.</p>
 							</div>
 							<div class="col">
@@ -189,8 +200,9 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="link_to_dei_info">Link to DEI info</label> <code>link_to_dei_info</code></h3>
+								<h4><label for="link_to_dei_info">Link to DEI info</label> <code>link_to_dei_info</code></h4>
 								<p>A link to a diversity and inclusion policy (similar to the CompanyLinkToGPGInfo field provided in gender pay gap reporting)</p>
+								<p class="pattern">Format: Must be a valid URL</p>
 							</div>
 							<div class="col">
 								<input type="text" id="link_to_dei_info" placeholder="e.g. https://a.org/" pattern="^(http|https)://[^ ]+$" />
@@ -198,7 +210,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sic_codes">SIC codes</label> <code>sic_codes</code></h3>
+								<h4><label for="sic_codes">SIC codes</label> <code>sic_codes</code></h4>
 								<p>Semi-colon-separated list of <a href='http://resources.companieshouse.gov.uk/sic/'>SIC codes</a> as used by Companies House.</p>
 								<p class="pattern">Format: Must be valid SIC codes separated by semi-colons</p>
 							</div>
@@ -209,12 +221,12 @@
 					</section>
 					<section id="age" class="grey">
 						<div class="heading doublepadded">
-							<h2>Age</h2>
+							<h3>Age</h3>
 							<p>This section is about age. It is optional as are each of the columns. A response rate will be calculated using the age_undisclosed value and the total. These were based on an attempt to find common age brackets from the <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>existing employers who had shared data</a>. The <a href='https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest'>ONS use 5-year bands</a> which match with these (mostly) 10 year bands. In under 25s the ONS use 15-17, and 18-24 but none of the existing employers report under 16s.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_0-14">0-14</label> <code>age_0-14</code></h3>
+								<h4><label for="age_0-14">0-14</label> <code>age_0-14</code></h4>
 								<p>The number of employees aged from 0-14 inclusive ie. not yet 15.</p>
 							</div>
 							<div class="col">
@@ -223,7 +235,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_15-24">15-24</label> <code>age_15-24</code></h3>
+								<h4><label for="age_15-24">15-24</label> <code>age_15-24</code></h4>
 								<p>The number of employees aged from 15 to 24 inclusive ie. not yet 25.</p>
 							</div>
 							<div class="col">
@@ -232,7 +244,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_25-34">25-34</label> <code>age_25-34</code></h3>
+								<h4><label for="age_25-34">25-34</label> <code>age_25-34</code></h4>
 								<p>The number of employees aged from 25 to 34 inclusive ie. not yet 35.</p>
 							</div>
 							<div class="col">
@@ -241,7 +253,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_35-44">35-44</label> <code>age_35-44</code></h3>
+								<h4><label for="age_35-44">35-44</label> <code>age_35-44</code></h4>
 								<p>The number of employees aged from 35 to 44 inclusive ie. not yet 45.</p>
 							</div>
 							<div class="col">
@@ -250,7 +262,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_45-54">45-54</label> <code>age_45-54</code></h3>
+								<h4><label for="age_45-54">45-54</label> <code>age_45-54</code></h4>
 								<p>The number of employees aged from 45 to 54 inclusive ie. not yet 55.</p>
 							</div>
 							<div class="col">
@@ -259,7 +271,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_55-64">55-64</label> <code>age_55-64</code></h3>
+								<h4><label for="age_55-64">55-64</label> <code>age_55-64</code></h4>
 								<p>The number of employees aged from 55 to 64 inclusive ie. not yet 65.</p>
 							</div>
 							<div class="col">
@@ -268,7 +280,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_65-69">65-69</label> <code>age_65-69</code></h3>
+								<h4><label for="age_65-69">65-69</label> <code>age_65-69</code></h4>
 								<p>The number of employees aged from 65 to 69 inclusive ie. not yet 70.</p>
 							</div>
 							<div class="col">
@@ -277,7 +289,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_70+">70+</label> <code>age_70+</code></h3>
+								<h4><label for="age_70+">70+</label> <code>age_70+</code></h4>
 								<p>The number of employees aged 70 or over.</p>
 							</div>
 							<div class="col">
@@ -286,7 +298,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_prefernottosay">Prefer not to say</label> <code>age_prefernottosay</code></h3>
+								<h4><label for="age_prefernottosay">Prefer not to say</label> <code>age_prefernottosay</code></h4>
 								<p>For consistency across categories this can be provided if needed.</p>
 							</div>
 							<div class="col">
@@ -295,7 +307,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_undisclosed">Undisclosed</label> <code>age_undisclosed</code></h3>
+								<h4><label for="age_undisclosed">Undisclosed</label> <code>age_undisclosed</code></h4>
 								<p>The number of employees for whom no age is known. This allows us to calculate “response” rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -304,7 +316,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="age_total">Total</label> <code>age_total</code></h3>
+								<h4><label for="age_total">Total</label> <code>age_total</code></h4>
 								<p>The total number of people this category applies to. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -314,12 +326,12 @@
 					</section>
 					<section id="carer" class="grey">
 						<div class="heading doublepadded">
-							<h2>Carers</h2>
+							<h3>Carers</h3>
 							<p>This section is about those who are carers for others. It is optional as are each of the columns. A response rate will be calculated using the carers_undisclosed value and the total. These options are based on question 14 of the 2011 Census (which is a super-set of <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf'>question 24 of the 2021 Census</a>).</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="carer_yes">Carers</label> <code>carer_yes</code></h3>
+								<h4><label for="carer_yes">Carers</label> <code>carer_yes</code></h4>
 								<p>The total number of people who look after, or give any help or support to, anyone because they have long-term physical or mental health conditions or illnesses, or problems related to old age (see Q24 Census 2021 Individual).</p>
 							</div>
 							<div class="col">
@@ -328,7 +340,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="carer_yes_1-19">Carers (1-19 hours/week)</label> <code>carer_yes_1-19</code></h3>
+								<h4><label for="carer_yes_1-19">Carers (1-19 hours/week)</label> <code>carer_yes_1-19</code></h4>
 								<p>Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census).</p>
 							</div>
 							<div class="col">
@@ -337,7 +349,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="carer_yes_20-49">Carers (20-49 hours/week)</label> <code>carer_yes_20-49</code></h3>
+								<h4><label for="carer_yes_20-49">Carers (20-49 hours/week)</label> <code>carer_yes_20-49</code></h4>
 								<p>Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census).</p>
 							</div>
 							<div class="col">
@@ -346,7 +358,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="carer_yes_50">Carers (50+ hours/week)</label> <code>carer_yes_50</code></h3>
+								<h4><label for="carer_yes_50">Carers (50+ hours/week)</label> <code>carer_yes_50</code></h4>
 								<p>Yes, 50 or more hours a week</p>
 							</div>
 							<div class="col">
@@ -355,7 +367,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="carer_no">Not carers</label> <code>carer_no</code></h3>
+								<h4><label for="carer_no">Not carers</label> <code>carer_no</code></h4>
 								<p>Those who are not a carer</p>
 							</div>
 							<div class="col">
@@ -364,7 +376,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="carer_prefernottosay">Prefer not to say</label> <code>carer_prefernottosay</code></h3>
+								<h4><label for="carer_prefernottosay">Prefer not to say</label> <code>carer_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -373,7 +385,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="carer_undisclosed">Undisclosed</label> <code>carer_undisclosed</code></h3>
+								<h4><label for="carer_undisclosed">Undisclosed</label> <code>carer_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -382,7 +394,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="carer_total">Total</label> <code>carer_total</code></h3>
+								<h4><label for="carer_total">Total</label> <code>carer_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -392,12 +404,12 @@
 					</section>
 					<section id="disability" class="grey">
 						<div class="heading doublepadded">
-							<h2>Disability</h2>
+							<h3>Disability</h3>
 							<p>This section is about disability. It is optional as are each of the columns. A response rate will be calculated using the disability_undisclosed value and the total. These mostly come from <a href='https://www.yorkshirewater.com/media/2770/40906_yw_workplace-diversity_report_web-1.pdf'>the categories that Yorkshire Water currently publish</a> which are <a href='https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/disability/articles/measuringdisabilitycomparingapproaches/2019-08-06#the-equality-act-disability-definition-eadd'>aligned with the Equality Act disability definition answers to Q1 and Q3</a> of the <a href='https://www.ons.gov.uk/aboutus/whatwedo/paidservices/opinions/opinionsandlifestylesurveymethodology'>ONS's Opinion and Lifestyle Survey</a> (OPD). <a href='https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/'>GSS guidance</a>.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="disability_yes">Has a disability</label> <code>disability_yes</code></h3>
+								<h4><label for="disability_yes">Has a disability</label> <code>disability_yes</code></h4>
 								<p>The total number of people who have a long-term health problem or disability. In the ONS OPD Q1 is “Do you have any physical or mental health conditions or illnesses?” Answers: yes/no.</p>
 							</div>
 							<div class="col">
@@ -406,7 +418,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="disability_yes_daytodayalot">Reduce ability to work a lot</label> <code>disability_yes_daytodayalot</code></h3>
+								<h4><label for="disability_yes_daytodayalot">Reduce ability to work a lot</label> <code>disability_yes_daytodayalot</code></h4>
 								<p>The number of people whose day-to-day activities are limited a lot. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a lot</p>
 							</div>
 							<div class="col">
@@ -415,7 +427,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="disability_yes_daytodayalittle">Reduce ability to work a little</label> <code>disability_yes_daytodayalittle</code></h3>
+								<h4><label for="disability_yes_daytodayalittle">Reduce ability to work a little</label> <code>disability_yes_daytodayalittle</code></h4>
 								<p>The number of people whose day-to-day activities are limited a little. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a little</p>
 							</div>
 							<div class="col">
@@ -424,7 +436,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="disability_no">No disability</label> <code>disability_no</code></h3>
+								<h4><label for="disability_no">No disability</label> <code>disability_no</code></h4>
 								<p>The number of people with no disability.</p>
 							</div>
 							<div class="col">
@@ -433,7 +445,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="disability_prefernottosay">Prefer not to say</label> <code>disability_prefernottosay</code></h3>
+								<h4><label for="disability_prefernottosay">Prefer not to say</label> <code>disability_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -442,7 +454,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="disability_undisclosed">Undisclosed</label> <code>disability_undisclosed</code></h3>
+								<h4><label for="disability_undisclosed">Undisclosed</label> <code>disability_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -451,7 +463,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="disability_total">Total</label> <code>disability_total</code></h3>
+								<h4><label for="disability_total">Total</label> <code>disability_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -461,12 +473,12 @@
 					</section>
 					<section id="ethnicity" class="grey">
 						<div class="heading doublepadded">
-							<h2>Ethnicity</h2>
+							<h3>Ethnicity</h3>
 							<p>This section is about ethnicity. It is optional as are each of the columns. A response rate will be calculated using the ethnicity_undisclosed value and the total. These come from <a href='https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups'>ONS Census categories</a> so are very UK-centric.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian">Asian or Asian British</label> <code>ethnicity_asian</code></h3>
+								<h4><label for="ethnicity_asian">Asian or Asian British</label> <code>ethnicity_asian</code></h4>
 								<p>The Census group “Asian/Asian British”.</p>
 							</div>
 							<div class="col">
@@ -475,7 +487,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian_bangladeshi">Bangladeshi</label> <code>ethnicity_asian_bangladeshi</code></h3>
+								<h4><label for="ethnicity_asian_bangladeshi">Bangladeshi</label> <code>ethnicity_asian_bangladeshi</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Bangladeshi”.</p>
 							</div>
 							<div class="col">
@@ -484,7 +496,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian_chinese">Chinese</label> <code>ethnicity_asian_chinese</code></h3>
+								<h4><label for="ethnicity_asian_chinese">Chinese</label> <code>ethnicity_asian_chinese</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Chinese”.</p>
 							</div>
 							<div class="col">
@@ -493,7 +505,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian_indian">Indian</label> <code>ethnicity_asian_indian</code></h3>
+								<h4><label for="ethnicity_asian_indian">Indian</label> <code>ethnicity_asian_indian</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Indian”.</p>
 							</div>
 							<div class="col">
@@ -502,7 +514,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian_pakistani">Pakistani</label> <code>ethnicity_asian_pakistani</code></h3>
+								<h4><label for="ethnicity_asian_pakistani">Pakistani</label> <code>ethnicity_asian_pakistani</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Pakistani”.</p>
 							</div>
 							<div class="col">
@@ -511,7 +523,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_asian_other">Other</label> <code>ethnicity_asian_other</code></h3>
+								<h4><label for="ethnicity_asian_other">Other</label> <code>ethnicity_asian_other</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Other”.</p>
 							</div>
 							<div class="col">
@@ -520,7 +532,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_black">Black, African, Caribbean or Black British</label> <code>ethnicity_black</code></h3>
+								<h4><label for="ethnicity_black">Black, African, Caribbean or Black British</label> <code>ethnicity_black</code></h4>
 								<p>The Census group “Black, African, Caribbean or Black British”.</p>
 							</div>
 							<div class="col">
@@ -529,7 +541,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_black_african">African</label> <code>ethnicity_black_african</code></h3>
+								<h4><label for="ethnicity_black_african">African</label> <code>ethnicity_black_african</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “African”.</p>
 							</div>
 							<div class="col">
@@ -538,7 +550,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_black_caribbean">Caribbean</label> <code>ethnicity_black_caribbean</code></h3>
+								<h4><label for="ethnicity_black_caribbean">Caribbean</label> <code>ethnicity_black_caribbean</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Caribbean”.</p>
 							</div>
 							<div class="col">
@@ -547,7 +559,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_black_other">Any other Black, African or Caribbean background</label> <code>ethnicity_black_other</code></h3>
+								<h4><label for="ethnicity_black_other">Any other Black, African or Caribbean background</label> <code>ethnicity_black_other</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Black, African or Caribbean background”.</p>
 							</div>
 							<div class="col">
@@ -556,7 +568,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_mixed">Mixed or Multiple ethnic groups</label> <code>ethnicity_mixed</code></h3>
+								<h4><label for="ethnicity_mixed">Mixed or Multiple ethnic groups</label> <code>ethnicity_mixed</code></h4>
 								<p>The Census group “Mixed or Multiple ethnic groups”.</p>
 							</div>
 							<div class="col">
@@ -565,7 +577,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_mixed_african">White and Black African</label> <code>ethnicity_mixed_african</code></h3>
+								<h4><label for="ethnicity_mixed_african">White and Black African</label> <code>ethnicity_mixed_african</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”.</p>
 							</div>
 							<div class="col">
@@ -574,7 +586,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_mixed_asian">White and Asian</label> <code>ethnicity_mixed_asian</code></h3>
+								<h4><label for="ethnicity_mixed_asian">White and Asian</label> <code>ethnicity_mixed_asian</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Asian”.</p>
 							</div>
 							<div class="col">
@@ -583,7 +595,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_mixed_caribbean">White and Black Caribbean</label> <code>ethnicity_mixed_caribbean</code></h3>
+								<h4><label for="ethnicity_mixed_caribbean">White and Black Caribbean</label> <code>ethnicity_mixed_caribbean</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black Caribbean”.</p>
 							</div>
 							<div class="col">
@@ -592,7 +604,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_mixed_other">Any other Mixed or Multiple ethnic background</label> <code>ethnicity_mixed_other</code></h3>
+								<h4><label for="ethnicity_mixed_other">Any other Mixed or Multiple ethnic background</label> <code>ethnicity_mixed_other</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Mixed or Multiple ethnic background”.</p>
 							</div>
 							<div class="col">
@@ -601,7 +613,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_other">Other ethnic group</label> <code>ethnicity_other</code></h3>
+								<h4><label for="ethnicity_other">Other ethnic group</label> <code>ethnicity_other</code></h4>
 								<p>The Census group “Other ethnic group”.</p>
 							</div>
 							<div class="col">
@@ -610,7 +622,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_other_arab">Arab</label> <code>ethnicity_other_arab</code></h3>
+								<h4><label for="ethnicity_other_arab">Arab</label> <code>ethnicity_other_arab</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Arab”.</p>
 							</div>
 							<div class="col">
@@ -619,7 +631,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_other_anyother">Any other ethnic group</label> <code>ethnicity_other_anyother</code></h3>
+								<h4><label for="ethnicity_other_anyother">Any other ethnic group</label> <code>ethnicity_other_anyother</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other ethnic group”.</p>
 							</div>
 							<div class="col">
@@ -628,7 +640,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_white">White</label> <code>ethnicity_white</code></h3>
+								<h4><label for="ethnicity_white">White</label> <code>ethnicity_white</code></h4>
 								<p>The Census group “White”.</p>
 							</div>
 							<div class="col">
@@ -637,7 +649,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_white_british">English, Welsh, Scottish, Northern Irish or British</label> <code>ethnicity_white_british</code></h3>
+								<h4><label for="ethnicity_white_british">English, Welsh, Scottish, Northern Irish or British</label> <code>ethnicity_white_british</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “English, Welsh, Scottish, Northern Irish or British”.</p>
 							</div>
 							<div class="col">
@@ -646,7 +658,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_white_irish">Irish</label> <code>ethnicity_white_irish</code></h3>
+								<h4><label for="ethnicity_white_irish">Irish</label> <code>ethnicity_white_irish</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Irish”.</p>
 							</div>
 							<div class="col">
@@ -655,7 +667,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_white_traveller">Gypsy or Irish Traveller</label> <code>ethnicity_white_traveller</code></h3>
+								<h4><label for="ethnicity_white_traveller">Gypsy or Irish Traveller</label> <code>ethnicity_white_traveller</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Gypsy or Irish Traveller”.</p>
 							</div>
 							<div class="col">
@@ -664,7 +676,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_white_other">Any other White background</label> <code>ethnicity_white_other</code></h3>
+								<h4><label for="ethnicity_white_other">Any other White background</label> <code>ethnicity_white_other</code></h4>
 								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other White background”.</p>
 							</div>
 							<div class="col">
@@ -673,7 +685,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_prefernottosay">Prefer not to say</label> <code>ethnicity_prefernottosay</code></h3>
+								<h4><label for="ethnicity_prefernottosay">Prefer not to say</label> <code>ethnicity_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -682,7 +694,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_undisclosed">Undisclosed</label> <code>ethnicity_undisclosed</code></h3>
+								<h4><label for="ethnicity_undisclosed">Undisclosed</label> <code>ethnicity_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -691,7 +703,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="ethnicity_total">Total</label> <code>ethnicity_total</code></h3>
+								<h4><label for="ethnicity_total">Total</label> <code>ethnicity_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -701,12 +713,12 @@
 					</section>
 					<section id="gender" class="grey">
 						<div class="heading doublepadded">
-							<h2>Gender</h2>
+							<h3>Gender</h3>
 							<p>This section is about sex and gender identity. It is optional as are each of the columns. A response rate will be calculated using the gender_undisclosed value and the gender_total. These are based on what <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>some existing employers currently report</a>.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_female">Female</label> <code>gender_female</code></h3>
+								<h4><label for="gender_female">Female</label> <code>gender_female</code></h4>
 								<p>The number of employees who are female (including trans).</p>
 							</div>
 							<div class="col">
@@ -715,7 +727,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_male">Male</label> <code>gender_male</code></h3>
+								<h4><label for="gender_male">Male</label> <code>gender_male</code></h4>
 								<p>The number of employees who are male (including trans).</p>
 							</div>
 							<div class="col">
@@ -724,7 +736,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_other">Other</label> <code>gender_other</code></h3>
+								<h4><label for="gender_other">Other</label> <code>gender_other</code></h4>
 								<p>Diverse and other genders including non-binary.</p>
 							</div>
 							<div class="col">
@@ -733,7 +745,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_prefernottosay">Prefer not to say</label> <code>gender_prefernottosay</code></h3>
+								<h4><label for="gender_prefernottosay">Prefer not to say</label> <code>gender_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -742,7 +754,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_undisclosed">Undisclosed</label> <code>gender_undisclosed</code></h3>
+								<h4><label for="gender_undisclosed">Undisclosed</label> <code>gender_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -751,7 +763,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="gender_total">Total</label> <code>gender_total</code></h3>
+								<h4><label for="gender_total">Total</label> <code>gender_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -761,11 +773,11 @@
 					</section>
 					<section id="trans" class="grey">
 						<div class="heading doublepadded">
-							<h2>Gender identity</h2>
+							<h3>Gender identity</h3>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="trans_no">Matches that assigned at birth</label> <code>trans_no</code></h3>
+								<h4><label for="trans_no">Matches that assigned at birth</label> <code>trans_no</code></h4>
 								<p>The number of employees whose gender matches that assigned at birth</p>
 							</div>
 							<div class="col">
@@ -774,7 +786,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="trans_yes">Doesn't match that assigned at birth</label> <code>trans_yes</code></h3>
+								<h4><label for="trans_yes">Doesn't match that assigned at birth</label> <code>trans_yes</code></h4>
 								<p>The number of employees whose gender doesn’t match that assigned at birth</p>
 							</div>
 							<div class="col">
@@ -783,7 +795,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="trans_prefernottosay">Prefer not to say</label> <code>trans_prefernottosay</code></h3>
+								<h4><label for="trans_prefernottosay">Prefer not to say</label> <code>trans_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -792,7 +804,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="trans_undisclosed">Undisclosed</label> <code>trans_undisclosed</code></h3>
+								<h4><label for="trans_undisclosed">Undisclosed</label> <code>trans_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -801,7 +813,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="trans_total">Total</label> <code>trans_total</code></h3>
+								<h4><label for="trans_total">Total</label> <code>trans_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -811,12 +823,12 @@
 					</section>
 					<section id="religion" class="grey">
 						<div class="heading doublepadded">
-							<h2>Religion</h2>
+							<h3>Religion</h3>
 							<p>This section is about religion. It is optional as are each of the columns. A response rate will be calculated using the religion_undisclosed value and the total. These are based on the categories used by the ONS in the <a href='https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires'>2021 Census</a>. The sum of individual responses may add up to more than the total number of people.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_buddhist">Buddhist</label> <code>religion_buddhist</code></h3>
+								<h4><label for="religion_buddhist">Buddhist</label> <code>religion_buddhist</code></h4>
 								<p>The number of employees who are Buddhist</p>
 							</div>
 							<div class="col">
@@ -825,7 +837,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_christian">Christian</label> <code>religion_christian</code></h3>
+								<h4><label for="religion_christian">Christian</label> <code>religion_christian</code></h4>
 								<p>The number of employees who are Christian</p>
 							</div>
 							<div class="col">
@@ -834,7 +846,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_hindu">Hindu</label> <code>religion_hindu</code></h3>
+								<h4><label for="religion_hindu">Hindu</label> <code>religion_hindu</code></h4>
 								<p>The number of employees who are Hindu</p>
 							</div>
 							<div class="col">
@@ -843,7 +855,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_jewish">Jewish</label> <code>religion_jewish</code></h3>
+								<h4><label for="religion_jewish">Jewish</label> <code>religion_jewish</code></h4>
 								<p>The number of employees who are Jewish</p>
 							</div>
 							<div class="col">
@@ -852,7 +864,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_muslim">Muslim</label> <code>religion_muslim</code></h3>
+								<h4><label for="religion_muslim">Muslim</label> <code>religion_muslim</code></h4>
 								<p>The number of employees who are Muslim</p>
 							</div>
 							<div class="col">
@@ -861,7 +873,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_no">No religion</label> <code>religion_no</code></h3>
+								<h4><label for="religion_no">No religion</label> <code>religion_no</code></h4>
 								<p>The number of employees who are “No Religion”</p>
 							</div>
 							<div class="col">
@@ -870,7 +882,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_other">Other</label> <code>religion_other</code></h3>
+								<h4><label for="religion_other">Other</label> <code>religion_other</code></h4>
 								<p>The number of employees who are “Other”</p>
 							</div>
 							<div class="col">
@@ -879,7 +891,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_sikh">Sikh</label> <code>religion_sikh</code></h3>
+								<h4><label for="religion_sikh">Sikh</label> <code>religion_sikh</code></h4>
 								<p>The number of employees who are “Sikh”</p>
 							</div>
 							<div class="col">
@@ -888,7 +900,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_prefernottosay">Prefer not to say</label> <code>religion_prefernottosay</code></h3>
+								<h4><label for="religion_prefernottosay">Prefer not to say</label> <code>religion_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -897,7 +909,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_undisclosed">Undisclosed</label> <code>religion_undisclosed</code></h3>
+								<h4><label for="religion_undisclosed">Undisclosed</label> <code>religion_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -906,7 +918,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="religion_total">Total</label> <code>religion_total</code></h3>
+								<h4><label for="religion_total">Total</label> <code>religion_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -916,12 +928,12 @@
 					</section>
 					<section id="sexuality" class="grey">
 						<div class="heading doublepadded">
-							<h2>Sexuality</h2>
+							<h3>Sexuality</h3>
 							<p>This section is about sexuality. It is optional as are each of the columns. A response rate will be calculated using the sexuality_undisclosed value and the total. These are based on <a href='https://gss.civilservice.gov.uk/policy-store/sexual-orientation/'>guidance from the Government Statistical Service</a> (17 April 2019) and similar to the <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/householdenglandpdf.pdf'>2021 Census</a> but using <a href='https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation'>language from the Australian Bureau of Statistics</a> (GSS are drawing on ABS’s approach soon).</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_bisexual">Bisexual</label> <code>sexuality_bisexual</code></h3>
+								<h4><label for="sexuality_bisexual">Bisexual</label> <code>sexuality_bisexual</code></h4>
 								<p>The number of employees who are bisexual</p>
 							</div>
 							<div class="col">
@@ -930,7 +942,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_gaylesbian">Gay or lesbian</label> <code>sexuality_gaylesbian</code></h3>
+								<h4><label for="sexuality_gaylesbian">Gay or lesbian</label> <code>sexuality_gaylesbian</code></h4>
 								<p>The number of employees who are gay or lesbian</p>
 							</div>
 							<div class="col">
@@ -939,7 +951,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_straight">Straight (heterosexual)</label> <code>sexuality_straight</code></h3>
+								<h4><label for="sexuality_straight">Straight (heterosexual)</label> <code>sexuality_straight</code></h4>
 								<p>The number of employees who are heterosexual/straight</p>
 							</div>
 							<div class="col">
@@ -948,7 +960,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_usedifferentterm">Use a different term</label> <code>sexuality_usedifferentterm</code></h3>
+								<h4><label for="sexuality_usedifferentterm">Use a different term</label> <code>sexuality_usedifferentterm</code></h4>
 								<p>The number of employees who would use a different term - this may be done in the form of a write-in box.</p>
 							</div>
 							<div class="col">
@@ -957,7 +969,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_prefernottosay">Prefer not to say</label> <code>sexuality_prefernottosay</code></h3>
+								<h4><label for="sexuality_prefernottosay">Prefer not to say</label> <code>sexuality_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -966,7 +978,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_undisclosed">Undisclosed</label> <code>sexuality_undisclosed</code></h3>
+								<h4><label for="sexuality_undisclosed">Undisclosed</label> <code>sexuality_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -975,7 +987,7 @@
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h3><label for="sexuality_total">Total</label> <code>sexuality_total</code></h3>
+								<h4><label for="sexuality_total">Total</label> <code>sexuality_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -985,18 +997,18 @@
 					</section>
 					<section id="seb" class="grey">
 						<div class="heading doublepadded">
-							<h2>Socio-economic background</h2>
+							<h3>Socio-economic background</h3>
 							<p>This section is about socio-economic background (SEB). Measuring or estimating socio-economic background is hard including <a href='https://www.theguardian.com/commentisfree/2021/jan/18/why-professional-middle-class-brits-insist-working-class'>when you ask people to self-identify</a>. All measures are going to be proxies to a complicated question. We have chosen to use the four questions used by <a href='https://socialmobilityworks.org/toolkit/measurement/'>The Social Mobility Commission toolkit</a>.</p>
 						</div>
 						<div class="row doublepadded level-0 one-col">
 							<div class="col">
-								<h3><label for="seb_at14">Q1. What was the occupation of your main household earner when you were about aged 14?</label> <code>seb_at14</code></h3>
+								<h4><label for="seb_at14">Q1. What was the occupation of your main household earner when you were about aged 14?</label> <code>seb_at14</code></h4>
 								<p><a href='https://socialmobilityworks.org/toolkit/measurement/'>The Social Mobility Commission toolkit</a> suggests this is a key question employers could ask because: <blockquote>“[T]his question is the best measure to assess someone’s socio-economic background. Not only that but it’s easy to understand, it gets the highest response rates in testing, and it’s applicable to those from all ages and from all countries.”</blockquote></p>
 							</div>
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_lower">Lower</label> <code>seb_at14_lower</code></h3>
+								<h4><label for="seb_at14_lower">Lower</label> <code>seb_at14_lower</code></h4>
 								<p>The number of employees who, at about 14, had their main household earner from a lower socio-economic background – technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed.</p>
 							</div>
 							<div class="col">
@@ -1005,7 +1017,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_intermediate">Intermediate</label> <code>seb_at14_intermediate</code></h3>
+								<h4><label for="seb_at14_intermediate">Intermediate</label> <code>seb_at14_intermediate</code></h4>
 								<p>The number of employees who, at about 14, had their main household earner from an intermediate background – clerical and intermediate occupations; small business owners</p>
 							</div>
 							<div class="col">
@@ -1014,7 +1026,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_professional">Professional</label> <code>seb_at14_professional</code></h3>
+								<h4><label for="seb_at14_professional">Professional</label> <code>seb_at14_professional</code></h4>
 								<p>The number of employees who, at about 14, had their main household earner from a professional background – modern professional & traditional occupations; senior or junior managers or administrators.</p>
 							</div>
 							<div class="col">
@@ -1023,7 +1035,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_prefernottosay">Prefer not to say</label> <code>seb_at14_prefernottosay</code></h3>
+								<h4><label for="seb_at14_prefernottosay">Prefer not to say</label> <code>seb_at14_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -1032,7 +1044,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_undisclosed">Undisclosed</label> <code>seb_at14_undisclosed</code></h3>
+								<h4><label for="seb_at14_undisclosed">Undisclosed</label> <code>seb_at14_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -1041,7 +1053,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_at14_total">Total</label> <code>seb_at14_total</code></h3>
+								<h4><label for="seb_at14_total">Total</label> <code>seb_at14_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -1050,13 +1062,13 @@
 						</div>
 						<div class="row doublepadded level-0 one-col">
 							<div class="col">
-								<h3><label for="seb_school">Q2. Which type of school did you attend for the most time between the ages of 11 and 16?</label> <code>seb_school</code></h3>
+								<h4><label for="seb_school">Q2. Which type of school did you attend for the most time between the ages of 11 and 16?</label> <code>seb_school</code></h4>
 								<p></p>
 							</div>
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_independent">Independent</label> <code>seb_school_independent</code></h3>
+								<h4><label for="seb_school_independent">Independent</label> <code>seb_school_independent</code></h4>
 								<p>The number of employees who attended an Independent or fee-paying school</p>
 							</div>
 							<div class="col">
@@ -1065,7 +1077,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_independent+bursary">Independent with bursary</label> <code>seb_school_independent+bursary</code></h3>
+								<h4><label for="seb_school_independent+bursary">Independent with bursary</label> <code>seb_school_independent+bursary</code></h4>
 								<p>The number of employees who attended an Independent or fee-paying school, where they received a means tested bursary covering 90% or more of the total cost of attending throughout their time there. </p>
 							</div>
 							<div class="col">
@@ -1074,7 +1086,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_outsideuk">Outside the UK</label> <code>seb_school_outsideuk</code></h3>
+								<h4><label for="seb_school_outsideuk">Outside the UK</label> <code>seb_school_outsideuk</code></h4>
 								<p>The number of employees who attended a school outside the UK</p>
 							</div>
 							<div class="col">
@@ -1083,7 +1095,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_staterun">State-run</label> <code>seb_school_staterun</code></h3>
+								<h4><label for="seb_school_staterun">State-run</label> <code>seb_school_staterun</code></h4>
 								<p>The number of employees who attended a state-run or state-funded school</p>
 							</div>
 							<div class="col">
@@ -1092,7 +1104,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_prefernottosay">Prefer not to say</label> <code>seb_school_prefernottosay</code></h3>
+								<h4><label for="seb_school_prefernottosay">Prefer not to say</label> <code>seb_school_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -1101,7 +1113,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_undisclosed">Undisclosed</label> <code>seb_school_undisclosed</code></h3>
+								<h4><label for="seb_school_undisclosed">Undisclosed</label> <code>seb_school_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -1110,7 +1122,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_school_total">Total</label> <code>seb_school_total</code></h3>
+								<h4><label for="seb_school_total">Total</label> <code>seb_school_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -1119,13 +1131,13 @@
 						</div>
 						<div class="row doublepadded level-0 one-col">
 							<div class="col">
-								<h3><label for="seb_fsm">Q3. If you finished school after 1980, were you eligible for free school meals at any point during your school years?</label> <code>seb_fsm</code></h3>
+								<h4><label for="seb_fsm">Q3. If you finished school after 1980, were you eligible for free school meals at any point during your school years?</label> <code>seb_fsm</code></h4>
 								<p></p>
 							</div>
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_no">No</label> <code>seb_fsm_no</code></h3>
+								<h4><label for="seb_fsm_no">No</label> <code>seb_fsm_no</code></h4>
 								<p>The number of employees who didn’t receive free school meals at any point during their school years.</p>
 							</div>
 							<div class="col">
@@ -1134,7 +1146,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_notapplicable">Not applicable</label> <code>seb_fsm_notapplicable</code></h3>
+								<h4><label for="seb_fsm_notapplicable">Not applicable</label> <code>seb_fsm_notapplicable</code></h4>
 								<p>The number of employees who to whom this doesn’t apply because finished school before 1980 or went to school overseas.</p>
 							</div>
 							<div class="col">
@@ -1143,7 +1155,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_yes">Yes</label> <code>seb_fsm_yes</code></h3>
+								<h4><label for="seb_fsm_yes">Yes</label> <code>seb_fsm_yes</code></h4>
 								<p>The number of employees who received free school meals at any point during their school years.</p>
 							</div>
 							<div class="col">
@@ -1152,7 +1164,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_prefernottosay">Prefer not to say</label> <code>seb_fsm_prefernottosay</code></h3>
+								<h4><label for="seb_fsm_prefernottosay">Prefer not to say</label> <code>seb_fsm_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -1161,7 +1173,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_undisclosed">Undisclosed</label> <code>seb_fsm_undisclosed</code></h3>
+								<h4><label for="seb_fsm_undisclosed">Undisclosed</label> <code>seb_fsm_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -1170,7 +1182,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_fsm_total">Total</label> <code>seb_fsm_total</code></h3>
+								<h4><label for="seb_fsm_total">Total</label> <code>seb_fsm_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -1179,13 +1191,13 @@
 						</div>
 						<div class="row doublepadded level-0 one-col">
 							<div class="col">
-								<h3><label for="seb_parentuni">Q4. Did either of your parents attend university and gain a degree (e.g. BA/BSc or equivalent) by the time you were 18?</label> <code>seb_parentuni</code></h3>
+								<h4><label for="seb_parentuni">Q4. Did either of your parents attend university and gain a degree (e.g. BA/BSc or equivalent) by the time you were 18?</label> <code>seb_parentuni</code></h4>
 								<p>Surveys such as the <a href='https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=2000030'>Longitudinal Survey of Young People in England</a> answer questions such as “are you first in your family to go to university” but this isn’t open data so comparisons at geographies such as “Leeds City Region” won’t be possible. The <a href='http://blog.ukdataservice.ac.uk/first-in-family-students/'>UK Data Service estimates 15%</a> of those born in 1990 were first-in-family to attend university.</p>
 							</div>
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_no">No</label> <code>seb_parentuni_no</code></h3>
+								<h4><label for="seb_parentuni_no">No</label> <code>seb_parentuni_no</code></h4>
 								<p>The number of employees for whom neither parent attended university.</p>
 							</div>
 							<div class="col">
@@ -1194,7 +1206,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_notsure">Not sure</label> <code>seb_parentuni_notsure</code></h3>
+								<h4><label for="seb_parentuni_notsure">Not sure</label> <code>seb_parentuni_notsure</code></h4>
 								<p>The number of employees who are unsure if their parents attended university.</p>
 							</div>
 							<div class="col">
@@ -1203,7 +1215,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_yes">Yes</label> <code>seb_parentuni_yes</code></h3>
+								<h4><label for="seb_parentuni_yes">Yes</label> <code>seb_parentuni_yes</code></h4>
 								<p>The number of employees who had at least one parent attend university.</p>
 							</div>
 							<div class="col">
@@ -1212,7 +1224,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_prefernottosay">Prefer not to say</label> <code>seb_parentuni_prefernottosay</code></h3>
+								<h4><label for="seb_parentuni_prefernottosay">Prefer not to say</label> <code>seb_parentuni_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
@@ -1221,7 +1233,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_undisclosed">Undisclosed</label> <code>seb_parentuni_undisclosed</code></h3>
+								<h4><label for="seb_parentuni_undisclosed">Undisclosed</label> <code>seb_parentuni_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
@@ -1230,7 +1242,7 @@
 						</div>
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
-								<h3><label for="seb_parentuni_total">Total</label> <code>seb_parentuni_total</code></h3>
+								<h4><label for="seb_parentuni_total">Total</label> <code>seb_parentuni_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.</p>
 							</div>
 							<div class="col">
@@ -1242,6 +1254,7 @@
 			</div>
 
 			<!-- END GENERATED CODE -->
+			</form>
 
 		</div>
 		

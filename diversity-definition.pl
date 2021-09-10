@@ -27,7 +27,6 @@ $output = "";
 
 $output .= $indent."<div id=\"builder\">\n";
 $output .= $indent."\t<div>\n";
-#$output .= $indent."\t\t<h2>Sections</h2>\n";
 $output .= $indent."\t\t<nav id=\"menu\">\n";
 $output .= $indent."\t\t\t<ul>\n";
 for($s = 0; $s < @{$json{'sections'}}; $s++){
@@ -37,13 +36,12 @@ $output .= $indent."\t\t\t</ul>\n";
 $output .= $indent."\t\t</nav>\n";
 $output .= $indent."\t</div>\n";
 $output .= $indent."\t<div>\n";
-
 $level = 0;
 for($s = 0; $s < @{$json{'sections'}}; $s++){
 	print "$s - $json{'sections'}[$s]{'title'}\n";
 	$output .= $indent."\t\t<section id=\"$json{'sections'}[$s]{'key'}\" class=\"grey\">\n";
 	$output .= $indent."\t\t\t<div class=\"heading doublepadded\">\n";
-	$output .= $indent."\t\t\t\t<h2>".$json{'sections'}[$s]{'title'}."</h2>\n";
+	$output .= $indent."\t\t\t\t<h3>".$json{'sections'}[$s]{'title'}."</h3>\n";
 	if($json{'sections'}[$s]{'description'}){
 		$output .= $indent."\t\t\t\t<p>".$json{'sections'}[$s]{'description'}."</p>\n";
 	}
@@ -90,7 +88,7 @@ sub makeRows {
 			$cols = ($rows{'properties'}[$p]{'type'}) ? 2 : 1;
 			$output .= $indent."\t\t\t<div class=\"row".($required ? " required":"")." doublepadded level-$lvl ".($cols==1 ? "one-col":"two-col")."\">\n";
 			$output .= $indent."\t\t\t\t<div class=\"col\">\n";
-			$output .= $indent."\t\t\t\t\t<h3><label for=\"$name\">$rows{'properties'}[$p]{'title'}</label> <code>$name</code></h3>\n";
+			$output .= $indent."\t\t\t\t\t<h4><label for=\"$name\">$rows{'properties'}[$p]{'title'}</label> <code>$name</code></h4>\n";
 			$output .= $indent."\t\t\t\t\t<p>$rows{'properties'}[$p]{'description'}</p>\n";
 			if($rows{'properties'}[$p]{'patterndesc'}){
 				$output .= $indent."\t\t\t\t\t<p class=\"pattern\">Format: $rows{'properties'}[$p]{'patterndesc'}</p>\n";

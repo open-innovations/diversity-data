@@ -42,25 +42,17 @@
 
 	function Builder(el){
 
-		inps = el.querySelectorAll('input[type=text]');
-		
-		for(i = 0; i < inps.length; i++){
-			if(inps[i].getAttribute('pattern')){
-				inps[i].addEventListener('input',function(e){
-					e.target.setCustomValidity('');
-					e.target.checkValidity();
-				});
-				inps[i].addEventListener('invalid',function(e){
-					e.target.setCustomValidity(e.target.parentNode.querySelector('.pattern').innerHTML);
-				});
-			}
-		}
-		sections = document.querySelectorAll('section');
+		this.data = {'data':[]};
+		this.selectedRow = null;
+		var _obj = this;
+
+		// Highlight the current section in the menu
+		this.sections = document.querySelectorAll('section');
 		menu = document.getElementById('menu').querySelectorAll('li a');
 		window.addEventListener('scroll',function(e){
 			var ok = -1;
-			for(var s = 0; s < sections.length; s++){
-				if(sections[s].offsetTop <= window.scrollY+5) ok = s;
+			for(var s = 0; s < _obj.sections.length; s++){
+				if(_obj.sections[s].offsetTop <= window.scrollY+_obj.buttons.el.offsetHeight) ok = s;
 			}
 			// Remove any previous selection
 			for(var i = 0; i < menu.length; i++){
@@ -72,36 +64,251 @@
 			}
 		});
 		
-		
 		// Setup the dnd listeners.
 		var dropZone = document.getElementById('drop_zone');
 		dropZone.addEventListener('dragover', dropOver, false);
 		dropZone.addEventListener('dragout', dragOff, false);
-		var _obj = this;
 		document.getElementById('standard_files').addEventListener('change', function(evt){
-			//document.getElementById('drop_zone).querySelectorAll('
-			//S('#drop_zone .helpertext').css({'display':'none'});
 			return _obj.handleFileSelect(evt,'csv');
 		}, false);
 		document.querySelector('form.chooser').addEventListener('reset',function(e){ _obj.reset(); });
 
+		this.ready = false;
+
+		// Process the builder form to find fields and properties
+		var inps = document.querySelectorAll('#builder input');
+		this.fields = [];
+		this.lookup = {};
+		for(var i = 0; i < inps.length; i++){
+			id = inps[i].getAttribute('id');
+			pattern = inps[i].getAttribute('pattern');
+			typ = inps[i].getAttribute('type');
+			min = inps[i].getAttribute('min');
+			max = inps[i].getAttribute('max');
+			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i]});
+			this.lookup[id] = i;
+			// Add validation events
+			if(inps[i].getAttribute('pattern')){
+				inps[i].addEventListener('input',function(e){
+					e.target.setCustomValidity('');
+					e.target.checkValidity();
+				});
+				inps[i].addEventListener('invalid',function(e){
+					e.target.setCustomValidity(e.target.parentNode.parentNode.querySelector('.pattern').innerHTML);
+				});
+			}
+		}
+		
+		this.buttons = {
+			'el':document.createElement('div'),
+			'add':document.createElement('button'),
+			'update':document.createElement('button'),
+			'remove':document.createElement('button'),
+			'save':document.createElement('button'),
+			'reset':document.createElement('button')
+		};
+		this.buttons.el.setAttribute('id','buttons');
+		this.buttons.add.classList.add('button');
+		this.buttons.add.innerHTML = "&plus; Add as new row";
+		this.buttons.add.setAttribute('type','submit');
+		this.buttons.update.classList.add('button');
+		this.buttons.update.innerHTML = "Update row";
+		this.buttons.update.style.display = 'none';
+		this.buttons.remove.classList.add('button');
+		this.buttons.remove.innerHTML = "Delete row";
+		this.buttons.remove.style.display = 'none';
+		this.buttons.save.classList.add('button');
+		this.buttons.save.innerHTML = "Save file";
+		this.buttons.reset.classList.add('b2-bg');
+		this.buttons.reset.innerHTML = "Clear form";
+		this.buttons.reset.setAttribute('type','reset');
+	
+		this.buttons.el.appendChild(this.buttons.add);
+		this.buttons.el.appendChild(this.buttons.update);
+		this.buttons.el.appendChild(this.buttons.remove);
+		this.buttons.el.appendChild(this.buttons.save);
+		this.buttons.el.appendChild(this.buttons.reset);
+
+		p = document.querySelector('#builder > div:last-child');
+		p.insertBefore(this.buttons.el, p.firstChild);
+		
+		addEvent('submit',document.querySelectorAll('form'),{},function(e){
+			e.preventDefault();
+			e.stopPropagation();
+		});
+		// Add event to the add button
+		addEvent('click',this.buttons.add,{this:this},function(e){ this.addRow();});
+		// Add event to the update button
+		addEvent('click',this.buttons.update,{this:this},function(e){ this.updateRow(); });
+		// Add event to the remove button
+		addEvent('click',this.buttons.remove,{this:this},function(e){ this.removeRow(); });
+		// Add event to the remove button
+		addEvent('click',this.buttons.save,{this:this},function(e){ this.save(); });
+
+		this.drawTable();
+
 		return this;
 	}
-	Builder.prototype.load = function(){
-		var r,c,table;
-		this.data = CSVToArray(this.csv);
-		console.log('load',this);
-		var table = '<table>';
-		for(r = 0; r < this.data.rows.length; r++){
-			table += '<tr>';
-			for(c = 0; c < this.data.rows[r].length; c++){
-				table += (r==0 ? '<th>':'<td>')+this.data.rows[r][c]+(r==0 ? '</th>':'</td>');	// contenteditable="true"
-			}
-			table += '</tr>';
+	Builder.prototype.updateOffset = function(){
+		for(i = 0; i < this.sections.length; i++){
+			this.sections[i].style['scroll-margin-top'] = this.buttons.el.offsetHeight+'px';
 		}
-		table += '</table>';
-		document.querySelector('#preview').innerHTML = table;
+
+		return this;
+	};
+	Builder.prototype.loaded = function(d){
+		var r,c,table;
+		this.data = CSVToArray(d);
+		this.drawTable();
+
+		return this;
+	};
+	Builder.prototype.clearTable = function(){
+		document.getElementById('preview').innerHTML = "";
+		return this;
+	};
+	Builder.prototype.drawTable = function(replace){
+		this.rows = [];
+		this.csv = "";
+
+		// Which fields do we actually have data for?
+		// First reset the counters
+		for(i = 0; i < this.fields.length; i++) this.fields[i].count = 0;
+		// Loop over the data and count each key
+		for(r = 0; r < this.data.data.length; r++){
+			for(key in this.data.data[r]){
+				this.fields[this.lookup[key]].count++;
+			}
+		}
+
+		// Create a table
+		var table = document.createElement('table');
+		row = document.createElement('tr');
+
+		for(i = 0; i < this.fields.length; i++){
+			if(this.fields[i].count > 0){
+				row.innerHTML += '<th>'+this.fields[i].id+'</th>';	// contenteditable="true"
+				this.csv += (this.csv ? ',':'')+this.fields[i].id;
+			}
+		}
+		this.csv += '\n';
+		table.appendChild(row);
+
+		for(r = 0; r < this.data.data.length; r++){
+			valid = true;
+			row = document.createElement('tr');
+			csvrow = "";
+			for(i = 0; i < this.fields.length; i++){
+				if(this.fields[i].count > 0){
+					v = (this.data.data[r][this.fields[i].id]||"");
+					row.innerHTML += '<td>'+v+'</td>';	// contenteditable="true"
+					csvrow += (csvrow ? ',':'')+v;
+				}
+				if(this.fields[i].el.getAttribute('required') && !this.data.data[r][this.fields[i].id]) valid = false;
+			}
+			if(!valid) row.classList.add('invalid');
+			this.csv += csvrow+'\n';
+			// Add a click event to the row
+			addEvent('click',row,{this:this,r:r},function(e){ this.loadRow(e.data.r); });
+			this.rows.push(row);
+			table.appendChild(row);
+		}
+		preview = document.getElementById('preview');
+		// If we are replacing the table we temporarily set the height of the container
+		if(replace) preview.style.height = preview.offsetHeight+'px';
+		preview.innerHTML = "";
+		preview.appendChild(table);
+		// If we are replacing the table we unset the height of the container
+		if(replace) preview.style.height = '';
+
 		
+		this.updateOffset();
+
+		return this;
+	};
+	Builder.prototype.clearForm = function(){
+		for(i = 0; i < this.fields.length; i++){
+			this.fields[i].el.value = "";
+		}
+		return this;
+	};
+	Builder.prototype.loadRow = function(r){
+		var sel,c,el;
+
+		sel = document.querySelector('#preview .selected');
+		if(sel) sel.classList.remove('selected');
+
+
+		if(this.selectedRow==r){
+			this.selectedRow = null;
+			this.clearForm();
+		}else{
+			this.selectedRow = r;
+
+			this.rows[r].classList.add('selected');
+
+			for(i = 0; i < this.fields.length; i++){
+				key = this.fields[i].id;
+				el = document.getElementById(key);
+				if(el){
+					el.value = (this.data.data[r][key]||"");
+				}else{
+					console.warn('No input element for '+key);
+				}
+			}
+		}
+		// Hide/show the update button
+		this.toggleButtons();
+
+		return this;
+	};
+	Builder.prototype.addRow = function(){
+		var row = {};
+		var added = 0;
+		for(i = 0; i < this.fields.length; i++){
+			if(this.fields[i].el.value!=""){
+				row[this.fields[i].id] = this.fields[i].el.value;
+				added++;
+			}
+		}
+		if(added > 0){
+			this.data.data.push(row);
+			this.drawTable(true);
+		}
+		return this;
+	};
+	Builder.prototype.updateRow = function(){
+		if(typeof this.selectedRow!=="number"){
+			console.error('No row selected to update');
+			return this;
+		}
+		var row = this.data.data[this.selectedRow];
+		for(i = 0; i < this.fields.length; i++){
+			//console.log(this.fields[i].id,this.fields[i].el.value);
+			if(this.fields[i].el.value!="") row[this.fields[i].id] = this.fields[i].el.value;
+		}
+		this.data.data[this.selectedRow] = row;
+		this.selectedRow = null;
+		this.drawTable(true);
+		this.toggleButtons();
+		this.clearForm();
+		return this;
+	};
+	Builder.prototype.removeRow = function(){
+		if(typeof this.selectedRow!=="number"){
+			console.error('No row selected to update');
+			return this;
+		}
+		this.data.data.splice(this.selectedRow,1);
+		this.selectedRow = null;
+		this.drawTable(true);
+		this.toggleButtons();
+		this.clearForm();
+		return this;
+	};
+	Builder.prototype.toggleButtons = function(){
+		this.buttons.update.style.display = (typeof this.selectedRow==="number" ? '':'none');
+		this.buttons.remove.style.display = (typeof this.selectedRow==="number" ? '':'none');
 		return this;
 	};
 	Builder.prototype.handleFileSelect = function(evt,typ){
@@ -142,8 +349,7 @@
 							var l = evt.target.result.regexLastIndexOf(/[\n\r]/);
 							result = (l > 0) ? evt.target.result.slice(0,l) : evt.target.result;
 						}else result = evt.target.result;
-						_obj.csv = result;
-						_obj.load();
+						_obj.loaded(result);
 					}
 				};
 				
@@ -160,12 +366,47 @@
 		}
 		return this;
 	};
+	Builder.prototype.save = function(){
+		
+		// Bail out if there is no Blob function
+		if(typeof Blob!=="function") return this;
+
+		if(this.data.data.length==0){
+			console.warn('Nothing to save');
+			return this;
+		}
+
+		var textFileAsBlob = new Blob([this.csv], {type:'text/plain'});
+		if(!this.file) this.file = "data.csv";
+		var fileNameToSaveAs = this.file.substring(0,this.file.lastIndexOf("."))+".csv";
+
+		function destroyClickedElement(event){ document.body.removeChild(event.target); }
+
+		var dl = document.createElement("a");
+		dl.download = fileNameToSaveAs;
+		dl.innerHTML = "Download File";
+		if(window.webkitURL != null){
+			// Chrome allows the link to be clicked
+			// without actually adding it to the DOM.
+			dl.href = window.webkitURL.createObjectURL(textFileAsBlob);
+		}else{
+			// Firefox requires the link to be added to the DOM
+			// before it can be clicked.
+			dl.href = window.URL.createObjectURL(textFileAsBlob);
+			dl.onclick = destroyClickedElement;
+			dl.style.display = "none";
+			document.body.appendChild(dl);
+		}
+		dl.click();
+
+		return this;
+	}
 	Builder.prototype.reset = function(){
 		document.getElementById('drop_zone').classList.remove('loaded');
 		var det = document.querySelectorAll('.filedetails');
 		for(var i = 0; i < det.length; i++) det[i].parentNode.removeChild(det[i]);
-		document.getElementById('preview').innerHTML = "";
-		delete this.csv;
+		this.clearTable();
+		this.data = {'data':[]};
 		delete this.file;
 		
 		return this;
@@ -248,6 +489,20 @@
 			}
 		}
 		return {'rows':rows,'data':data}; // Return the parsed data Array
+	}
+	
+	function addEvent(ev,el,attr,fn){
+		if(el){
+			if(el.tagName) el = [el];
+			if(typeof fn==="function"){
+				for(i = 0; i < el.length; i++){
+					el[i].addEventListener(ev,function(e){
+						e.data = attr;
+						fn.call(attr['this']||this,e);
+					});
+				}
+			}
+		}
 	}
 
 	ODI.ready(function(){
