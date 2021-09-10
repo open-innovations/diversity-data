@@ -1,4 +1,4 @@
-published,organisation,organisation_division,employees,age_15-24,age_25-34,age_35-44,age_45-54,age_55-64,age_65-69,age_70+,gender_female,gender_male,gender_total,ethnicity_asian,ethnicity_white,ethnicity_prefernottosay,disability_yes,disability_undisclosed
+published,organisation,organisation_grouping,employees,age_15-24,age_25-34,age_35-44,age_45-54,age_55-64,age_65-69,age_70+,gender_female,gender_male,gender_total,ethnicity_asian,ethnicity_white,ethnicity_prefernottosay,disability_yes,disability_undisclosed
 2020-03-31,Kelda Group plc,"Kelda, Keyland, KWS3 & Three Sixty",221,20,56,65,56,24,0,0,124,97,221,26,128,67,1,220
 2020-03-31,Kelda Group plc,Loop,651,65,198,169,134,81,4,0,450,201,651,164,402,85,19,632
 2020-03-31,Kelda Group plc,Yorkshire Water,3514,260,991,832,840,555,35,0,815,2699,3514,176,2541,798,21,3493
