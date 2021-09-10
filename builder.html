@@ -37,6 +37,7 @@
 		width: 640px;
 	}
 	button.button { background: #1DD3A7; color: black; }
+	button[aria-disabled=true] { opacity: 0.5; filter: grayscale(100%); cursor: not-allowed; }
 	.chooser button { position: relative; z-index: 1; margin-top: 0!important; }
 	#preview {
 		max-width: 100%;

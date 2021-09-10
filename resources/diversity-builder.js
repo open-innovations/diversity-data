@@ -113,10 +113,8 @@
 		this.buttons.add.setAttribute('type','submit');
 		this.buttons.update.classList.add('button');
 		this.buttons.update.innerHTML = "Update row";
-		this.buttons.update.style.display = 'none';
 		this.buttons.remove.classList.add('button');
 		this.buttons.remove.innerHTML = "Delete row";
-		this.buttons.remove.style.display = 'none';
 		this.buttons.save.classList.add('button');
 		this.buttons.save.innerHTML = "Save file";
 		this.buttons.reset.classList.add('b2-bg');
@@ -128,6 +126,8 @@
 		this.buttons.el.appendChild(this.buttons.remove);
 		this.buttons.el.appendChild(this.buttons.save);
 		this.buttons.el.appendChild(this.buttons.reset);
+		
+		this.toggleButtons();
 
 		p = document.querySelector('#builder > div:last-child');
 		p.insertBefore(this.buttons.el, p.firstChild);
@@ -153,7 +153,6 @@
 		for(i = 0; i < this.sections.length; i++){
 			this.sections[i].style['scroll-margin-top'] = this.buttons.el.offsetHeight+'px';
 		}
-
 		return this;
 	};
 	Builder.prototype.loaded = function(d){
@@ -284,7 +283,6 @@
 		}
 		var row = this.data.data[this.selectedRow];
 		for(i = 0; i < this.fields.length; i++){
-			//console.log(this.fields[i].id,this.fields[i].el.value);
 			if(this.fields[i].el.value!="") row[this.fields[i].id] = this.fields[i].el.value;
 		}
 		this.data.data[this.selectedRow] = row;
@@ -307,8 +305,13 @@
 		return this;
 	};
 	Builder.prototype.toggleButtons = function(){
-		this.buttons.update.style.display = (typeof this.selectedRow==="number" ? '':'none');
-		this.buttons.remove.style.display = (typeof this.selectedRow==="number" ? '':'none');
+		if(typeof this.selectedRow==="number"){
+			enable(this.buttons.update);
+			enable(this.buttons.remove);
+		}else{
+			disable(this.buttons.update);
+			disable(this.buttons.remove);
+		}
 		return this;
 	};
 	Builder.prototype.handleFileSelect = function(evt,typ){
@@ -490,7 +493,16 @@
 		}
 		return {'rows':rows,'data':data}; // Return the parsed data Array
 	}
-	
+	function disable(b){
+		b.setAttribute('disabled','disabled');
+		b.setAttribute('aria-disabled',true);
+		return b;
+	}
+	function enable(b){
+		b.removeAttribute('disabled');
+		b.removeAttribute('aria-disabled');
+		return b;
+	}
 	function addEvent(ev,el,attr,fn){
 		if(el){
 			if(el.tagName) el = [el];
