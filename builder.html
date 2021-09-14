@@ -14,6 +14,7 @@
 		position: relative;
 		padding: 1em;
 		border: 2px dashed #999999;
+		text-align: center;
 	}
 	.dropzone.drop { background: #bcf6e7; border-color: #1DD3A7; }
 	.dropzone.loaded { border: 2px solid #1DD3A7; background: #bcf6e7; }
@@ -26,6 +27,8 @@
 		height: 100%;
 		opacity: 0.01;
 		z-index: 0;
+		padding-top: 1em;
+		padding-left: 1em;
 	}
 	.dropzone input[type=file]:focus{
 		opacity: 1;
@@ -41,7 +44,7 @@
 		width: 640px;
 	}
 	button.button { background: #1DD3A7; color: black; }
-	button[aria-disabled=true] { opacity: 0.5; filter: grayscale(100%); cursor: not-allowed; }
+	button[aria-disabled=true] { opacity: 0.5; filter: grayscale(100%); cursor: not-allowed; display: none; }
 	.chooser button { position: relative; z-index: 1; margin-top: 0!important; }
 	#preview {
 		max-width: 100%;
@@ -93,7 +96,7 @@
 	#builder input:invalid { border: 4px solid red; }
 	#menu, #buttons { position: sticky; top: 0; width: 100%; }
 	#buttons { background: white; z-index: 1000; box-shadow: 0 4px 4px -2px rgba(0,0,0,0.2); padding: 1em; background: #ddd; }
-	#buttons button { margin-top: 0; margin-right: 0.5em; }
+	#buttons button { margin-top: 2px; margin-bottom: 2px; margin-right: 0.5em; }
 	button[type=reset] { float: right; }
 	#menu li a { display: block; padding: 0.5em; text-decoration: none; color: inherit; font-weight: 600; }
 	@media only screen and (max-width: 1200px) {
