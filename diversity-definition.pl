@@ -47,7 +47,7 @@ for($s = 0; $s < @{$json{'sections'}}; $s++){
 	}
 	$output .= $indent."\t\t\t</div>\n";
 	$output .= makeRows($json{'sections'}[$s]{'key'},$level,%{$json{'sections'}[$s]});
-
+	$output .= $indent."\t\t\t<p class=\"totop doublepadded\"><a href=\"#top\">Back to top</a></p>";
 	$output .= $indent."\t\t</section>\n";
 }
 $output .= $indent."\t</div>\n";

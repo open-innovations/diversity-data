@@ -105,11 +105,12 @@
 			'update':document.createElement('button'),
 			'remove':document.createElement('button'),
 			'save':document.createElement('button'),
+			'clear':document.createElement('button'),
 			'reset':document.createElement('button')
 		};
 		this.buttons.el.setAttribute('id','buttons');
 		this.buttons.add.classList.add('button');
-		this.buttons.add.innerHTML = "&plus; Add as new row";
+		this.buttons.add.innerHTML = "Add as new row";
 		this.buttons.add.setAttribute('type','submit');
 		this.buttons.update.classList.add('button');
 		this.buttons.update.innerHTML = "Update row";
@@ -117,15 +118,17 @@
 		this.buttons.remove.innerHTML = "Delete row";
 		this.buttons.save.classList.add('button');
 		this.buttons.save.innerHTML = "Save file";
-		this.buttons.reset.classList.add('b2-bg');
-		this.buttons.reset.innerHTML = "Clear form";
-		this.buttons.reset.setAttribute('type','reset');
+		this.buttons.clear.classList.add('b2-bg');
+		this.buttons.clear.innerHTML = "Clear form";
+		this.buttons.clear.setAttribute('type','reset');
+		this.buttons.reset = document.getElementById('reset');
+		disable(this.buttons.reset);
 	
 		this.buttons.el.appendChild(this.buttons.add);
 		this.buttons.el.appendChild(this.buttons.update);
 		this.buttons.el.appendChild(this.buttons.remove);
 		this.buttons.el.appendChild(this.buttons.save);
-		this.buttons.el.appendChild(this.buttons.reset);
+		this.buttons.el.appendChild(this.buttons.clear);
 		
 		this.toggleButtons();
 
@@ -365,6 +368,7 @@
 			document.getElementById('drop_zone').appendChild(output)
 			document.getElementById('drop_zone').classList.add('loaded');
 			document.querySelector('form.chooser input[type=file]').blur();
+			enable(this.buttons.reset);
 			return this;
 		}
 		return this;
@@ -411,6 +415,7 @@
 		this.clearTable();
 		this.data = {'data':[]};
 		delete this.file;
+		disable(this.buttons.reset);
 		
 		return this;
 	};
