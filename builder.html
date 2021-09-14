@@ -17,6 +17,7 @@
 	}
 	.dropzone.drop { background: #bcf6e7; border-color: #1DD3A7; }
 	.dropzone.loaded { border: 2px solid #1DD3A7; background: #bcf6e7; }
+	.dropzone label { margin-right: 0; }
 	.dropzone input[type=file] {
 		position: absolute;
 		left: 0px;
@@ -117,13 +118,13 @@
 			<h1>Diversity Data Builder<span class="alpha">alpha</span></h1>
 		</header>
 		<div class="main doublepadded">
-			<p>This tool will help you create a CSV file following the Diversity Data Standard. This CSV file should have one row per date/group/level within your organisation. It may be as simple as one row for your entire organisation. Once you have a valid CSV file it should be published openly on the web at a fixed URL under an <a href="https://opendatacommons.org/licenses/odbl/">Open Database Licence (ODbL)</a>. Once your data is published openly, it needs to be added to a dashboard index file e.g. <a href="https://github.com/odileeds/diversity-data/blob/main/leeds.csv">Leeds City Region index</a>. If you have a Github account you can create a pull request directly or you <a href="mailto:hello@open-innovations.org?subject=Diversity Dashboard&body=Please add our organisation.%0A%0ADashboard:%0AOrganisation name:%0AURL of data published to the data standard:">may contact Open Innovations to get it added manually</a>.</p>
+			<p>This tool will help you create a CSV file following the Diversity Data Standard.</p>
 			<noscript class="error">Without Javascript enabled the builder cannot currently function. Sorry.</noscript>
 
 			<form class="chooser">
 				<div class="grey dropzone" id="drop_zone">
 					<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv">
-					Drop CSV or <label for="standard_files">browse files</label>...<!--, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
+					Drop <label for="standard_files">your existing CSV</label> here...<!--, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
 					<button id="open" type="submit" class="button">Open</button>-->
 					<button id="reset" type="reset" class="b2-bg">Reset</button>
 				</div>
@@ -132,7 +133,7 @@
 			
 			</div>
 			
-			<p>To add a row, fill in the form below. To update an existing row select the row, update the values in the form below, then click the "Update row" button when finished.</p>
+			<p>To add a row, fill in the form below and click "<em>Add as new row</em>". To update an existing row select the row, update the values in the form below, then click the "<em>Update row</em>" button when finished. To delete a row select an existing row and click "<em>Delete row</em>". Once you have finished editing the file, click "<em>Save file</em>" and then upload the result to where you publish your data. If your published data isn't already included in the dashboard and you would like it to be, you will need to add it to the index for a specific dashboard e.g. the <a href="https://github.com/open-innovations/diversity-data/edit/main/leeds-city-region/leeds.csv">Leeds City Region index</a>. If you have a Github account you can create a pull request directly or you <a href="mailto:hello@open-innovations.org?subject=Diversity Dashboard&body=Please add our organisation.%0A%0ADashboard: Leeds City Region%0AOrganisation name:%0AURL of data published to the data standard:">may contact Open Innovations to get it added manually</a>.</p>
 			<form class="builder">
 			
 			<!-- START GENERATED CODE -->
