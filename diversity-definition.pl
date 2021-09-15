@@ -56,6 +56,7 @@ $output .= $indent."</div>\n";
 
 # Update the builder page
 $html =~ s/(<\!-- START GENERATED CODE -->[\n\r]+)(.*)([\n\r]+\t*<\!-- END GENERATED CODE -->)/$1$output$3/s;
+$html =~ s/(<\!-- START VERSION -->[\n\r]*)(.*)([\n\r]*\t*<\!-- END VERSION -->)/$1$json{'version'}$3/s;
 open(HTML,">",$builder);
 print HTML $html;
 close(HTML);
