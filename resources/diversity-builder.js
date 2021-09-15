@@ -116,10 +116,10 @@
 		this.buttons.clear.classList.add('b2-bg');
 		this.buttons.clear.innerHTML = "Clear form";
 		this.buttons.clear.setAttribute('type','reset');
-		addEvent('click',this.buttons.save,{this:this},function(e){ this.save(); });
 		this.buttons.el.appendChild(this.buttons.clear);
 
 		this.buttons.save = document.getElementById('btn-save');
+		addEvent('click',this.buttons.save,{this:this},function(e){  this.save(); });
 
 		this.preview = document.getElementById('preview');
 		this.preview_orig = this.preview.innerHTML;
@@ -226,7 +226,6 @@
 		this.preview.appendChild(table);
 		// If we are replacing the table we unset the height of the container
 		if(replace) this.preview.style.height = '';
-console.log(added)
 		
 		this.updateOffset();
 
