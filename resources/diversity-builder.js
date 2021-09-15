@@ -59,11 +59,14 @@
 		});
 		
 		// Load CSV button
-		var pbtn = document.querySelector('#standard_files-button');
-		if(pbtn){
-			pbtn.addEventListener('click',function(e){ e.preventDefault(); document.querySelector('#standard_files').click(); hamburger.click(); });
-			addEvent('change',document.getElementById('standard_files'),{this:this},function(e){ return this.handleFileSelect(e,'csv'); });
-		}
+		this.buttons.load = document.querySelector('#standard_files-button');
+		addEvent('click',this.buttons.load,{this:this},function(e){ e.preventDefault(); document.querySelector('#standard_files').click(); hamburger.click(); });
+		addEvent('change',document.getElementById('standard_files'),{this:this},function(e){ return this.handleFileSelect(e,'csv'); });
+
+		// Save CSV button
+		this.buttons.save = document.getElementById('btn-save');
+		addEvent('click',this.buttons.save,{this:this},function(e){ this.save(); hamburger.click(); });
+
 
 
 		// Process the builder form to find fields and properties
@@ -117,9 +120,6 @@
 		this.buttons.clear.innerHTML = "Clear form";
 		this.buttons.clear.setAttribute('type','reset');
 		this.buttons.el.appendChild(this.buttons.clear);
-
-		this.buttons.save = document.getElementById('btn-save');
-		addEvent('click',this.buttons.save,{this:this},function(e){  this.save(); });
 
 		this.preview = document.getElementById('preview');
 		this.preview_orig = this.preview.innerHTML;
