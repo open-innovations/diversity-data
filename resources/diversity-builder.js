@@ -8,37 +8,6 @@
 			else document.addEventListener('DOMContentLoaded', fn);
 		};
 	}
-	function AJAX(url,opt){
-		// Version 1.3
-		if(!opt) opt = {};
-		var req = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-		var responseTypeAware = 'responseType' in req;
-		req.open((opt.method||'GET'),url+(typeof opt.cache===null || (typeof opt.cache==="boolean" && !opt.cache) ? '?'+Math.random() : ''),true);
-		if(responseTypeAware && opt.dataType!=="undefined"){
-			try{
-				req.responseType = opt.dataType;
-			}catch(err){
-				console.error('Problem setting response type',err);
-			}
-		}
-		req.onload = function(e){
-			if(this.status >= 200 && this.status < 400) {
-				// Success!
-				var resp = this.response;
-				if(typeof opt.success==="function") opt.success.call((opt['this']||this),resp,{'url':url,'data':opt,'originalEvent':e});
-			}else{
-				// We reached our target server, but it returned an error
-				if(typeof opt.error==="function") opt.error.call((opt['this']||this),e,{'url':url,'data':opt});
-			}
-		};
-		if(typeof opt.error==="function"){
-			// There was a connection error of some sort
-			req.onerror = function(err){ opt.error.call((opt['this']||this),err,{'url':url,'data':opt}); };
-		}
-		req.send();
-		return this;
-	}
-	if(!ODI.ajax) ODI.ajax = AJAX;
 
 	function Builder(el){
 
@@ -60,7 +29,7 @@
 		
 		// Load CSV button
 		this.buttons.load = document.querySelector('#standard_files-button');
-		addEvent('click',this.buttons.load,{this:this},function(e){ e.preventDefault(); document.querySelector('#standard_files').click(); hamburger.click(); });
+		addEvent('click',this.buttons.load,{this:this},function(e){ e.preventDefault(); this.message(); document.querySelector('#standard_files').click(); hamburger.click(); });
 		addEvent('change',document.getElementById('standard_files'),{this:this},function(e){ return this.handleFileSelect(e,'csv'); });
 
 		// Save CSV button
@@ -163,7 +132,6 @@
 		return this;
 	};
 	Builder.prototype.clearTable = function(){
-		console.log('clearTable');
 		this.preview.innerHTML = this.preview_orig;
 		return this;
 	};
@@ -270,22 +238,35 @@
 	Builder.prototype.addRow = function(){
 		var row = {};
 		var added = 0;
+		var valid = true;
 		for(i = 0; i < this.fields.length; i++){
-			if(this.fields[i].el.value!=""){
-				row[this.fields[i].id] = this.fields[i].el.value;
-				added++;
+			if(this.fields[i].el.getAttribute('required')){
+				if(this.fields[i].el.value===""){
+					valid = false;
+				}
 			}
 		}
-		if(added > 0){
-			this.data.data.push(row);
-			this.drawTable(true);
+		if(valid){
+			for(i = 0; i < this.fields.length; i++){
+				if(this.fields[i].el.value!=""){
+					row[this.fields[i].id] = this.fields[i].el.value;
+					added++;
+				}
+			}
+			if(added > 0) this.data.data.push(row);
+			this.message();
+		}else{
+			this.message('ERROR','Unable to add row as there are required fields missing');
 		}
+		this.drawTable(true);
 		return this;
 	};
 	Builder.prototype.updateRow = function(){
 		if(typeof this.selectedRow!=="number"){
-			console.error('No row selected to update');
+			this.message('WARNING','No row selected to update');
 			return this;
+		}else{
+			this.message();
 		}
 		var row = this.data.data[this.selectedRow];
 		for(i = 0; i < this.fields.length; i++){
@@ -300,8 +281,10 @@
 	};
 	Builder.prototype.removeRow = function(){
 		if(typeof this.selectedRow!=="number"){
-			console.error('No row selected to update');
+			this.message('WARNING','No row selected to update');
 			return this;
+		}else{
+			this.message();
 		}
 		this.data.data.splice(this.selectedRow,1);
 		this.selectedRow = null;
@@ -310,6 +293,24 @@
 		this.clearForm();
 		return this;
 	};
+	Builder.prototype.message = function(typ,msg){
+		var el = document.getElementById('message');
+		el.classList.remove('ERROR','WARNING','INFO','padded');
+		if(msg){
+			txt = msg.replace(/<[^\>]*>/,'');
+			if(typ=="ERROR") console.error(txt);
+			else if(typ=="WARNING") console.warn(txt);
+			else if(typ=="INFO") console.info(txt);
+			else console.log(txt);
+			el.innerHTML = msg;
+			el.classList.add(typ);
+			if(msg) el.classList.add('padded');
+		}else{
+			el.innerHTML = "";
+		}
+
+		return this;
+	}
 	Builder.prototype.toggleButtons = function(){
 		if(typeof this.selectedRow==="number"){
 			enable(this.buttons.update);
@@ -372,8 +373,10 @@
 		if(typeof Blob!=="function") return this;
 
 		if(this.data.data.length==0){
-			console.warn('Nothing to save');
+			this.message('WARNING','Nothing to save');
 			return this;
+		}else{
+			this.message();
 		}
 
 		var textFileAsBlob = new Blob([this.csv], {type:'text/plain'});

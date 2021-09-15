@@ -9,6 +9,12 @@
 	<style>
 	html { scroll-behavior: smooth; }
 	.alpha { font-size: 0.6em; top: -0.75em; position: relative;}
+
+	.message { position: fixed; bottom: 0; width: 100%; background-color: rgb(248, 248, 248); color: black; text-align: center; font-weight: 500; }
+	.ERROR { color: #D8000C; background-color: #FFD2D2; }
+	.WARNING { color: #9F6000; background-color: #FEEFB3; }
+	.INFO { color: #00529B; background-color: #BDE5F8; }
+	.INFO { color: #00529B; background-color: #BDE5F8; }
 	
 	header { position: fixed; top: 0; z-index: 1000; width: 100%; display: grid; grid-template-columns: 1fr auto; }
 	header h1 { font-size: 1.25em; }
@@ -1276,8 +1282,8 @@
 
 			<!-- END GENERATED CODE -->
 			</form>
-
 		</div>
+		<div id="message" class="message"></div>
 		
 		<footer class="b1-bg">
 			<div class="doublepadded">
