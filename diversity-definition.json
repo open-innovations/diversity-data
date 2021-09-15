@@ -9,7 +9,7 @@
 		"properties": [{
 			"key": "published",
 			"title": "Publishing date",
-			"description": "The date associated with the row. This should be in ISO 8601 format as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This reduces ambiguity in parsing dates and gives flexibility with time precision. It can be reported as just a year (e.g. '2021'), a month (e.g. '2021-01'), or a full date (e.g. '2021-01-26'). This allows an organisation to publish figures as frequently as they need to.",
+			"description": "The date associated with the entry. This should be in ISO 8601 format as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This reduces ambiguity in parsing dates and gives flexibility with time precision. It can be reported as just a year (e.g. '2021'), a month (e.g. '2021-01'), or a full date (e.g. '2021-01-26'). This allows an organisation to publish figures as frequently as they need to.",
 			"type": "string",
 			"pattern": "^[0-9]{4}(-[0-9]{2})?(-[0-9]{2})?$",
 			"patterndesc": "Must by an ISO 8601 date.",

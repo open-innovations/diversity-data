@@ -145,7 +145,7 @@
 			</div>
 		</header>
 		<div class="main doublepadded">
-			<p>This tool will help you create or update a CSV file following the Diversity Data Standard. Use the menu in the top right to load/save a file. Use the "<em>Row editor</em>" to add, update, or delete rows.</p>
+			<p>This tool will help you create or update a CSV file following the Diversity Data Standard. CSV files following the standard will consist of rows per <em>entry</em>. Each <em>entry</em> is a set of values for a specific date and organisation name/grouping/level. Use the menu at the top right to load/save a file. Use the "<em>Report editor</em>" to add, update, or delete entries.</p>
 			<noscript class="error">Without Javascript enabled the builder cannot currently function. Sorry.</noscript>
 
 			<h2>Data preview</h2>
@@ -153,7 +153,7 @@
 				<div class="padded">No data to show.</div>
 			</div>
 
-			<h2>Row editor</h2>
+			<h2>Entry editor</h2>
 			<form class="builder">
 			
 			<!-- START GENERATED CODE -->
@@ -182,7 +182,7 @@
 						<div class="row required doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="published">Publishing date</label> <code>published</code></h4>
-								<p>The date associated with the row. This should be in ISO 8601 format as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This reduces ambiguity in parsing dates and gives flexibility with time precision. It can be reported as just a year (e.g. '2021'), a month (e.g. '2021-01'), or a full date (e.g. '2021-01-26'). This allows an organisation to publish figures as frequently as they need to.</p>
+								<p>The date associated with the entry. This should be in ISO 8601 format as <a href='https://www.gov.uk/government/publications/open-standards-for-government/date-times-and-time-stamps-standard'>recommended by GDS</a>. This reduces ambiguity in parsing dates and gives flexibility with time precision. It can be reported as just a year (e.g. '2021'), a month (e.g. '2021-01'), or a full date (e.g. '2021-01-26'). This allows an organisation to publish figures as frequently as they need to.</p>
 								<p class="pattern">Format: Must by an ISO 8601 date.</p>
 							</div>
 							<div class="col">
