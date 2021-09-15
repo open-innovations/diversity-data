@@ -5,6 +5,7 @@ use JSON::XS;
 
 $jfile = "diversity-definition.json";
 $builder = "builder.html";
+#$standard = "standard.html";
 
 # Read in the JSON definition
 open(FILE,$jfile);
@@ -60,6 +61,18 @@ print HTML $html;
 close(HTML);
 
 
+# Update the standard page
+#open(HTML,$standard);
+#@lines = <HTML>;
+#close(HTML);
+#$html = join("",@lines);
+#$output =~ s/two-col/one-col/g;
+#$output =~ s/\t+<div class="col">\n\t+<input [^\>]* \/>\n\t+<\/div>\n//g;
+#$html =~ s/(<\!-- START GENERATED CODE -->[\n\r]+)(.*)([\n\r]+\t*<\!-- END GENERATED CODE -->)/$1$output$3/s;
+#open(HTML,">",$standard);
+#print HTML $html;
+#close(HTML);
+
 
 
 
@@ -79,10 +92,8 @@ sub makeRows {
 		$required = "";
 		if($rows{'properties'}[$p]{'key'}){
 
-			for($r = 0; $r < @{$rows{'required'}}; $r++){
-				if($rows{'required'}[$r] eq $rows{'properties'}[$p]{'key'}){
-					$required = " required=\"required\"";
-				}
+			if($rows{'properties'}[$p]{'required'}){
+				$required = " required=\"required\"";
 			}
 			$name = $key.($key ? "_":"").$rows{'properties'}[$p]{'key'};
 			$cols = ($rows{'properties'}[$p]{'type'}) ? 2 : 1;
