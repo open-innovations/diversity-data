@@ -4,48 +4,42 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8" />
 	<title>Diversity Data Builder</title>
-	<script src="resources/diversity-builder.js"></script>
 	<link rel="StyleSheet" href="resources/fonts/open-sans/open-sans.css" type="text/css" />
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 	<style>
 	html { scroll-behavior: smooth; }
-	.chooser { margin-bottom: 1em; line-height: 2em; }
-	.dropzone {
-		position: relative;
-		padding: 1em;
-		border: 2px dashed #999999;
-		text-align: center;
-	}
-	.dropzone.drop { background: #bcf6e7; border-color: #1DD3A7; }
-	.dropzone.loaded { border: 2px solid #1DD3A7; background: #bcf6e7; }
-	.dropzone label { margin-right: 0; }
-	.dropzone input[type=file] {
-		position: absolute;
-		left: 0px;
-		top: 0px;
-		width: 100%;
-		height: 100%;
-		opacity: 0.01;
-		z-index: 0;
-		padding-top: 1em;
-		padding-left: 1em;
-	}
-	.dropzone input[type=file]:focus{
-		opacity: 1;
-	}
-	.dropzone button[aria-disabled=true] {
-		display: none;
-	}
-	.dropzone input[type=url] {
-		position: relative;
-		z-index: 1;
-		font: inherit;
-		height: 2.25em;
-		width: 640px;
-	}
+	.alpha { font-size: 0.6em; top: -0.75em; position: relative;}
+	
+	header { position: fixed; top: 0; z-index: 1000; width: 100%; display: grid; grid-template-columns: 1fr auto; }
+	header h1 { font-size: 1.25em; }
+	header + * { margin-top: calc(3.5em + 8px); }
+	header > div { position: relative; }
+	header > div:last-child { width: 4em; height: 3.5em; }
+	header #showmenu { position: absolute; width: 100%; height: 100%; opacity: 0.01; z-index: 1000; cursor: pointer; margin: 0; }
+	header #showmenu:hover + label { background: #444; color: white; }
+	header #showmenu:focus + label { background: #1DD3A7; color: black; }
+	header #showmenu + label { position: absolute; z-index:1001; margin: 0; width: 100%; height: 100%; line-height: 2.5em; font-size: 1.4em; text-align:center; padding: 0; }
+	header #showmenu:checked + label + nav { display: block; }
+	header nav { position: absolute; z-index: 1000; top: 3.5em; right: 0px; display: none; }
+	header .menu { padding: 0.5em 0.75em; background: inherit; color: inherit; font-weight:bold; }
+	header button { height: 100%; margin: 0; font-size: 1.1em; }
+	header ul { display: none; position: absolute; top: 100%; right: 0; border-bottom-left-radius: 0.5em; overflow: hidden; }
+	header ul li { width: 100%; cursor: pointer; }
+	header ul li button { color: white; background: #000; width: 100%; text-align: left; text-decoration: none; padding: 1em 1em 1em 2.5em; display: block; white-space: nowrap; line-height: 1em; box-shadow: none; position: relative; }
+	header ul li button svg { position: absolute; left: 1em; top: 1em; }
+	header button:focus, header button:hover, header ul li button:hover, header ul li button:focus  { background: #1DD3A7; color: black; outline: none; }
+	header button:focus path, header button:hover path, header ul li button:hover path, header ul li button:focus path { fill: black!important; }
+	header nav .fileselect { display: none; }
+	header nav ul input { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.01; }
+
+	
 	button.button { background: #1DD3A7; color: black; }
 	button[aria-disabled=true] { opacity: 0.5; filter: grayscale(100%); cursor: not-allowed; display: none; }
+
+	.chooser { margin-bottom: 1em; line-height: 2em; }
 	.chooser button { position: relative; z-index: 1; margin-top: 0!important; }
+
+	#preview, #builder { margin-top: 1em; }
 	#preview {
 		max-width: 100%;
 		overflow-x: auto;
@@ -54,12 +48,12 @@
 	#preview table td, #preview table th { white-space: nowrap; }
 	#preview table tr { cursor: cell; }
 	#preview table .selected { background: #bcf6e7; }
+
 	.invalid { background: #FFD2D2; color: #D8000C; }
 	#builder {
 		display: grid;
 		grid-template-columns: 260px 1fr;
 		grid-gap: 2em;
-		margin-top: 1em;
 	}
 	.doublepadded { padding: 2em; }
 	#builder > div { display: relative; }
@@ -94,8 +88,8 @@
 	#builder .required label::after { content: "*"; position: relative; color: #D8000C; }
 	#builder input { width: 320px; font: inherit; height: 3em; padding: 0 0.5em; }
 	#builder input:invalid { border: 4px solid red; }
-	#menu, #buttons { position: sticky; top: 0; width: 100%; }
-	#buttons { background: white; z-index: 1000; box-shadow: 0 4px 4px -2px rgba(0,0,0,0.2); padding: 1em; background: #ddd; }
+	#menu, #buttons { position: sticky; top: calc(3.5em + 8px); width: 100%; }
+	#buttons { background: white; z-index: 100; box-shadow: 0 4px 4px -2px rgba(0,0,0,0.2); padding: 1em; background: #ddd; }
 	#buttons button { margin-top: 2px; margin-bottom: 2px; margin-right: 0.5em; }
 	button[type=reset] { float: right; }
 	#menu li a { display: block; padding: 0.5em; text-decoration: none; color: inherit; font-weight: 600; }
@@ -114,29 +108,46 @@
 		.doublepadded { padding: 1em; }
 	}
 	</style>
+	<script src="resources/diversity-builder.js"></script>
 </head>
 <body class="b1-bg">
 	<div id="dashboard">
-		<header class="padded b1-bg" id="top">
-			<h1>Diversity Data Builder<span class="alpha">alpha</span></h1>
+		<header class="b1-bg" id="top">
+			<div class="padded"><h1>Diversity Data Builder<span class="alpha">alpha</span></h1></div>
+			<div>
+				<input type="checkbox" id="showmenu" aria-label="Show Navigation Menu" aria-expanded="true" tabindex="0" />
+				<label for="showmenu">☰</label>
+				<nav aria-labelledby="showmenu">
+					<ul style="display: block;">
+						<li>
+							<form id="form-load-progress">
+								<button id="standard_files-button">
+									<svg width="1em" height="1em" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M 0 32 l 32 0 l 0 -10 l -4 0 l 0 6 l -24 0 l 0 -6 l -4 0 l 0 10 M 12 22 l 0 -10 l -8 0 l 12 -12 l 12 12 l -8 0 l 0 10" fill="white"></path></svg>
+									Load from CSV
+								</button>
+								<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv" aria-labelledby="file-progress-button">
+							</form>
+						</li>
+						<li>
+							<button id="btn-save">
+								<svg width="1em" height="1em" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M 0 32 l 32 0 l 0 -10 l -4 0 l 0 6 l -24 0 l 0 -6 l -4 0 l 0 10 M 12 0 l 8 0 l 0 10 l 8 0 l -12 12 l -12 -12 l 8 0" fill="white"></path></svg>
+								Save to CSV
+							</button>
+						</li>
+					</ul>
+				</nav>
+			</div>
 		</header>
 		<div class="main doublepadded">
-			<p>This tool will help you create a CSV file following the Diversity Data Standard.</p>
+			<p>This tool will help you create or update a CSV file following the Diversity Data Standard. Use the menu in the top right to load/save a file.</p>
 			<noscript class="error">Without Javascript enabled the builder cannot currently function. Sorry.</noscript>
 
-			<form class="chooser">
-				<div class="grey dropzone" id="drop_zone">
-					<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv">
-					Drop <label for="standard_files">your existing CSV</label> here...<!--, or enter <label for="url">URL</label> <input id="url" type="url" name="url" class="" placeholder="e.g. https://open-innovations.github.io/diversity-data/leeds-city-region/data/kelda-group.csv" pattern="https://.*">
-					<button id="open" type="submit" class="button">Open</button>-->
-					<button id="reset" type="reset" class="b2-bg">Reset</button>
-				</div>
-			</form>
-			<div id="preview">
-			
+			<h2>Data preview</h2>
+			<div id="preview" class="grey">
+				<div class="padded">No data to show.</div>
 			</div>
-			
-			<p>To add a row, fill in the form below and click "<em>Add as new row</em>". To update an existing row select the row, update the values in the form below, then click the "<em>Update row</em>" button when finished. To delete a row select an existing row and click "<em>Delete row</em>". Once you have finished editing the file, click "<em>Save file</em>" and then upload the result to where you publish your data. If your published data isn't already included in the dashboard and you would like it to be, you will need to add it to the index for a specific dashboard e.g. the <a href="https://github.com/open-innovations/diversity-data/edit/main/leeds-city-region/leeds.csv">Leeds City Region index</a>. If you have a Github account you can create a pull request directly or you <a href="mailto:hello@open-innovations.org?subject=Diversity Dashboard&body=Please add our organisation.%0A%0ADashboard: Leeds City Region%0AOrganisation name:%0AURL of data published to the data standard:">may contact Open Innovations to get it added manually</a>.</p>
+
+			<h2>Row editor</h2>
 			<form class="builder">
 			
 			<!-- START GENERATED CODE -->
@@ -199,13 +210,13 @@
 								<input type="text" id="organisation_level" placeholder="e.g. TopQuartile" />
 							</div>
 						</div>
-						<div class="row doublepadded level-0 two-col">
+						<div class="row required doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="employees">Employees</label> <code>employees</code></h4>
 								<p>A number representing the total number of employees.</p>
 							</div>
 							<div class="col">
-								<input type="number" id="employees" placeholder="e.g. 546" min="0" />
+								<input type="number" id="employees" placeholder="e.g. 546" min="0" required="required" />
 							</div>
 						</div>
 						<div class="row doublepadded level-0 two-col">

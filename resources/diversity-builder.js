@@ -42,38 +42,29 @@
 
 	function Builder(el){
 
+		this.ready = false;
 		this.data = {'data':[]};
 		this.selectedRow = null;
-		var _obj = this;
+		var hamburger = document.getElementById('showmenu');
+		this.buttons = {};
 
-		// Highlight the current section in the menu
 		this.sections = document.querySelectorAll('section');
-		menu = document.getElementById('menu').querySelectorAll('li a');
-		window.addEventListener('scroll',function(e){
-			var ok = -1;
-			for(var s = 0; s < _obj.sections.length; s++){
-				if(_obj.sections[s].offsetTop <= window.scrollY+_obj.buttons.el.offsetHeight+5) ok = s;
-			}
-			// Remove any previous selection
-			for(var i = 0; i < menu.length; i++){
-				menu[i].classList.remove('selected');
-			}
-			if(ok >= 0){
-				// Select this menu item
-				menu[ok].classList.add('selected');
-			}
+		this.menu = document.getElementById('menu').querySelectorAll('li a');
+		// Highlight the current section in the menu
+		addEvent('scroll',[window],{this:this},function(e){ this.scroll(); });
+
+		// Hamburger menu open/close
+		addEvent('click',hamburger,{},function(e){
+			if(!hamburger.checked) hamburger.blur();
 		});
 		
-		// Setup the dnd listeners.
-		var dropZone = document.getElementById('drop_zone');
-		dropZone.addEventListener('dragover', dropOver, false);
-		dropZone.addEventListener('dragout', dragOff, false);
-		document.getElementById('standard_files').addEventListener('change', function(evt){
-			return _obj.handleFileSelect(evt,'csv');
-		}, false);
-		document.querySelector('form.chooser').addEventListener('reset',function(e){ _obj.reset(); });
+		// Load CSV button
+		var pbtn = document.querySelector('#standard_files-button');
+		if(pbtn){
+			pbtn.addEventListener('click',function(e){ e.preventDefault(); document.querySelector('#standard_files').click(); hamburger.click(); });
+			addEvent('change',document.getElementById('standard_files'),{this:this},function(e){ return this.handleFileSelect(e,'csv'); });
+		}
 
-		this.ready = false;
 
 		// Process the builder form to find fields and properties
 		var inps = document.querySelectorAll('#builder input');
@@ -99,37 +90,40 @@
 			}
 		}
 		
-		this.buttons = {
-			'el':document.createElement('div'),
-			'add':document.createElement('button'),
-			'update':document.createElement('button'),
-			'remove':document.createElement('button'),
-			'save':document.createElement('button'),
-			'clear':document.createElement('button'),
-			'reset':document.createElement('button')
-		};
+		this.buttons.el = document.createElement('div');
 		this.buttons.el.setAttribute('id','buttons');
+
+		this.buttons.add = document.createElement('button');
 		this.buttons.add.classList.add('button');
 		this.buttons.add.innerHTML = "Add as new row";
 		this.buttons.add.setAttribute('type','submit');
+		addEvent('click',this.buttons.add,{this:this},function(e){ this.addRow();});
+		this.buttons.el.appendChild(this.buttons.add);
+
+		this.buttons.update = document.createElement('button');
 		this.buttons.update.classList.add('button');
 		this.buttons.update.innerHTML = "Update row";
+		addEvent('click',this.buttons.update,{this:this},function(e){ this.updateRow(); });
+		this.buttons.el.appendChild(this.buttons.update);
+
+		this.buttons.remove = document.createElement('button');
 		this.buttons.remove.classList.add('button');
 		this.buttons.remove.innerHTML = "Delete row";
-		this.buttons.save.classList.add('button');
-		this.buttons.save.innerHTML = "Save file";
+		addEvent('click',this.buttons.remove,{this:this},function(e){ this.removeRow(); });
+		this.buttons.el.appendChild(this.buttons.remove);
+
+		this.buttons.clear = document.createElement('button');
 		this.buttons.clear.classList.add('b2-bg');
 		this.buttons.clear.innerHTML = "Clear form";
 		this.buttons.clear.setAttribute('type','reset');
-		this.buttons.reset = document.getElementById('reset');
-		disable(this.buttons.reset);
-	
-		this.buttons.el.appendChild(this.buttons.add);
-		this.buttons.el.appendChild(this.buttons.update);
-		this.buttons.el.appendChild(this.buttons.remove);
-		this.buttons.el.appendChild(this.buttons.save);
+		addEvent('click',this.buttons.save,{this:this},function(e){ this.save(); });
 		this.buttons.el.appendChild(this.buttons.clear);
-		
+
+		this.buttons.save = document.getElementById('btn-save');
+
+		this.preview = document.getElementById('preview');
+		this.preview_orig = this.preview.innerHTML;
+
 		this.toggleButtons();
 
 		p = document.querySelector('#builder > div:last-child');
@@ -139,23 +133,26 @@
 			e.preventDefault();
 			e.stopPropagation();
 		});
-		// Add event to the add button
-		addEvent('click',this.buttons.add,{this:this},function(e){ this.addRow();});
-		// Add event to the update button
-		addEvent('click',this.buttons.update,{this:this},function(e){ this.updateRow(); });
-		// Add event to the remove button
-		addEvent('click',this.buttons.remove,{this:this},function(e){ this.removeRow(); });
-		// Add event to the remove button
-		addEvent('click',this.buttons.save,{this:this},function(e){ this.save(); });
 
 		this.drawTable();
 
 		return this;
 	}
-	Builder.prototype.updateOffset = function(){
-		for(i = 0; i < this.sections.length; i++){
-			this.sections[i].style['scroll-margin-top'] = this.buttons.el.offsetHeight+'px';
+	Builder.prototype.scroll = function(){
+		var ok,i,s;
+		var ok = -1;
+		for(s = 0; s < this.sections.length; s++){
+			if(this.sections[s].offsetTop <= window.scrollY + this.buttons.el.offsetHeight + parseInt(window.getComputedStyle(this.buttons.el).top) + 5) ok = s;
 		}
+		// Remove any previous selection
+		for(i = 0; i < this.menu.length; i++) this.menu[i].classList.remove('selected');
+		// Select this menu item
+		if(ok >= 0) this.menu[ok].classList.add('selected');
+		return this;
+	};
+	Builder.prototype.updateOffset = function(){
+		var y = (this.buttons.el.offsetHeight + parseInt(window.getComputedStyle(this.buttons.el).top));
+		for(var i = 0; i < this.sections.length; i++) this.sections[i].style['scroll-margin-top'] = y+'px';
 		return this;
 	};
 	Builder.prototype.loaded = function(d){
@@ -166,25 +163,32 @@
 		return this;
 	};
 	Builder.prototype.clearTable = function(){
-		document.getElementById('preview').innerHTML = "";
+		console.log('clearTable');
+		this.preview.innerHTML = this.preview_orig;
 		return this;
 	};
 	Builder.prototype.drawTable = function(replace){
+		var i,r,table,row,added;
 		this.rows = [];
 		this.csv = "";
+		added = 0;
 
 		// Which fields do we actually have data for?
 		// First reset the counters
-		for(i = 0; i < this.fields.length; i++) this.fields[i].count = 0;
+		for(i = 0; i < this.fields.length; i++){
+			this.fields[i].count = 0;
+		}
 		// Loop over the data and count each key
 		for(r = 0; r < this.data.data.length; r++){
 			for(key in this.data.data[r]){
-				this.fields[this.lookup[key]].count++;
+				if(this.data.data[r][key]!=""){
+					this.fields[this.lookup[key]].count++;
+				}
 			}
 		}
 
 		// Create a table
-		var table = document.createElement('table');
+		table = document.createElement('table');
 		row = document.createElement('tr');
 
 		for(i = 0; i < this.fields.length; i++){
@@ -214,15 +218,15 @@
 			addEvent('click',row,{this:this,r:r},function(e){ this.loadRow(e.data.r); });
 			this.rows.push(row);
 			table.appendChild(row);
+			if(csvrow) added++;
 		}
-		preview = document.getElementById('preview');
 		// If we are replacing the table we temporarily set the height of the container
-		if(replace) preview.style.height = preview.offsetHeight+'px';
-		preview.innerHTML = "";
-		preview.appendChild(table);
+		if(replace) this.preview.style.height = this.preview.offsetHeight+'px';
+		this.preview.innerHTML = (added > 0 ? "" : this.preview_orig);
+		this.preview.appendChild(table);
 		// If we are replacing the table we unset the height of the container
-		if(replace) preview.style.height = '';
-
+		if(replace) this.preview.style.height = '';
+console.log(added)
 		
 		this.updateOffset();
 
@@ -286,9 +290,9 @@
 		}
 		var row = this.data.data[this.selectedRow];
 		for(i = 0; i < this.fields.length; i++){
-			if(this.fields[i].el.value!="") row[this.fields[i].id] = this.fields[i].el.value;
+			row[this.fields[i].id] = this.fields[i].el.value;
 		}
-		this.data.data[this.selectedRow] = row;
+		this.data.data[this.selectedRow] = clone(row);
 		this.selectedRow = null;
 		this.drawTable(true);
 		this.toggleButtons();
@@ -321,7 +325,6 @@
 
 		evt.stopPropagation();
 		evt.preventDefault();
-		dragOff();
 
 		var files;
 		if(evt.dataTransfer && evt.dataTransfer.files) files = evt.dataTransfer.files; // FileList object.
@@ -337,11 +340,7 @@
 				f = files[i];
 
 				this.file = f.name;
-				// ('+ (f.type || 'n/a')+ ')
 				output.innerHTML += (f.name)+ ' - ' + niceSize(f.size);
-
-				// DEPRECATED as not reliable // Only process csv files.
-				//if(!f.type.match('text/csv')) continue;
 
 				var start = 0;
 				var stop = f.size - 1; //Math.min(100000, f.size - 1);
@@ -364,11 +363,6 @@
 				var blob = f.slice(start,stop+1);
 				reader.readAsText(blob);
 			}
-			//document.getElementById('list').innerHTML = '<p>File loaded:</p><ul>' + output.join('') + '</ul>';
-			document.getElementById('drop_zone').appendChild(output)
-			document.getElementById('drop_zone').classList.add('loaded');
-			document.querySelector('form.chooser input[type=file]').blur();
-			enable(this.buttons.reset);
 			return this;
 		}
 		return this;
@@ -409,7 +403,7 @@
 		return this;
 	}
 	Builder.prototype.reset = function(){
-		document.getElementById('drop_zone').classList.remove('loaded');
+//		document.getElementById('drop_zone').classList.remove('loaded');
 		var det = document.querySelectorAll('.filedetails');
 		for(var i = 0; i < det.length; i++) det[i].parentNode.removeChild(det[i]);
 		this.clearTable();
@@ -419,16 +413,6 @@
 		
 		return this;
 	};
-	function dropOver(evt){
-		evt.stopPropagation();
-		evt.preventDefault();
-		console.log('dropOver',this);
-		this.classList.add('drop');
-	}
-	function dragOff(){
-		el = document.querySelectorAll('.drop');
-		for(i = 0; i < el.length; i++) el[i].classList.remove('drop');
-	}
 	function niceSize(b){
 		if(b > 1e12) return (b/1e12).toFixed(2)+" TB";
 		if(b > 1e9) return (b/1e9).toFixed(2)+" GB";
