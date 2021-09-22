@@ -104,6 +104,10 @@
 		#builder { grid-template-columns: 200px 1fr; }
 	}
 	@media only screen and (max-width: 1080px) {
+		#builder .row { grid-template-columns: 1fr 288px; }
+		#builder input { width: 100%; }
+	}
+	@media only screen and (max-width: 1020px) {
 		#menu { display: none; }
 		#builder { grid-template-columns: 100%; }
 		#builder > div:first-child { display: none; }
