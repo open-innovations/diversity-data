@@ -8,6 +8,7 @@
 	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
 	<style>
 	html { scroll-behavior: smooth; }
+	#top { position: absolute; top: 0; }
 	.alpha { font-size: 0.6em; top: -0.75em; position: relative;}
 
 	.message { position: fixed; bottom: 0; width: 100%; background-color: rgb(248, 248, 248); color: black; text-align: center; font-weight: 500; }
@@ -122,8 +123,9 @@
 	<script src="resources/diversity-builder.js"></script>
 </head>
 <body class="b1-bg">
+	<a id="top"></a>
 	<div id="dashboard">
-		<header class="b1-bg" id="top">
+		<header class="b1-bg">
 			<div class="padded"><h1>Diversity Data Builder<span class="alpha"><!-- START VERSION -->1.0.1<!-- END VERSION --></span></h1></div>
 			<div>
 				<input type="checkbox" id="showmenu" aria-label="Show Navigation Menu" aria-expanded="true" tabindex="0" />
