@@ -67,7 +67,7 @@
 	},{
 		"key":"age",
 		"title": "Age",
-		"description": "This section is about age. It is optional as are each of the columns. A response rate will be calculated using the age_undisclosed value and the total. These were based on an attempt to find common age brackets from the <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>existing employers who had shared data</a>. The <a href='https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest'>ONS use 5-year bands</a> which match with these (mostly) 10 year bands. In under 25s the ONS use 15-17, and 18-24 but none of the existing employers report under 16s.",
+		"description": "This section is about age. It is optional as are each of the columns. These were based on an attempt to find common age brackets from the <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>existing employers who had shared data</a>. The <a href='https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest'>ONS use 5-year bands</a> which match with these (mostly) 10 year bands. In under 25s the ONS use 15-17, and 18-24 but none of the existing employers report under 16s.",
 		"properties": [{
 			"key": "0-14",
 			"title": "0-14",
@@ -141,7 +141,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people this category applies to. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people this category applies to. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -149,7 +149,7 @@
 	},{
 		"key":"carer",
 		"title": "Carers",
-		"description": "This section is about those who are carers for others. It is optional as are each of the columns. A response rate will be calculated using the carers_undisclosed value and the total. These options are based on question 14 of the 2011 Census (which is a super-set of <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf'>question 24 of the 2021 Census</a>).",
+		"description": "This section is about those who are carers for others. It is optional as are each of the columns. These options are based on question 14 of the 2011 Census (which is a super-set of <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/englishindividual.pdf'>question 24 of the 2021 Census</a>).",
 		"properties": [{
 			"key": "yes",
 			"title": "Carers",
@@ -203,7 +203,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -211,7 +211,7 @@
 	},{
 		"key":"disability",
 		"title": "Disability",
-		"description": "This section is about disability. It is optional as are each of the columns. A response rate will be calculated using the disability_undisclosed value and the total. These mostly come from <a href='https://www.yorkshirewater.com/media/2770/40906_yw_workplace-diversity_report_web-1.pdf'>the categories that Yorkshire Water currently publish</a> which are <a href='https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/disability/articles/measuringdisabilitycomparingapproaches/2019-08-06#the-equality-act-disability-definition-eadd'>aligned with the Equality Act disability definition answers to Q1 and Q3</a> of the <a href='https://www.ons.gov.uk/aboutus/whatwedo/paidservices/opinions/opinionsandlifestylesurveymethodology'>ONS's Opinion and Lifestyle Survey</a> (OPD). <a href='https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/'>GSS guidance</a>.",
+		"description": "This section is about disability. It is optional as are each of the columns. These mostly come from <a href='https://www.yorkshirewater.com/media/2770/40906_yw_workplace-diversity_report_web-1.pdf'>the categories that Yorkshire Water currently publish</a> which are <a href='https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/disability/articles/measuringdisabilitycomparingapproaches/2019-08-06#the-equality-act-disability-definition-eadd'>aligned with the Equality Act disability definition answers to Q1 and Q3</a> of the <a href='https://www.ons.gov.uk/aboutus/whatwedo/paidservices/opinions/opinionsandlifestylesurveymethodology'>ONS's Opinion and Lifestyle Survey</a> (OPD). <a href='https://gss.civilservice.gov.uk/policy-store/measuring-disability-for-the-equality-act-2010/'>GSS guidance</a>.",
 		"properties": [{
 			"key": "yes",
 			"title": "Has a disability",
@@ -258,7 +258,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -266,7 +266,7 @@
 	},{
 		"key":"ethnicity",
 		"title": "Ethnicity",
-		"description": "This section is about ethnicity. It is optional as are each of the columns. A response rate will be calculated using the ethnicity_undisclosed value and the total. These come from <a href='https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups'>ONS Census categories</a> so are very UK-centric.",
+		"description": "This section is about ethnicity. It is optional as are each of the columns. These come from <a href='https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups'>ONS Census categories</a> so are very UK-centric.",
 		"properties": [{
 			"key": "asian",
 			"title": "Asian or Asian British",
@@ -450,7 +450,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -458,7 +458,7 @@
 	},{
 		"key":"gender",
 		"title": "Gender",
-		"description": "This section is about sex and gender identity. It is optional as are each of the columns. A response rate will be calculated using the gender_undisclosed value and the gender_total. These are based on what <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>some existing employers currently report</a>.",
+		"description": "This section is about sex and gender identity. It is optional as are each of the columns. These are based on what <a href='https://docs.google.com/document/d/14JCjn02ifOOXInYPCLUjk6SOYUBkTokV52bkOq1gCqU/edit'>some existing employers currently report</a>.",
 		"properties": [{
 			"key": "female",
 			"title": "Female",
@@ -497,7 +497,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -536,7 +536,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -544,7 +544,7 @@
 	},{
 		"key":"religion",
 		"title": "Religion",
-		"description": "This section is about religion. It is optional as are each of the columns. A response rate will be calculated using the religion_undisclosed value and the total. These are based on the categories used by the ONS in the <a href='https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires'>2021 Census</a>. The sum of individual responses may add up to more than the total number of people.",
+		"description": "This section is about religion. It is optional as are each of the columns. These are based on the categories used by the ONS in the <a href='https://www.ons.gov.uk/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires'>2021 Census</a>. The sum of individual responses may add up to more than the total number of people.",
 		"properties": [{
 			"key": "buddhist",
 			"title": "Buddhist",
@@ -618,7 +618,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -626,7 +626,7 @@
 	},{
 		"key":"sexuality",
 		"title": "Sexuality",
-		"description": "This section is about sexuality. It is optional as are each of the columns. A response rate will be calculated using the sexuality_undisclosed value and the total. These are based on <a href='https://gss.civilservice.gov.uk/policy-store/sexual-orientation/'>guidance from the Government Statistical Service</a> (17 April 2019) and similar to the <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/householdenglandpdf.pdf'>2021 Census</a> but using <a href='https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation'>language from the Australian Bureau of Statistics</a> (GSS are drawing on ABS’s approach soon).",
+		"description": "This section is about sexuality. It is optional as are each of the columns. These are based on <a href='https://gss.civilservice.gov.uk/policy-store/sexual-orientation/'>guidance from the Government Statistical Service</a> (17 April 2019) and similar to the <a href='https://www.ons.gov.uk/file?uri=/census/censustransformationprogramme/questiondevelopment/census2021paperquestionnaires/householdenglandpdf.pdf'>2021 Census</a> but using <a href='https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation'>language from the Australian Bureau of Statistics</a> (GSS are drawing on ABS’s approach soon).",
 		"properties": [{
 			"key": "bisexual",
 			"title": "Bisexual",
@@ -672,7 +672,7 @@
 		},{
 			"key": "total",
 			"title": "Total",
-			"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "546"
@@ -723,7 +723,7 @@
 			},{
 				"key": "total",
 				"title": "Total",
-				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "546"
@@ -776,7 +776,7 @@
 			},{
 				"key": "total",
 				"title": "Total",
-				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "546"
@@ -822,7 +822,7 @@
 			},{
 				"key": "total",
 				"title": "Total",
-				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "546"
@@ -869,7 +869,7 @@
 			},{
 				"key": "total",
 				"title": "Total",
-				"description": "The total number of people. If not provided it will be assumed to be the same as employees. If it is the same as employees it can be omitted.",
+				"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "546"
