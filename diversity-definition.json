@@ -505,6 +505,7 @@
 	},{
 		"key":"trans",
 		"title": "Gender identity",
+		"description": "This section is about gender identity. It is optional as are each of the columns.",
 		"properties": [{
 			"key": "no",
 			"title": "Matches that assigned at birth",
