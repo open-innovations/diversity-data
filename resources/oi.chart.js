@@ -1,6 +1,6 @@
 (function(root){
 
-	if(!root.ODI) root.ODI = {};
+	if(!root.OI) root.OI = {};
 
 	var G = {};
 	if(typeof Object.extend === 'undefined'){
@@ -392,6 +392,6 @@
 		return {'min':t_min,'max':t_max,'inc':t_inc,'range':t_max-t_min};
 	};
 	
-	ODI.chart = Chart;
+	OI.chart = Chart;
 
 })(window || this);

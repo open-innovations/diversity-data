@@ -1,10 +1,10 @@
 /*
 	Create very simple horizontal bar charts using SVG
-	(c) Stuart Lowe, ODI Leeds 2020
+	(c) Stuart Lowe, Open Innovations (formerly ODI Leeds) 2020
 */
 (function(root){
 
-	if(!root.ODI) root.ODI = {};
+	if(!root.OI) root.OI = {};
 
 	var svgcounter = 0;
 
@@ -558,7 +558,7 @@ console.log(el,attr);
 		return this;
 	}
 
-	root.ODI.barchart = function(el,attr){
+	root.OI.barchart = function(el,attr){
 		console.log(el,attr)
 		if(el) return new SVGBarChart(el,attr);
 	}

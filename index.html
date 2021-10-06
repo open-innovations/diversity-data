@@ -34,41 +34,5 @@
 			</div>
 		</footer>
 	</div>
-	<div id="add" class="dialog dialog-hidden" role="dialog" aria-labelledby="addTitle">
-		<fieldset class="inner">
-			<legend><h3 id="addTitle">Add an organisation</h3></legend>
-			<div class="option-block">
-				<label for="org">Name</label><select id="org"><option value="">Select organisation</option></select>
-				<label for="div">Grouping</label><select id="grp"><option value="">Select grouping</option></select>
-				<label for="lvl">Level</label><select id="lvl"><option value="">Select level</option></select>
-				<label for="dat">Date</label><select id="dat"><option value="">Select date</option></select>
-			</div>
-		</fieldset>
-		<input type="submit" class="grey" aria-label="Add the organisation to the dashboard" value="Add organisation" />
-	</div>
-
-	<script>
-	var dash;
-	ODI.ready(function(){
-		dash = ODI.diversityDashboard({
-			'index':'leeds.csv',
-			'comparison': {
-				'max': 3,
-				'nav':document.querySelector('nav'),
-				'main':document.getElementById('dashboard'),
-				'el':document.getElementById('comparators'),
-				'geography': document.getElementById('area'),
-				'geography-error':document.getElementById('area-error'),
-				'add': document.getElementById('add-comparison'),
-				'org': document.getElementById('org'),
-				'grouping': document.getElementById('grp'),
-				'level': document.getElementById('lvl'),
-				'date': document.getElementById('dat'),
-				'dialog': document.getElementById('add')
-			}
-		});
-		
-	});
-	</script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 (function(root){
 
-	var ODI = root.ODI || {};
-	if(!ODI.ready){
-		ODI.ready = function(fn){
+	var OI = root.OI || {};
+	if(!OI.ready){
+		OI.ready = function(fn){
 			// Version 1.1
 			if(document.readyState != 'loading') fn();
 			else document.addEventListener('DOMContentLoaded', fn);
@@ -39,7 +39,7 @@
 		req.send();
 		return this;
 	}
-	if(!ODI.ajax) ODI.ajax = AJAX;
+	if(!OI.ajax) OI.ajax = AJAX;
 
 	/**
 	 * CSVToArray parses any String of Data including '\r' '\n' characters,
@@ -165,7 +165,7 @@
 						end.insertAdjacentElement('afterend',o);
 						end = o;
 						
-						if(panels[id].chart) this.chart = new ODI.chart(this.panels[id].el,panels[id].chart);
+						if(panels[id].chart) this.chart = new OI.chart(this.panels[id].el,panels[id].chart);
 						
 						i++;
 					}
@@ -348,7 +348,7 @@
 			}
 			return this;
 		};
-		this.title = "ODI Leeds Diversity Dashboard";
+		this.title = "Open Innovations Diversity Dashboard";
 		this.version = "1.2";
 		this.log('INFO','version '+this.version,attr);
 		this.selected = {'org':''};
@@ -506,7 +506,7 @@
 			this.setStateFromHREF();
 
 			// Load the index file
-			ODI.ajax(attr.index,{
+			OI.ajax(attr.index,{
 				"this": this,
 				"dataType": "text",
 				"success": function(d){
@@ -526,7 +526,7 @@
 					for(u in urls){
 						if(urls[u]){
 							this.data[u] = {};
-							ODI.ajax(u,{
+							OI.ajax(u,{
 								"this": this,
 								"dataType": "text",
 								"url": u,
@@ -807,7 +807,7 @@
 				this.cache[geocode] = {'loaded':false};
 
 				// Load the data from a file
-				ODI.ajax('data/'+geocode+'.json',{
+				OI.ajax('data/'+geocode+'.json',{
 					"this": this,
 					"geocode": geocode,
 					"callback": cb,
@@ -1271,8 +1271,8 @@
 	}
 	
 	//var dash = new Dashboard();
-	ODI.diversityDashboard = Dashboard;
+	OI.diversityDashboard = Dashboard;
 
-	root.ODI = ODI;
+	root.OI = OI;
 	
 })(window || this);

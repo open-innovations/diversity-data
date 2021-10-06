@@ -1,8 +1,8 @@
 (function(root){
 
-	var ODI = root.ODI || {};
-	if(!ODI.ready){
-		ODI.ready = function(fn){
+	var OI = root.OI || {};
+	if(!OI.ready){
+		OI.ready = function(fn){
 			// Version 1.1
 			if(document.readyState != 'loading') fn();
 			else document.addEventListener('DOMContentLoaded', fn);
@@ -508,10 +508,10 @@
 		}
 	}
 
-	ODI.ready(function(){
+	OI.ready(function(){
 		root.builder = new Builder(document.getElementById('builder'));
 	});
 
-	root.ODI = ODI;
+	root.OI = OI;
 	
 })(window || this);
