@@ -223,6 +223,9 @@ footer a,footer a:visited { color: inherit; }
 
 .error { padding: 1em; color: #D8000C; background-color: #FFD2D2; margin-bottom: 1em; }
 
+.headless .not-headless { display: none; }
+.non-interactive .interactive { display: none; }
+
 @media only screen and (max-width: 1080px) {
 	.grid.links { grid-template-columns: repeat(4, auto); }
 }

@@ -14,14 +14,14 @@
 </head>
 <body class="b1-bg">
 	<div id="dashboard">
-		<header class="padded b1-bg">
+		<header class="padded b1-bg not-headless">
 			<h1>Leeds Diversity Dashboard<span class="alpha">alpha</span></h1>
 		</header>
 		<div class="main doublepadded">
 			<section>
 				<noscript class="error">Without Javascript enabled the dashboard cannot currently function. Sorry.</noscript>
-				<p id="organisations">There are <span class="number">0</span> organisation(s) currently included in the dashboard. You can compare them - and groupings and/or levels within them where those are provided - against a reference area below. Data last updated on <span class="lastupdated">?</span>.</p>
-				<form id="comparators" class="comparators">
+				<p id="organisations"><span class="interactive">There are <span class="number">0</span> organisation(s) currently included in the dashboard. You can compare them - and groupings and/or levels within them where those are provided - against a reference area below.</span> Data last updated on <span class="lastupdated">?</span>.</p>
+				<form id="comparators" class="comparators interactive">
 					<div class="comparator series-0">
 						<div class="inner">
 							<h3><label for="area">Reference area</label></h3>
@@ -117,7 +117,7 @@
 
 		</div>
 		
-		<footer class="b1-bg">
+		<footer class="b1-bg not-headless">
 			<div class="doublepadded">
 				<section id="sources">
 					
@@ -139,7 +139,7 @@
 			</div>
 		</footer>
 	</div>
-	<div id="add" class="dialog dialog-hidden" role="dialog" aria-labelledby="addTitle">
+	<div id="add" class="dialog dialog-hidden not-headless" role="dialog" aria-labelledby="addTitle">
 		<fieldset class="inner">
 			<legend><h3 id="addTitle">Add an organisation</h3></legend>
 			<div class="option-block">

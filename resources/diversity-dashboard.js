@@ -228,6 +228,13 @@
 					console.error('Not a valid string '+e);
 					return;
 				}
+			}else{
+				for(i = 0; i < tabs.length; i++){
+					if(tabs[i]==e.target){
+						sel = i;
+						tabFocus = i;
+					}
+				}
 			}
 			t = e.target;
 			p = t.parentNode;
@@ -238,7 +245,7 @@
 
 			// Remove all current selected tabs
 			ps = p.querySelectorAll('[aria-selected="true"]');
-			for(i = 0; i < ps.length; i++) ps[i].setAttribute("aria-selected", false);
+			for(i = 0; i < ps.length; i++) ps[i].removeAttribute("aria-selected");
 
 			tabid = t.getAttribute('aria-controls');
 
@@ -295,28 +302,25 @@
 		}else{
 			q = h;
 		}
-		rtn = {'anchor':a,'compare':{}};
-		if(q.indexOf('&') >= 0){
-			bits = q.split(/\&/);
-			
-			for(b = 0; b < bits.length; b++){
-				bits[b] = bits[b].split(/=/);
-				if(bits[b][0]=="area"){
-					rtn.compare[0] = {'area':bits[b][1]};
+		rtn = {'compare':{}};
+		if(a) rtn['anchor'] = a;
+		if(q.indexOf('&') >= 0) bits = q.split(/\&/);
+		else bits = [q];
+
+		for(b = 0; b < bits.length; b++){
+			bits[b] = bits[b].split(/=/);
+			if(bits[b][0]=="area"){
+				rtn.compare[0] = {'area':bits[b][1]};
+			}else{
+				i = bits[b][0].replace(/[\D]/g,"");
+				key = bits[b][0].replace(/[0-9]/g,"");
+				if(key=="org" || key=="grp" || key=="lvl" || key=="date"){
+					if(!rtn.compare[i]) rtn.compare[i] = {};
+					rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
 				}else{
-					i = bits[b][0].replace(/[\D]/g,"");
-					key = bits[b][0].replace(/[0-9]/g,"");
-					if(key=="org" || key=="grp" || key=="lvl" || key=="date"){
-						if(!rtn.compare[i]) rtn.compare[i] = {};
-						rtn.compare[i][key] = decodeURIComponent(bits[b][1]);
-					}else{
-						rtn[key] = decodeURIComponent(bits[b][1]);
-					}
+					rtn[key] = decodeURIComponent(bits[b][1]);
 				}
 			}
-		}else{
-			bits = q.split(/=/);
-			if(bits[0]=="area") rtn.compare[0] = {'area':bits[1]};
 		}
 		return rtn;
 	}
@@ -349,7 +353,7 @@
 			return this;
 		};
 		this.title = "Open Innovations Diversity Dashboard";
-		this.version = "1.2";
+		this.version = "1.3";
 		this.log('INFO','version '+this.version,attr);
 		this.selected = {'org':''};
 		this.cache = {};
@@ -604,6 +608,8 @@
 				}
 			}
 			if(qs.debug) str += (str ? '&':'')+'debug=true';
+			if(qs.headless) str += (str ? '&':'')+'headless=true';
+			if(qs.static) str += (str ? '&':'')+'static=true';
 			if(this.nav.selectedID) str += '#'+this.nav.selectedID;
 			return (str ? '?':'')+str;
 		};
@@ -633,6 +639,12 @@
 				// Loop over comparisons and add them
 				for(i = 1; i < n; i++) this.addComparison(qs.compare[i]);
 			}
+			
+			if(qs.headless) document.body.classList.add('headless');
+			else document.body.classList.remove('headless');
+
+			if(qs.static) document.body.classList.add('non-interactive');
+			else document.body.classList.remove('non-interactive');
 
 			return this;
 		};
@@ -849,7 +861,7 @@
 
 				// Check if the values are possible
 				if(!this.orgs[org] || !this.orgs[org][grp] || !this.orgs[org][grp][lvl] || !this.orgs[org][grp][lvl][date]){
-					this.log('ERROR','The organisation/grouping/level/date does not seem to exist in the data.',org,grp,lvl,date);
+					this.log('WARNING','The organisation/grouping/level/date does not seem to exist in the data.',org,grp,lvl,date);
 					return this;
 				}
 
@@ -950,7 +962,7 @@
 				d2 = JSON.parse(JSON.stringify(this.format));
 
 				total = 0;
-				if(!d[r].employees) this.log('ERROR','No employee total given');
+				if(!d[r].employees) this.log('WARNING','No employee total given for '+d[r].published+' '+d[r].organisation+' '+(d[r].organisation_grouping ? '('+d[r].organisation_grouping+')':''));
 				else total = d[r].employees;
 
 				for(p in d[r]){
