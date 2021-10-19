@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8" />
+	<title>Publish your diversity data</title>
+	<link rel="StyleSheet" href="resources/fonts/open-sans/open-sans.css" type="text/css" />
+	<link rel="StyleSheet" href="resources/style.css" type="text/css" />
+	<link rel="icon" href="resources/favicon.svg" />
+	<style>
+	
+	.WARNING { color: #9F6000; background-color: #FEEFB3; }
+	ul { list-style: disc; margin-left: 1.5em; margin-bottom: 1em; }
+	#top { position: absolute; top: 0; }
+	header { position: fixed; top: 0; z-index: 1000; width: 100%; display: grid; grid-template-columns: 1fr auto; }
+	header h1 { font-size: 1.25em; }
+	header + * { margin-top: calc(3.5em + 8px); }
+	header > div { position: relative; }
+	header nav { position: absolute; z-index: 1000; top: 3.5em; right: 0px; display: none; }
+	header .menu { padding: 0.5em 0.75em; background: inherit; color: inherit; font-weight:bold; }
+	.heading h2 { margin-bottom: 1em!important; }
+	.doublepadded *:last-child { margin-bottom: 0; }
+	#page {
+		display: grid;
+		grid-template-columns: 260px 1fr;
+		grid-gap: 2em;
+	}
+	#menu a.selected { border: 0; border-right: 8px solid #1DD3A7; }
+	#menu a:hover, #builder #menu a:focus { outline: 4px solid #00B6FF; }
+	#page { margin-top: 1em; }
+	#page section { margin-bottom: 2em; position: relative; }
+	#page section .totop { margin-bottom: 0; text-align: right;}
+	code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.25em; }
+
+	#menu { position: sticky; top: calc(3.5em + 8px); width: 100%; }
+	#menu ul { list-style: none; margin-left: 0; }
+	#menu li a { display: block; padding: 0.5em; text-decoration: none; color: inherit; font-weight: 600; }
+	@media only screen and (max-width: 1200px) {
+		.twocol { grid-template-columns: 200px 1fr; }
+	}
+	@media only screen and (max-width: 1020px) {
+		.twocol { grid-template-columns: 100%; }
+		.twocol > div:first-child { display: none; }
+	}
+	@media only screen and (max-width: 800px) {
+		.doublepadded { padding: 1em; }
+	}
+	</style>
+	<script src="resources/diversity-publish.js"></script>
+</head>
+<body class="b1-bg">
+	<a id="top"></a>
+	<div id="dashboard">
+		<header class="b1-bg">
+			<div class="padded"><h1>Publish your diversity data</h1></div>
+		</header>
+		<div class="main doublepadded">
+			<p><strong>Updated: 19 October 2021</strong></p>
+
+			<div id="page" class="twocol">
+				<div>
+					<nav id="menu">
+						<ul>
+						<li><a href="#intro" class="grey">Introduction</a></li>
+						<li><a href="#step-1" class="grey">Step 1: Create your CSV</a></li>
+						<li><a href="#step-2" class="grey">Step 2: Publish your file</a></li>
+						<li><a href="#step-3" class="grey">Step 3: Update the register</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div>
+					<section id="intro">
+						<div class="heading">
+							<h2>Introduction</h2>
+						</div>
+						<p>This guidance will help organisations ensure their diversity data is:</p>
+			
+						<ul>
+							<li>published in the <a href="builder.html">agreed format</a> and contain the required data</li>
+							<li>kept up to date</li>
+							<li>easily found online</li>
+						</ul>
+						<div class="padded grey">
+							<p>Please share any feedback on this guidance by emailing <a href="mailto:diversity-data@open-innovations.org?subject=Feedback on guidance">diversity-data@open-innovations.org</a>.</p>
+						</div>
+					</section>
+					<section id="step-1">
+						<div class="heading">
+							<h2>Step 1: Create your CSV</h2>
+						</div>
+						<p>To complete step 1 you will need the summary information for your organisation's diversity figures as counts of staff rather than percentages.</p>
+						
+						<p>Once you have the data you will need to create a CSV file. You can either use spreadsheet software such as Microsoft Excel, Google Sheets or Apple Numbers and save as a CSV file or you can use our <a href="builder.html">diversity data builder tool</a> to help you create a CSV file. Our builder tool will lead you through the process. Simply fill in the values that you can and then save the resulting table to your computer. The builder tool will also let you load existing diversity data CSV files and modify rows.</p>
+
+						<p class="WARNING padded">Warning: if you choose to create or amend your data using Microsoft Excel then make sure to set the format for the <code>published</code> column to ISO8601 (e.g. 'YYYY-MM-DD') otherwise there is a good chance that it will be saved in Excel's internal date format instead. When you have finished editing and need to save, simply select ‘save as .csv file’. Find out more about <a href="https://w3c.github.io/csvw/primer/">creating a CSV file</a>.</p>
+
+						<p>The CSV file must include:</p>
+						<ul>
+							<li>a header row which must be the first row in the spreadsheet, with column headings exactly matching those in the specification (headers are case sensitive with no spacing)</li>
+							<li>1 row for each date/organisation/group/level combination of data</li>
+						</ul>
+						<p>The file does not need to contain all the possible columns of data - only include the columns you have. We have deliberately made most values optional as we appreciate that different organisations will find some data easier to collate than others.</p>
+
+					</section>
+					<section id="step-2">
+						<div class="heading">
+							<h2>Step 2: Publish your file</h2>
+						</div>
+						<p>To complete step 2 you must be able to add a file to a publicly accessible website.</p>
+						
+						<p>You can publish the file to your own website if you wish. You may need to contact whoever updates your organisation's website to ask them how to do this. You will need to make sure that the URL (web address) of the CSV file is a persistent URL (a web address that will not change over time). For example, Open Innovations might use the following persistent URL (this is an example, not live data):</p>
+						
+						<p>https://open-innovations.org/projects/diversity/data/latest.csv</p>
+						
+						<p>If you don't have easy access to publishing files on your own website, you can publish the file to <a href="https://datamillnorth.org/">Data Mill North</a> - a data portal for the north of England maintained by Leeds City Council. Firstly you will need to make sure your organisation is <a href="https://datamillnorth.org/publisher">a publisher on Data Mill North</a>. If it isn't you can contact us to see about setting up your organisation. If your organisation is already a publisher but you don't have any login details you can also contact us to set up a login account. If you are set up as a publisher and have login details you are ready to publish. Once you are logged in there will be a user menu at the top right. In this menu select "Create a Dataset". This will present a form to create an entry for your data. Once you have filled in the metadata you can click "Create Dataset". You will then be able to add your CSV file to the dataset.</p>
+
+						<p>Whether you publish on your own website or to Data Mill North, if you update the file the URL should not change. However, if it ever does change, you must tell us.</p>
+
+						<p>To make your data reuseable you should make sure you publish your data under an Open licence. If you are publishing to Data Mill North make sure to select an open licence such as ODbL or Creative Commons Attribution in the dataset metadata. This will allow us to include the data in the <a href="leeds-city-region/index.html">interactive dashboard</a> and allow others to create other visualisations.</p>
+					</section>
+					<section id="step-3">
+						<div class="heading">
+							<h2>Step 3: Update the register</h2>
+						</div>
+						<p>Open Innovations maintain the <a href="https://github.com/open-innovations/diversity-data/blob/main/leeds-city-region/leeds.csv">Leeds City Region register of diversity data</a> using the data you and other organisations publish. This register is used to power the <a href="leeds-city-region/index.html">Leeds City Region diversity dashboard</a>.</p>
+						<p>The first time you create and publish your CSV file you must tell us where this is published (the persistent URL created in step 2). You must also tell us if this URL ever changes.</p>
+						<p>You can either email the persistent URL for the CSV file to <a href="mailto:diversity-data@open-innovations.org?subject=Add a URL">diversity-data@open-innovations.org</a> and we will add it to the register for you or you can <a href="https://github.com/open-innovations/diversity-data/edit/main/leeds-city-region/leeds.csv">edit the register on Github</a> and create a pull request.</p>
+					</section>
+				</div>
+			</div>
+
+			<!-- END GENERATED CODE -->
+			</form>
+		</div>
+		<div id="message" class="message"></div>
+		
+		<footer class="b1-bg">
+			<div class="doublepadded">
+				<section id="sources">
+					<p>&copy Open Innovations 2021</p>
+				</section>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

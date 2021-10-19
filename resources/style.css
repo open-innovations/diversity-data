@@ -87,12 +87,12 @@ a.button:hover, button:hover, button:focus, a.button:focus { background-color: #
 
 
 
-
+html { scroll-behavior: smooth; }
 body { font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif; }
 body > * { background: white; color: #222; }
 .alpha { margin-left: 0.25em; padding: 0.1em 0.2em; background: #1DD3A7; color: black; }
-#dashboard > header { border-bottom: 8px solid #1DD3A7; }
-#dashboard > header h1 { margin-bottom: 0; line-height: 1em; }
+#dashboard > header { border-bottom: 8px solid #1DD3A7; height: 4em; }
+#dashboard > header h1 { margin-bottom: 0; line-height: 1em; font-size: 1.25em; }
 .datestamp { float: right; }
 .main section h2 { margin-top: 0; }
 table td, table th { border:1px solid #444; border-collapse: collapse; padding: 0.25em 0.5em; }
