@@ -16,9 +16,6 @@
 		// Highlight the current section in the menu
 		addEvent('scroll',[window],{this:this},function(e){ this.scroll(); });
 
-		var y = parseInt(window.getComputedStyle(document.querySelector('header')).height);
-		for(var i = 0; i < this.sections.length; i++) this.sections[i].style['scroll-margin-top'] = y+'px';
-
 		return this;
 	}
 	Page.prototype.scroll = function(){
