@@ -354,6 +354,7 @@
 		};
 		this.title = "Open Innovations Diversity Dashboard";
 		this.version = "1.3";
+		this.maxcomparisons = 3;
 		this.log('INFO','version '+this.version,attr);
 		this.selected = {'org':''};
 		this.cache = {};
@@ -890,7 +891,7 @@
 						e.preventDefault();
 						_obj.removeComparison(parseInt(e.target.closest('.comparator').getAttribute('data')));
 					});
-					if(n >= (this.attr.comparison.max||3)){
+					if(n >= (this.attr.comparison.max||this.maxcomparisons)){
 						// Hide adding form
 						this.attr.comparison.el.querySelector('.add').style.display = "none";
 					}
@@ -937,7 +938,7 @@
 			this.compare.splice(n,1);
 
 			// Show adding form
-			if(len <= (attr.comparison.max||3)) attr.comparison.el.querySelector('.add').style.display = "";
+			if(len <= (attr.comparison.max||this.maxcomparisons)) attr.comparison.el.querySelector('.add').style.display = "";
 			
 			this.update();
 			

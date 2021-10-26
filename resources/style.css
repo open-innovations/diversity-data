@@ -155,6 +155,7 @@ article article p { margin-top: 1em; }
 .series-2, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-2 { background-color: #67E767; }
 .series-3, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-3 { background-color: #EF3AAB; }
 .series-4, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-4 { background-color: #FF6700; }
+.series-5, .barchart .barchart-data .barchart-cluster-inner .barchart-series-inner.series-5 { background-color: #722EA5; }
 .barchart-series-inner.prefernottosay { background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.5) 4px, rgba(255,255,255,.5) 8px)!important; }
 
 .key li { line-height: 1.5em; display: inline-block; margin-right: 1em; margin-bottom: 0.25em; }
