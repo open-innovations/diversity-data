@@ -40,6 +40,8 @@
 	header nav .fileselect { display: none; }
 	header nav ul input { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.01; }
 
+	#errors h3 { margin-top: 0; font-weight: bold; margin-bottom: 0.25em; }
+	#errors ul { list-style: disc; margin-left: 1em; }
 	#errors code { font-family: monospace; font-weight: bold; line-height: 1em; }
 	
 	button.button { background: #1DD3A7; color: black; }
@@ -130,7 +132,6 @@
 	<div id="dashboard">
 		<header class="b1-bg">
 			<div class="padded"><h1>Diversity Data Builder<span class="alpha"><!-- START VERSION -->1.0.1<!-- END VERSION --></span></h1></div>
-			<div><button id="error-count" class="padded"></button></div>
 			<div>
 				<input type="checkbox" id="showmenu" aria-label="Show Navigation Menu" aria-expanded="true" tabindex="0" />
 				<label for="showmenu">&#9776;</label>

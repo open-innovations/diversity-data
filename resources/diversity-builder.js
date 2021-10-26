@@ -103,23 +103,6 @@
 			e.stopPropagation();
 		});
 
-		addEvent('click',document.getElementById('error-count'),{this:this},function(e){
-			var html = '';
-			for(i = 0; i < this.validation.length; i++) html += '<li>'+this.validation[i].message+'</li>';
-			if(html) html = '<ul>'+html+'</ul>';
-			var header = document.querySelector('header');
-			var error = document.getElementById('errors');
-			if(!error){
-				error = document.createElement('div');
-				error.id = 'errors';
-				error.classList.add('ERROR','doublepadded');
-				header.insertAdjacentElement('afterend', error);
-				error.innerHTML = html;
-			}else{
-				error.parentNode.removeChild(error);
-			}			
-		});
-
 		this.drawTable();
 
 		return this;
@@ -233,14 +216,22 @@
 	};
 	Builder.prototype.validate = function(){
 		var err = this.validation.length;
-		var el = document.getElementById('error-count');
-		el.innerHTML = (err > 0 ? err+' error'+(err==1 ? '':'s') : '');
-		if(err > 0){
-			el.classList.add('ERROR');
-			el.style.display = 'block';
-		}else{
-			el.classList.remove('ERROR');
-			el.style.display = 'none';
+		var html = '';
+		for(i = 0; i < err; i++){
+			html += '<li>'+this.validation[i].message+'</li>';
+			console.error(this.validation[i].message);
+		}
+		if(html) html = '<h3>'+(err > 0 ? err+' error'+(err==1 ? '':'s') : '')+':</h3><ul>'+html+'</ul>';
+		var error = document.getElementById('errors');
+		if(!error){
+			error = document.createElement('div');
+			error.id = 'errors';
+			error.classList.add('ERROR','padded');
+			document.getElementById('preview').insertAdjacentElement('afterend', error);
+		}
+		if(error){
+			error.style.display = (err == 0) ? 'none':'';
+			error.innerHTML = html;
 		}
 		return this;
 	};
