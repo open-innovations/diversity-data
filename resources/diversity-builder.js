@@ -132,9 +132,9 @@
 		for(var i = 0; i < this.sections.length; i++) this.sections[i].style['scroll-margin-top'] = y+'px';
 		return this;
 	};
-	Builder.prototype.loaded = function(d){
+	Builder.prototype.setContent = function(d){
 		var r,c,table;
-		this.data = CSVToArray(d);
+		this.data = (d ? CSVToArray(d) : {'rows':[],'data':[]});
 		this.drawTable();
 
 		return this;
@@ -227,7 +227,25 @@
 		
 		this.updateOffset();
 		
-		this.validate();
+		// Validate
+		var err = this.validation.length;
+		var html = '';
+		for(i = 0; i < err; i++){
+			html += '<li>'+this.validation[i].message+'</li>';
+			console.error(this.validation[i].message);
+		}
+		if(html) html = '<h3>'+(err > 0 ? err+' error'+(err==1 ? '':'s') : '')+':</h3><ul>'+html+'</ul>';
+		var error = document.getElementById('errors');
+		if(!error){
+			error = document.createElement('div');
+			error.id = 'errors';
+			error.classList.add('ERROR','padded');
+			document.getElementById('preview').insertAdjacentElement('afterend', error);
+		}
+		if(error){
+			error.style.display = (err == 0) ? 'none':'';
+			error.innerHTML = html;
+		}
 		
 		return this;
 	};
@@ -255,7 +273,7 @@
 		var el = document.getElementById('loadURL-errors');
 		fetch(url,{cache: "no-cache"}).then(response => { return response.text(); }).then(text => {
 			this.loadURLCancel();
-			this.loaded(text);
+			this.setContent(text);
 			window.scrollTo(0, 0);
 			el.innerHTML = '';
 			el.classList.remove('ERROR','padded');
@@ -265,27 +283,6 @@
 			el.classList.add('ERROR','padded');
 			console.error('Error:', error);
 		});
-		return this;
-	};
-	Builder.prototype.validate = function(){
-		var err = this.validation.length;
-		var html = '';
-		for(i = 0; i < err; i++){
-			html += '<li>'+this.validation[i].message+'</li>';
-			console.error(this.validation[i].message);
-		}
-		if(html) html = '<h3>'+(err > 0 ? err+' error'+(err==1 ? '':'s') : '')+':</h3><ul>'+html+'</ul>';
-		var error = document.getElementById('errors');
-		if(!error){
-			error = document.createElement('div');
-			error.id = 'errors';
-			error.classList.add('ERROR','padded');
-			document.getElementById('preview').insertAdjacentElement('afterend', error);
-		}
-		if(error){
-			error.style.display = (err == 0) ? 'none':'';
-			error.innerHTML = html;
-		}
 		return this;
 	};
 	Builder.prototype.clearForm = function(){
@@ -443,7 +440,7 @@
 							var l = evt.target.result.regexLastIndexOf(/[\n\r]/);
 							result = (l > 0) ? evt.target.result.slice(0,l) : evt.target.result;
 						}else result = evt.target.result;
-						_obj.loaded(result);
+						_obj.setContent(result);
 					}
 				};
 				
@@ -494,7 +491,6 @@
 		return this;
 	}
 	Builder.prototype.reset = function(){
-//		document.getElementById('drop_zone').classList.remove('loaded');
 		var det = document.querySelectorAll('.filedetails');
 		for(var i = 0; i < det.length; i++) det[i].parentNode.removeChild(det[i]);
 		this.clearTable();
