@@ -136,7 +136,6 @@
 		var r,c,table;
 		this.data = (d ? CSVToArray(d) : {'rows':[],'data':[]});
 		this.drawTable();
-
 		return this;
 	};
 	Builder.prototype.clearTable = function(){
