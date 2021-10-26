@@ -48,7 +48,7 @@
 			typ = inps[i].getAttribute('type');
 			min = inps[i].getAttribute('min');
 			max = inps[i].getAttribute('max');
-			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i]});
+			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i],'required':(inps[i].getAttribute('required')=="required")});
 			this.lookup[id] = i;
 			// Add validation events
 			if(inps[i].getAttribute('pattern')){
@@ -103,10 +103,27 @@
 			e.stopPropagation();
 		});
 
+		addEvent('click',document.getElementById('error-count'),{this:this},function(e){
+			var html = '';
+			for(i = 0; i < this.validation.length; i++) html += '<li>'+this.validation[i].message+'</li>';
+			if(html) html = '<ul>'+html+'</ul>';
+			var header = document.querySelector('header');
+			var error = document.getElementById('errors');
+			if(!error){
+				error = document.createElement('div');
+				error.id = 'errors';
+				error.classList.add('ERROR','doublepadded');
+				header.insertAdjacentElement('afterend', error);
+				error.innerHTML = html;
+			}else{
+				error.parentNode.removeChild(error);
+			}			
+		});
+
 		this.drawTable();
 
 		return this;
-	}
+	};
 	Builder.prototype.scroll = function(){
 		var ok,i,s;
 		var ok = -1;
@@ -136,9 +153,10 @@
 		return this;
 	};
 	Builder.prototype.drawTable = function(replace){
-		var i,r,table,row,added;
+		var i,r,table,row,added,valid,validcell;
 		this.rows = [];
 		this.csv = "";
+		this.validation = [];
 		added = 0;
 
 		// Which fields do we actually have data for?
@@ -173,12 +191,24 @@
 			row = document.createElement('tr');
 			csvrow = "";
 			for(i = 0; i < this.fields.length; i++){
+				validcell = true;
 				if(this.fields[i].count > 0){
 					v = (this.data.data[r][this.fields[i].id]||"");
-					row.innerHTML += '<td>'+v+'</td>';	// contenteditable="true"
+					if(v!="" && this.fields[i].pattern){
+						// Check if it validates
+						regex = new RegExp(this.fields[i].pattern);
+						if(!this.data.data[r][this.fields[i].id].match(regex)){
+							validcell = false;
+							this.validation.push({'row':r,'col':i,'message':'The value of <code>'+this.data.data[r][this.fields[i].id]+'</code> for <code>'+this.fields[i].id+'</code> on line '+(r+1)+' appears to be invalid. '+this.fields[i].el.closest('.row').querySelector('.pattern').innerHTML});
+						}
+					}
+					row.innerHTML += '<td'+(validcell ? '':' class="invalid"')+'>'+v+'</td>';	// contenteditable="true"
 					csvrow += (csvrow ? ',':'')+(v.indexOf(",") >= 0 ? '"':'')+v+(v.indexOf(",") >= 0 ? '"':'');
 				}
-				if(this.fields[i].el.getAttribute('required') && !this.data.data[r][this.fields[i].id]) valid = false;
+				if(this.fields[i].required && this.data.data[r][this.fields[i].id]==""){
+					valid = false;
+					this.validation.push({'row':r,'message':'The required field <code>'+this.fields[i].id+'</code> appears to be missing on line '+(r+1)+'.'});
+				}
 			}
 			if(!valid) row.classList.add('invalid');
 			this.csv += csvrow+'\n';
@@ -196,7 +226,22 @@
 		if(replace) this.preview.style.height = '';
 		
 		this.updateOffset();
-
+		
+		this.validate();
+		
+		return this;
+	};
+	Builder.prototype.validate = function(){
+		var err = this.validation.length;
+		var el = document.getElementById('error-count');
+		el.innerHTML = (err > 0 ? err+' error'+(err==1 ? '':'s') : '');
+		if(err > 0){
+			el.classList.add('ERROR');
+			el.style.display = 'block';
+		}else{
+			el.classList.remove('ERROR');
+			el.style.display = 'none';
+		}
 		return this;
 	};
 	Builder.prototype.clearForm = function(){
