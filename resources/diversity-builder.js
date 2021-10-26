@@ -27,10 +27,18 @@
 			if(!hamburger.checked) hamburger.blur();
 		});
 		
-		// Load CSV button
+		// Load file button
 		this.buttons.load = document.querySelector('#standard_files-button');
 		addEvent('click',this.buttons.load,{this:this},function(e){ e.preventDefault(); this.message(); document.querySelector('#standard_files').click(); hamburger.click(); });
 		addEvent('change',document.getElementById('standard_files'),{this:this},function(e){ return this.handleFileSelect(e,'csv'); });
+
+		// Load URL button
+		this.buttons.loadurl = document.getElementById('btn-loadurl');
+		addEvent('click',this.buttons.loadurl,{this:this},function(e){ e.preventDefault(); this.loadURLToggle(); hamburger.click(); });
+		this.buttons.loadurlcancel = document.getElementById('btn-loadURL-cancel');
+		addEvent('click',this.buttons.loadurlcancel,{this:this},function(e){ e.preventDefault(); this.loadURLCancel(); });
+		this.buttons.loadurlsubmit = document.getElementById('btn-loadURL-submit');
+		addEvent('click',this.buttons.loadurlsubmit,{this:this},function(e){ e.preventDefault(); this.loadURL(document.getElementById('loadURL-input').value); });
 
 		// Save CSV button
 		this.buttons.save = document.getElementById('btn-save');
@@ -221,6 +229,42 @@
 		
 		this.validate();
 		
+		return this;
+	};
+	Builder.prototype.loadURLToggle = function(){
+		if(document.body.style.overflow=="hidden"){
+			this.loadURLCancel();
+		}else{
+			this.loadURLOpen();
+		}
+	};
+	Builder.prototype.loadURLOpen = function(){
+		document.body.style.overflow = 'hidden';
+		document.querySelector('.main').style.opacity = 0.05;
+		var el = document.getElementById('loadURL');
+		if(el) el.classList.remove('dialog-hidden');
+	};
+	Builder.prototype.loadURLCancel = function(){
+		var el = document.getElementById('loadURL');
+		if(el) el.classList.add('dialog-hidden');
+		document.body.style.overflow = '';
+		document.querySelector('.main').style.opacity = '';
+	};
+	Builder.prototype.loadURL = function(url){
+		console.info('Getting '+url);
+		var el = document.getElementById('loadURL-errors');
+		fetch(url,{cache: "no-cache"}).then(response => { return response.text(); }).then(text => {
+			this.loadURLCancel();
+			this.loaded(text);
+			window.scrollTo(0, 0);
+			el.innerHTML = '';
+			el.classList.remove('ERROR','padded');
+			return true;
+		}).catch(error => {
+			el.innerHTML = error;
+			el.classList.add('ERROR','padded');
+			console.error('Error:', error);
+		});
 		return this;
 	};
 	Builder.prototype.validate = function(){

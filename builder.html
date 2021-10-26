@@ -44,6 +44,9 @@
 	#errors ul { list-style: disc; margin-left: 1em; }
 	#errors code { font-family: monospace; font-weight: bold; line-height: 1em; }
 	
+	.dialog { position: fixed; }
+	.dialog input[type=url] { border: 2px solid #444; padding: 0 0.5em; font-weight: normal; }
+	
 	button.button { background: #1DD3A7; color: black; }
 	button[aria-disabled=true] { opacity: 0.5; filter: grayscale(100%); cursor: not-allowed; display: none; }
 
@@ -141,11 +144,16 @@
 							<form id="form-load-progress">
 								<button id="standard_files-button">
 									<svg width="1em" height="1em" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M 0 32 l 32 0 l 0 -10 l -4 0 l 0 6 l -24 0 l 0 -6 l -4 0 l 0 10 M 12 22 l 0 -10 l -8 0 l 12 -12 l 12 12 l -8 0 l 0 10" fill="white"></path></svg>
-									Load from CSV
+									Load from file
 								</button>
 								<input id="standard_files" class="fileselect" type="file" title="browse" name="file" accept=".csv" aria-labelledby="file-progress-button">
 							</form>
 						</li>
+						<li>
+							<button id="btn-loadurl">
+								<svg width="1em" height="1em" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M 0 32 l 32 0 l 0 -10 l -4 0 l 0 6 l -24 0 l 0 -6 l -4 0 l 0 10 M 12 0 l 8 0 l 0 10 l 8 0 l -12 12 l -12 -12 l 8 0" fill="white"></path></svg>
+								Load from URL
+							</button>
 						<li>
 							<button id="btn-save">
 								<svg width="1em" height="1em" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M 0 32 l 32 0 l 0 -10 l -4 0 l 0 6 l -24 0 l 0 -6 l -4 0 l 0 10 M 12 0 l 8 0 l 0 10 l 8 0 l -12 12 l -12 -12 l 8 0" fill="white"></path></svg>
@@ -1297,7 +1305,7 @@
 			</form>
 		</div>
 		<div id="message" class="message"></div>
-		
+
 		<footer class="b1-bg">
 			<div class="doublepadded">
 				<section id="sources">
@@ -1305,6 +1313,17 @@
 				</section>
 			</div>
 		</footer>
+	</div>
+
+	<div 
+	<div id="loadURL" class="dialog dialog-hidden interactive" role="dialog" aria-labelledby="loadURL-label">
+		<fieldset class="inner">
+			<legend><h3 id="loadURL-label"><label for="loadURL-input">Load from a URL</label></h3></legend>
+			<input type="url" name="url" id="loadURL-input" style="width:40em;max-width:80vw;" />
+			<div id="loadURL-errors"></div>
+		</fieldset>
+		<input id="btn-loadURL-submit" type="submit" class="grey" aria-label="Add the organisation to the dashboard" value="Load" />
+		<input id="btn-loadURL-cancel" type="reset" class="grey" aria-label="Cancel" value="Cancel" />
 	</div>
 </body>
 </html>
