@@ -556,7 +556,7 @@
 		},{
 			"key": "christian",
 			"title": "Christian",
-			"description": "The number of employees who are Christian",
+			"description": "The number of employees who are Christian. Christian includes Church of England, Catholic, Protestant and all other Christian denominations.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "495"
@@ -591,7 +591,7 @@
 		},{
 			"key": "other",
 			"title": "Other",
-			"description": "The number of employees who are “Other”",
+			"description": "The number of employees who are any other religions not otherwise listed.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "495"

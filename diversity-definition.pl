@@ -2,6 +2,7 @@
 
 use Data::Dumper;
 use JSON::XS;
+use open qw( :std :encoding(UTF-8) );	# To avoid "Wide character warning"
 
 $jfile = "diversity-definition.json";
 $builder = "builder.html";
