@@ -205,7 +205,7 @@
 					row.innerHTML += '<td'+(validcell ? '':' class="invalid"')+'>'+v+'</td>';	// contenteditable="true"
 					csvrow += (csvrow ? ',':'')+(v.indexOf(",") >= 0 ? '"':'')+v+(v.indexOf(",") >= 0 ? '"':'');
 				}
-				if(this.fields[i].required && this.data.data[r][id]==""){
+				if(this.fields[i].required && (this.data.data[r][id]=="" || !this.data.data[r][id])){
 					valid = false;
 					this.validation.push({'row':r,'field':id,'message':'The required field <code>'+id+'</code> appears to be missing on line '+(r+1)+'.'});
 				}
