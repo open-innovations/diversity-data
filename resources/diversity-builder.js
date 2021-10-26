@@ -46,8 +46,8 @@
 			id = inps[i].getAttribute('id');
 			pattern = inps[i].getAttribute('pattern');
 			typ = inps[i].getAttribute('type');
-			min = inps[i].getAttribute('min');
-			max = inps[i].getAttribute('max');
+			min = parseInt(inps[i].getAttribute('min'));
+			max = parseInt(inps[i].getAttribute('max'));
 			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i],'required':(inps[i].getAttribute('required')=="required")});
 			this.lookup[id] = i;
 			// Add validation events
@@ -175,22 +175,31 @@
 			csvrow = "";
 			for(i = 0; i < this.fields.length; i++){
 				validcell = true;
+				id = this.fields[i].id;
 				if(this.fields[i].count > 0){
-					v = (this.data.data[r][this.fields[i].id]||"");
+					v = (this.data.data[r][id]||"");
 					if(v!="" && this.fields[i].pattern){
 						// Check if it validates
 						regex = new RegExp(this.fields[i].pattern);
-						if(!this.data.data[r][this.fields[i].id].match(regex)){
+						if(!this.data.data[r][id].match(regex)){
 							validcell = false;
-							this.validation.push({'row':r,'col':i,'message':'The value of <code>'+this.data.data[r][this.fields[i].id]+'</code> for <code>'+this.fields[i].id+'</code> on line '+(r+1)+' appears to be invalid. '+this.fields[i].el.closest('.row').querySelector('.pattern').innerHTML});
+							this.validation.push({'row':r,'field':id,'message':'The value of <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' appears to be invalid. '+this.fields[i].el.closest('.row').querySelector('.pattern').innerHTML});
 						}
+					}
+					if(typeof this.fields[i].min==="number" && this.data.data[r][id] < min){
+						validcell = false;
+						this.validation.push({'row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is smaller than '+this.fields[i].min+'.'});
+					}
+					if(typeof this.fields[i].max==="number" && this.data.data[r][id] > max){
+						validcell = false;
+						this.validation.push({'row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is larger than '+this.fields[i].max+'.'});
 					}
 					row.innerHTML += '<td'+(validcell ? '':' class="invalid"')+'>'+v+'</td>';	// contenteditable="true"
 					csvrow += (csvrow ? ',':'')+(v.indexOf(",") >= 0 ? '"':'')+v+(v.indexOf(",") >= 0 ? '"':'');
 				}
-				if(this.fields[i].required && this.data.data[r][this.fields[i].id]==""){
+				if(this.fields[i].required && this.data.data[r][id]==""){
 					valid = false;
-					this.validation.push({'row':r,'message':'The required field <code>'+this.fields[i].id+'</code> appears to be missing on line '+(r+1)+'.'});
+					this.validation.push({'row':r,'field':id,'message':'The required field <code>'+id+'</code> appears to be missing on line '+(r+1)+'.'});
 				}
 			}
 			if(!valid) row.classList.add('invalid');
