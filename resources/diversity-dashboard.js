@@ -1189,7 +1189,7 @@
 
 			keytxt = '<ul>';
 			for(i = 0; i < this.compare.length; i++) keytxt += '<li><span class="series-'+i+' key-item"></span> <span class="label">'+(this.compare[i].name)+': '+data.age.total[i].toLocaleString()+' people</span></li>';
-			keytxt += '</ul><p class="extranotes"></p>';
+			keytxt += '</ul><p class="extranotes">Note that percentages have been rounded so the sum of the columns may not add up to 100%.</p>';
 
 
 			if(g.age.table){
