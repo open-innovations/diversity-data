@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 
+use utf8;
 use Data::Dumper;
 use JSON::XS;
-use open qw( :std :encoding(UTF-8) );	# To avoid "Wide character warning"
+use open qw/ :std :encoding(utf8) /; # To avoid "Wide character warning"
 
 $jfile = "diversity-definition.json";
 $builder = "builder.html";
@@ -12,8 +13,8 @@ $builder = "builder.html";
 open(FILE,$jfile);
 @lines = <FILE>;
 close(FILE);
-%json = %{JSON::XS->new->utf8->decode(join("\n",@lines))};
-
+$str = join("",@lines);
+%json = %{JSON::XS->new->decode($str)};
 
 # Read in the builder page
 open(HTML,$builder);
@@ -58,6 +59,8 @@ $output .= $indent."</div>\n";
 # Update the builder page
 $html =~ s/(<\!-- START GENERATED CODE -->[\n\r]+)(.*)([\n\r]+\t*<\!-- END GENERATED CODE -->)/$1$output$3/s;
 $html =~ s/(<\!-- START VERSION -->[\n\r]*)(.*)([\n\r]*\t*<\!-- END VERSION -->)/$1$json{'version'}$3/s;
+
+print "Save\n";
 open(HTML,">",$builder);
 print HTML $html;
 close(HTML);
@@ -82,7 +85,7 @@ close(HTML);
 
 sub makeRows {
 	my ($key,$lvl,%rows) = @_;
-	my ($output,$required,$r,$p,$name,$ps,$cols,$input);
+	my ($output,$required,$r,$p,$name,$ps,$cols,$input,$replaces,$pattern);
 	$output = "";
 	#$key = $rows{'key'};
 	$ps = @{$rows{'properties'}};
@@ -108,15 +111,16 @@ sub makeRows {
 			}
 			$output .= $indent."\t\t\t\t</div>\n";	# End column
 			$input = "";
+			$replaces = ($rows{'properties'}[$p]{'replaces'} ? " data-replaces=\"$rows{'properties'}[$p]{'replaces'}\"":"");
 
 			if($rows{'properties'}[$p]{'type'} eq "date"){
-				$input = $indent."\t\t\t\t\t<input type=\"date\" id=\"$name\" $required/>\n";
+				$input = $indent."\t\t\t\t\t<input type=\"date\" id=\"$name\"$replaces $required/>\n";
 			}elsif($rows{'properties'}[$p]{'type'} eq "string"){
 				$pattern = "";
 				if($rows{'properties'}[$p]{'pattern'}){
 					$pattern = " pattern=\"$rows{'properties'}[$p]{'pattern'}\"";
 				}
-				$input = $indent."\t\t\t\t\t<input type=\"text\" id=\"$name\" placeholder=\"e.g. $rows{'properties'}[$p]{'example'}\"$pattern$required />\n";
+				$input = $indent."\t\t\t\t\t<input type=\"text\" id=\"$name\" placeholder=\"e.g. $rows{'properties'}[$p]{'example'}\"$replaces$pattern$required />\n";
 			}elsif($rows{'properties'}[$p]{'type'} eq "integer"){
 				$range = "";
 				if($rows{'properties'}[$p]{'minimum'} ne ""){
@@ -126,7 +130,7 @@ sub makeRows {
 				if($rows{'properties'}[$p]{'maximum'} ne ""){
 					$range .= " max=\"$rows{'properties'}[$p]{'maximum'}\"";
 				}
-				$input = $indent."\t\t\t\t\t<input type=\"number\" id=\"$name\" placeholder=\"e.g. $rows{'properties'}[$p]{'example'}\"$range$required />\n";
+				$input = $indent."\t\t\t\t\t<input type=\"number\" id=\"$name\" placeholder=\"e.g. $rows{'properties'}[$p]{'example'}\"$replaces$range$required />\n";
 			}
 			
 			if($input){

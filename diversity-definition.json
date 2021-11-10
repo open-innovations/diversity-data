@@ -1,5 +1,5 @@
 {
-	"version": "1.0.1",
+	"version": "1.1",
 	"title": "Diversity and Inclusion Data",
 	"description": "Sharing data around diversity and inclusion within organisations",
 	"sections": [{
@@ -503,25 +503,28 @@
 			"example": "546"
 		}]
 	},{
-		"key":"trans",
+		"key":"genderidentitymatchesthatassignedatbirth",
 		"title": "Gender identity",
 		"description": "This section is about gender identity. It is optional as are each of the columns.",
 		"properties": [{
 			"key": "no",
-			"title": "Matches that assigned at birth",
-			"description": "The number of employees whose gender matches that assigned at birth",
-			"type": "integer",
-			"minimum": 0,
-			"example": "495"
-		},{
-			"key": "yes",
+			"replaces": "trans_yes",
 			"title": "Doesn't match that assigned at birth",
-			"description": "The number of employees whose gender doesn’t match that assigned at birth",
+			"description": "The number of employees whose gender identity doesn’t match that assigned at birth",
 			"type": "integer",
 			"minimum": 0,
 			"example": "5"
 		},{
+			"key": "yes",
+			"replaces": "trans_no",
+			"title": "Matches that assigned at birth",
+			"description": "The number of employees whose gender identity matches that assigned at birth",
+			"type": "integer",
+			"minimum": 0,
+			"example": "495"
+		},{
 			"key": "prefernottosay",
+			"replaces": "trans_prefernottosay",
 			"title": "Prefer not to say",
 			"description": "The number of people who prefer not to say",
 			"type": "integer",
@@ -529,6 +532,7 @@
 			"example": "11"
 		},{
 			"key": "undisclosed",
+			"replaces": "trans_undisclosed",
 			"title": "Undisclosed",
 			"description": "The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.",
 			"type": "integer",
@@ -536,6 +540,7 @@
 			"example": "30"
 		},{
 			"key": "total",
+			"replaces": "trans_total",
 			"title": "Total",
 			"description": "The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.",
 			"type": "integer",

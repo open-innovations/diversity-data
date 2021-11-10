@@ -42,7 +42,7 @@
 
 	#errors h3 { margin-top: 0; font-weight: bold; margin-bottom: 0.25em; }
 	#errors ul { list-style: disc; margin-left: 1em; }
-	#errors code { font-family: monospace; font-weight: bold; line-height: 1em; }
+	code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.25em; }
 	
 	.dialog { position: fixed; }
 	.dialog input[type=url] { border: 2px solid #444; padding: 0 0.5em; font-weight: normal; }
@@ -97,7 +97,6 @@
 		-webkit-transform: rotate(-45deg);
 	}
 	#builder .row .col *:last-child { margin-bottom: 0; }
-	#builder code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.25em; }
 	#builder h3 { text-transform: uppercase; margin-top: 0; font-weight: 600; }
 	#builder h4 { font-weight: 600; margin-top: 0; }
 	#builder h4 + p { margin-top: 0.25em; }
@@ -134,7 +133,7 @@
 	<a id="top"></a>
 	<div id="dashboard">
 		<header class="b1-bg">
-			<div class="padded"><h1>Diversity Data Builder<span class="alpha"><!-- START VERSION -->1.0.1<!-- END VERSION --></span></h1></div>
+			<div class="padded"><h1>Diversity Data Builder<span class="alpha"><!-- START VERSION -->1.1<!-- END VERSION --></span></h1></div>
 			<div>
 				<input type="checkbox" id="showmenu" aria-label="Show Navigation Menu" aria-expanded="true" tabindex="0" />
 				<label for="showmenu">&#9776;</label>
@@ -187,7 +186,7 @@
 						<li><a href="#disability" class="grey">Disability</a></li>
 						<li><a href="#ethnicity" class="grey">Ethnicity</a></li>
 						<li><a href="#gender" class="grey">Gender</a></li>
-						<li><a href="#trans" class="grey">Gender identity</a></li>
+						<li><a href="#genderidentitymatchesthatassignedatbirth" class="grey">Gender identity</a></li>
 						<li><a href="#religion" class="grey">Religion</a></li>
 						<li><a href="#sexuality" class="grey">Sexuality</a></li>
 						<li><a href="#seb" class="grey">Socio-economic background</a></li>
@@ -818,54 +817,54 @@
 							</div>
 						</div>
 						<p class="totop doublepadded"><a href="#top">Back to top</a></p>					</section>
-					<section id="trans" class="grey">
+					<section id="genderidentitymatchesthatassignedatbirth" class="grey">
 						<div class="heading doublepadded">
 							<h3>Gender identity</h3>
 							<p>This section is about gender identity. It is optional as are each of the columns.</p>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h4><label for="trans_no">Matches that assigned at birth</label> <code>trans_no</code></h4>
-								<p>The number of employees whose gender matches that assigned at birth</p>
+								<h4><label for="genderidentitymatchesthatassignedatbirth_no">Doesn't match that assigned at birth</label> <code>genderidentitymatchesthatassignedatbirth_no</code></h4>
+								<p>The number of employees whose gender identity doesn’t match that assigned at birth</p>
 							</div>
 							<div class="col">
-								<input type="number" id="trans_no" placeholder="e.g. 495" min="0" />
-							</div>
-						</div>
-						<div class="row doublepadded level-0 two-col">
-							<div class="col">
-								<h4><label for="trans_yes">Doesn't match that assigned at birth</label> <code>trans_yes</code></h4>
-								<p>The number of employees whose gender doesn’t match that assigned at birth</p>
-							</div>
-							<div class="col">
-								<input type="number" id="trans_yes" placeholder="e.g. 5" min="0" />
+								<input type="number" id="genderidentitymatchesthatassignedatbirth_no" placeholder="e.g. 5" data-replaces="trans_yes" min="0" />
 							</div>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h4><label for="trans_prefernottosay">Prefer not to say</label> <code>trans_prefernottosay</code></h4>
+								<h4><label for="genderidentitymatchesthatassignedatbirth_yes">Matches that assigned at birth</label> <code>genderidentitymatchesthatassignedatbirth_yes</code></h4>
+								<p>The number of employees whose gender identity matches that assigned at birth</p>
+							</div>
+							<div class="col">
+								<input type="number" id="genderidentitymatchesthatassignedatbirth_yes" placeholder="e.g. 495" data-replaces="trans_no" min="0" />
+							</div>
+						</div>
+						<div class="row doublepadded level-0 two-col">
+							<div class="col">
+								<h4><label for="genderidentitymatchesthatassignedatbirth_prefernottosay">Prefer not to say</label> <code>genderidentitymatchesthatassignedatbirth_prefernottosay</code></h4>
 								<p>The number of people who prefer not to say</p>
 							</div>
 							<div class="col">
-								<input type="number" id="trans_prefernottosay" placeholder="e.g. 11" min="0" />
+								<input type="number" id="genderidentitymatchesthatassignedatbirth_prefernottosay" placeholder="e.g. 11" data-replaces="trans_prefernottosay" min="0" />
 							</div>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h4><label for="trans_undisclosed">Undisclosed</label> <code>trans_undisclosed</code></h4>
+								<h4><label for="genderidentitymatchesthatassignedatbirth_undisclosed">Undisclosed</label> <code>genderidentitymatchesthatassignedatbirth_undisclosed</code></h4>
 								<p>The number of employees who were not asked or who didn’t respond actively. This allows us to calculate 'response' rates. Assumed to be 0 if not included.</p>
 							</div>
 							<div class="col">
-								<input type="number" id="trans_undisclosed" placeholder="e.g. 30" min="0" />
+								<input type="number" id="genderidentitymatchesthatassignedatbirth_undisclosed" placeholder="e.g. 30" data-replaces="trans_undisclosed" min="0" />
 							</div>
 						</div>
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
-								<h4><label for="trans_total">Total</label> <code>trans_total</code></h4>
+								<h4><label for="genderidentitymatchesthatassignedatbirth_total">Total</label> <code>genderidentitymatchesthatassignedatbirth_total</code></h4>
 								<p>The total number of people. If not provided it will be assumed to be the same as <code>employees</code>. If it is the same as <code>employees</code> it can be omitted.</p>
 							</div>
 							<div class="col">
-								<input type="number" id="trans_total" placeholder="e.g. 546" min="0" />
+								<input type="number" id="genderidentitymatchesthatassignedatbirth_total" placeholder="e.g. 546" data-replaces="trans_total" min="0" />
 							</div>
 						</div>
 						<p class="totop doublepadded"><a href="#top">Back to top</a></p>					</section>

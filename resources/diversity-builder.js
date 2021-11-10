@@ -50,14 +50,19 @@
 		var inps = document.querySelectorAll('#builder input');
 		this.fields = [];
 		this.lookup = {};
-		for(var i = 0; i < inps.length; i++){
+		this.replace = {};
+		var i,id,pattern,typ,min,max,replaces,p;
+		for(i = 0; i < inps.length; i++){
 			id = inps[i].getAttribute('id');
 			pattern = inps[i].getAttribute('pattern');
 			typ = inps[i].getAttribute('type');
 			min = parseInt(inps[i].getAttribute('min'));
 			max = parseInt(inps[i].getAttribute('max'));
-			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i],'required':(inps[i].getAttribute('required')=="required")});
+			replaces = inps[i].getAttribute('data-replaces');
+			this.fields.push({'id':id,'pattern':pattern,'min':min,'max':max,'type':typ,'el':inps[i],'replaces':replaces,'required':(inps[i].getAttribute('required')=="required")});
 			this.lookup[id] = i;
+			// Rename keys from previous version
+			if(replaces) this.replace[replaces] = id;
 			// Add validation events
 			if(inps[i].getAttribute('pattern')){
 				inps[i].addEventListener('input',function(e){
@@ -117,7 +122,7 @@
 	};
 	Builder.prototype.scroll = function(){
 		var ok,i,s;
-		var ok = -1;
+		ok = -1;
 		for(s = 0; s < this.sections.length; s++){
 			if(this.sections[s].offsetTop <= window.scrollY + this.buttons.el.offsetHeight + parseInt(window.getComputedStyle(this.buttons.el).top) + 5) ok = s;
 		}
@@ -133,8 +138,31 @@
 		return this;
 	};
 	Builder.prototype.setContent = function(d){
-		var r,c,table;
+		var i,k,c,conv,oldkey,newkey,keys;
 		this.data = (d ? CSVToArray(d) : {'rows':[],'data':[]});
+		for(i = 0; i < this.data.data.length; i++){
+			keys = Object.keys(this.data.data[i]);
+			for(k = 0; k < keys.length; k++){
+				if(this.replace[keys[k]]){
+					oldkey = keys[k];
+					newkey = this.replace[keys[k]];
+					this.data.data[i][newkey] = this.data.data[i][oldkey];
+					delete this.data.data[i][oldkey];
+					if(!conv) conv = {};
+					conv[oldkey] = newkey;
+				}
+			}
+		}
+		if(conv){
+			var msg = "";
+			for(c in conv){
+				if(conv[c]){
+					msg += (msg ? ', ':'')+'<code>'+c+'</code> to <code>'+conv[c]+'</code>';
+				}
+			}
+			this.message('INFO','Converting '+msg);
+		}
+
 		this.drawTable();
 		return this;
 	};
@@ -143,7 +171,7 @@
 		return this;
 	};
 	Builder.prototype.drawTable = function(replace){
-		var i,r,table,row,added,valid,validcell;
+		var i,r,table,row,added,valid,validcell,key,csvrow,id,v,regex,min,max;
 		this.rows = [];
 		this.csv = "";
 		this.validation = [];
@@ -158,7 +186,11 @@
 		for(r = 0; r < this.data.data.length; r++){
 			for(key in this.data.data[r]){
 				if(this.data.data[r][key]!=""){
-					this.fields[this.lookup[key]].count++;
+					if(typeof this.lookup[key]==="undefined"){
+						this.message('WARNING','Unknown key <code>'+key+'</code>');
+					}else{
+						this.fields[this.lookup[key]].count++;
+					}
 				}
 			}
 		}
@@ -285,13 +317,13 @@
 		return this;
 	};
 	Builder.prototype.clearForm = function(){
-		for(i = 0; i < this.fields.length; i++){
+		for(var i = 0; i < this.fields.length; i++){
 			this.fields[i].el.value = "";
 		}
 		return this;
 	};
 	Builder.prototype.loadRow = function(r){
-		var sel,c,el;
+		var sel,el,i,key;
 
 		sel = document.querySelector('#preview .selected');
 		if(sel) sel.classList.remove('selected');
@@ -324,6 +356,7 @@
 		var row = {};
 		var added = 0;
 		var valid = true;
+		var i;
 		for(i = 0; i < this.fields.length; i++){
 			if(this.fields[i].el.getAttribute('required')){
 				if(this.fields[i].el.value===""){
@@ -353,6 +386,7 @@
 		}else{
 			this.message();
 		}
+		var i;
 		var row = this.data.data[this.selectedRow];
 		for(i = 0; i < this.fields.length; i++){
 			row[this.fields[i].id] = this.fields[i].el.value;
@@ -379,23 +413,33 @@
 		return this;
 	};
 	Builder.prototype.message = function(typ,msg){
+		var txt,cls;
 		var el = document.getElementById('message');
 		el.classList.remove('ERROR','WARNING','INFO','padded');
 		if(msg){
-			txt = msg.replace(/<[^\>]*>/,'');
+			txt = msg.replace(/<[^\>]*>/g,'');
 			if(typ=="ERROR") console.error(txt);
 			else if(typ=="WARNING") console.warn(txt);
 			else if(typ=="INFO") console.info(txt);
 			else console.log(txt);
 			el.innerHTML = msg;
 			el.classList.add(typ);
-			if(msg) el.classList.add('padded');
+			if(msg){
+				el.classList.add('padded');
+				cls = document.createElement('div');
+				cls.innerHTML = '&times;';
+				cls.setAttribute('title','Close message');
+				cls.classList.add('close');
+				cls.addEventListener('click',function(e){
+					el.parentNode.removeChild(el);
+				});
+				el.appendChild(cls);
+			}
 		}else{
 			el.innerHTML = "";
 		}
-
 		return this;
-	}
+	};
 	Builder.prototype.toggleButtons = function(){
 		if(typeof this.selectedRow==="number"){
 			enable(this.buttons.update);
@@ -434,6 +478,7 @@
 
 				// Closure to capture the file information.
 				reader.onloadend = function(evt) {
+					var result;
 					if(evt.target.readyState == FileReader.DONE) { // DONE == 2
 						if(stop > f.size - 1){
 							var l = evt.target.result.regexLastIndexOf(/[\n\r]/);
@@ -486,9 +531,8 @@
 			document.body.appendChild(dl);
 		}
 		dl.click();
-
 		return this;
-	}
+	};
 	Builder.prototype.reset = function(){
 		var det = document.querySelectorAll('.filedetails');
 		for(var i = 0; i < det.length; i++) det[i].parentNode.removeChild(det[i]);
@@ -496,7 +540,6 @@
 		this.data = {'data':[]};
 		delete this.file;
 		disable(this.buttons.reset);
-		
 		return this;
 	};
 	function niceSize(b){
@@ -579,6 +622,7 @@
 		return b;
 	}
 	function addEvent(ev,el,attr,fn){
+		var i;
 		if(el){
 			if(el.tagName) el = [el];
 			if(typeof fn==="function"){
