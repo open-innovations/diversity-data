@@ -431,7 +431,8 @@
 				cls.setAttribute('title','Close message');
 				cls.classList.add('close');
 				cls.addEventListener('click',function(e){
-					el.parentNode.removeChild(el);
+					el.innerHTML = "";
+					el.classList.remove('ERROR','WARNING','INFO','padded');
 				});
 				el.appendChild(cls);
 			}
