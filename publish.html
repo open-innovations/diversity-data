@@ -62,9 +62,10 @@
 					<nav id="menu">
 						<ul>
 						<li><a href="#intro" class="grey">Introduction</a></li>
-						<li><a href="#step-1" class="grey">Step 1: Create your CSV</a></li>
-						<li><a href="#step-2" class="grey">Step 2: Publish your file</a></li>
-						<li><a href="#step-3" class="grey">Step 3: Update the register</a></li>
+						<li><a href="#step-1" class="grey">Step 1: Collect your data</a></li>
+						<li><a href="#step-2" class="grey">Step 2: Create your CSV</a></li>
+						<li><a href="#step-3" class="grey">Step 3: Publish your file</a></li>
+						<li><a href="#step-4" class="grey">Step 4: Update the register</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -86,11 +87,19 @@
 					</section>
 					<section id="step-1">
 						<div class="heading">
-							<h2>Step 1: Create your CSV</h2>
+							<h2>Step 1: Collect your data</h2>
 						</div>
-						<p>To complete step 1 you will need the summary information for your organisation's diversity figures as counts of staff rather than percentages.</p>
+						<p>Collect or extract data about workforce diversity. You may already have an existing dataset that you could start from, but this may need to be reshaped to match the schema we jointly defined - largely based on existing ONS categories. You don't need to have data in every category - just include as much as you can or feel comfortable with as an organisation.</p>
+						<p>If you don't have data in a category, consider if it would be appropriate for you to start collecting it and how. For example, most organisations don't currently collect information on socio-economic background and we recommend following <a href="https://socialmobilityworks.org/toolkit/measurement/">the Social Mobility Commission's toolkit</a> which was developed with input from a range of organisations.</p>
+						<p>Make sure you have your summary information as counts of staff rather than percentages.</p>
+					</section>
+					<section id="step-2">
+						<div class="heading">
+							<h2>Step 2: Create your CSV</h2>
+						</div>
+						<p>To complete step 2 you will need the summary information for your organisation's diversity figures as counts of staff rather than percentages.</p>
 						
-						<p>Once you have the data you will need to create a CSV file. You can either use spreadsheet software such as Microsoft Excel, Google Sheets or Apple Numbers and save as a CSV file or you can use our <a href="builder.html">diversity data builder tool</a> to help you create a CSV file. Our builder tool will lead you through the process. Simply fill in the values that you can and then save the resulting table to your computer. The builder tool will also let you load existing diversity data CSV files and modify rows.</p>
+						<p>Once you have the data you will need to <a href="https://www.gov.uk/guidance/using-csv-file-format">create a CSV file</a>. You can either use spreadsheet software such as Microsoft Excel, Google Sheets or Apple Numbers and save as a CSV file or you can use our <a href="builder.html">diversity data builder tool</a> to help you create a CSV file. Our builder tool will lead you through the process. Simply fill in the values that you can and then save the resulting table to your computer. The builder tool will also let you load existing diversity data CSV files and modify rows.</p>
 
 						<p class="WARNING padded">Warning: if you choose to create or amend your data using <i>Microsoft Excel</i> then make sure to set the format for the <code>published</code> column to ISO8601 (e.g. 'YYYY-MM-DD') otherwise there is a good chance that it will be saved in Excel's internal date format or your system default instead. When you have finished editing and need to save, select ‘save as .csv file’. Once you have saved it is worth loading it into our <a href="builder.html">Builder</a> tool to check for errors. If you are struggling to get Excel to save dates as YYYY-MM-DD try putting the file through our <a href="https://odileeds.github.io/CSVCleaner/">CSVCleaner</a>. Find out more about <a href="https://w3c.github.io/csvw/primer/">creating a CSV file</a>.</p>
 
@@ -107,11 +116,11 @@
 						<h3>What if I don't have detailed ethnicity breakdowns?</h3>
 						<p>If you don't have the detailed ethnicity breakdowns (e.g. "Bangladeshi", "English, Welsh, Scottish, Northern Irish or British" etc) you don't need to include them. This is only provided to allow
 					</section>
-					<section id="step-2">
+					<section id="step-3">
 						<div class="heading">
-							<h2>Step 2: Publish your file</h2>
+							<h2>Step 3: Publish your file</h2>
 						</div>
-						<p>To complete step 2 you must be able to add a file to a publicly accessible website.</p>
+						<p>To complete step 3 you must be able to add a file to a publicly accessible website.</p>
 						
 						<p>You can publish the file to your own website if you wish. You may need to contact whoever updates your organisation's website to ask them how to do this. You will need to make sure that the URL (web address) of the CSV file is a persistent URL (a web address that will not change over time). For example, Open Innovations might use the following persistent URL (this is an example, not live data):</p>
 						
@@ -123,9 +132,9 @@
 
 						<p>To make your data reuseable you should make sure you publish your data under an Open licence. If you are publishing to Data Mill North make sure to select an open licence such as ODbL or Creative Commons Attribution in the dataset metadata. This will allow us to include the data in the <a href="leeds-city-region/index.html">interactive dashboard</a> and allow others to create other visualisations.</p>
 					</section>
-					<section id="step-3">
+					<section id="step-4">
 						<div class="heading">
-							<h2>Step 3: Update the register</h2>
+							<h2>Step 4: Update the register</h2>
 						</div>
 						<p>Open Innovations maintain the <a href="https://github.com/open-innovations/diversity-data/blob/main/leeds-city-region/leeds.csv">Leeds City Region register of diversity data</a> that points to the data that you and other organisations publish. This register is used to power the <a href="leeds-city-region/index.html">Leeds City Region diversity dashboard</a>.</p>
 						<p>The first time you create and publish your CSV file you must tell us where this is published (the persistent URL created in step 2). You must also tell us if this URL ever changes.</p>
