@@ -270,7 +270,7 @@
 		for(i = 0; i < tabs.length; i++){
 			id = tabs[i].getAttribute('aria-controls');
 			tabs[i].setAttribute('tabindex',-1);
-			tabs[i].addEventListener('focus',this.selectTab);
+			tabs[i].addEventListener('click',this.selectTab);
 			if(opt.selected && id==opt.selected) this.selectTab(i,true);
 		}
 		tabList.addEventListener("keydown",function(e){
@@ -284,6 +284,9 @@
 				}
 
 				tabs[tabFocus].setAttribute("tabindex", 0);
+				var event = document.createEvent('HTMLEvents');
+				event.initEvent('click', true, false);
+				tabs[tabFocus].dispatchEvent(event);
 				tabs[tabFocus].focus();
 			}
 		});
