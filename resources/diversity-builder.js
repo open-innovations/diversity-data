@@ -264,7 +264,7 @@
 					}
 				}else{
 					if(checksubtotal[category].total > 0){
-						this.validation.push({'type':'warning','row':r,'field':category,'message':'No value has been given for <code>'+category+'</code> although the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to have values on line '+(r+1)+'.'});
+						this.validation.push({'type':'warning','row':r,'field':category,'message':'No value has been given for <code>'+category+'</code> although the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to add up to <strong>'+checksubtotal[category].total+'</strong> on line '+(r+1)+'.'});
 					}
 				}
 			}
