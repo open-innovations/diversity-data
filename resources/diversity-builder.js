@@ -119,7 +119,7 @@
 		this.drawTable();
 
 		return this;
-	};
+	}
 	Builder.prototype.scroll = function(){
 		var ok,i,s;
 		ok = -1;
@@ -171,7 +171,7 @@
 		return this;
 	};
 	Builder.prototype.drawTable = function(replace){
-		var i,r,table,row,added,valid,validcell,key,csvrow,id,v,regex,min,max;
+		var i,r,table,row,added,valid,validcell,key,csvrow,id,v,regex,min,max,n,b,category,checksubtotal,higher,t;
 		this.rows = [];
 		this.csv = "";
 		this.validation = [];
@@ -212,6 +212,7 @@
 			valid = true;
 			row = document.createElement('tr');
 			csvrow = "";
+			checksubtotal = {};
 			for(i = 0; i < this.fields.length; i++){
 				validcell = true;
 				id = this.fields[i].id;
@@ -222,25 +223,46 @@
 						regex = new RegExp(this.fields[i].pattern);
 						if(!this.data.data[r][id].match(regex)){
 							validcell = false;
-							this.validation.push({'row':r,'field':id,'message':'The value of <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' appears to be invalid. '+this.fields[i].el.closest('.row').querySelector('.pattern').innerHTML});
+							this.validation.push({'type':'error','row':r,'field':id,'message':'The value of <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' appears to be invalid. '+this.fields[i].el.closest('.row').querySelector('.pattern').innerHTML});
 						}
 					}
 					if(typeof this.fields[i].min==="number" && this.data.data[r][id] < min){
 						validcell = false;
-						this.validation.push({'row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is smaller than '+this.fields[i].min+'.'});
+						this.validation.push({'type':'error','row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is smaller than '+this.fields[i].min+'.'});
 					}
 					if(typeof this.fields[i].max==="number" && this.data.data[r][id] > max){
 						validcell = false;
-						this.validation.push({'row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is larger than '+this.fields[i].max+'.'});
+						this.validation.push({'type':'error','row':r,'field':id,'message':'The value <code>'+this.data.data[r][id]+'</code> for <code>'+id+'</code> on line '+(r+1)+' is larger than '+this.fields[i].max+'.'});
 					}
 					row.innerHTML += '<td'+(validcell ? '':' class="invalid"')+'>'+v+'</td>';	// contenteditable="true"
 					csvrow += (csvrow ? ',':'')+(v.indexOf(",") >= 0 ? '"':'')+v+(v.indexOf(",") >= 0 ? '"':'');
 				}
 				if(this.fields[i].required && (this.data.data[r][id]=="" || !this.data.data[r][id])){
 					valid = false;
-					this.validation.push({'row':r,'field':id,'message':'The required field <code>'+id+'</code> appears to be missing on line '+(r+1)+'.'});
+					this.validation.push({'type':'error','row':r,'field':id,'message':'The required field <code>'+id+'</code> appears to be missing on line '+(r+1)+'.'});
+				}
+				// If this field is a number type 
+				if(this.fields[i].type == "number"){
+					b = this.fields[i].id.split(/_/g);
+					n = b.length;
+					category = b.pop();
+					higher = b.join("_");
+					if(n > 2){
+						if(!checksubtotal[higher]) checksubtotal[higher] = {'total':0,'sub':[]};
+						if(category != "total" && this.data.data[r][id]){
+							checksubtotal[higher].total += parseInt(this.data.data[r][id]);
+							checksubtotal[higher].sub.push('<code>'+this.fields[i].id+'</code>');
+						}
+					}
 				}
 			}
+			for(category in checksubtotal){
+				t = parseInt(this.data.data[r][category])||0;
+				if(checksubtotal[category].total > t){
+					this.validation.push({'type':'warning','row':r,'field':category,'message':'The value for <code>'+category+'</code> is '+t+' but the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to add up to '+checksubtotal[category].total+' on line '+(r+1)+'.'});
+				}
+			}
+
 			if(!valid) row.classList.add('invalid');
 			this.csv += csvrow+'\n';
 			// Add a click event to the row
@@ -258,26 +280,9 @@
 		
 		this.updateOffset();
 		
-		// Validate
-		var err = this.validation.length;
-		var html = '';
-		for(i = 0; i < err; i++){
-			html += '<li>'+this.validation[i].message+'</li>';
-			console.error(this.validation[i].message);
-		}
-		if(html) html = '<h3>'+(err > 0 ? err+' error'+(err==1 ? '':'s') : '')+':</h3><ul>'+html+'</ul>';
-		var error = document.getElementById('errors');
-		if(!error){
-			error = document.createElement('div');
-			error.id = 'errors';
-			error.classList.add('ERROR','padded');
-			document.getElementById('preview').insertAdjacentElement('afterend', error);
-		}
-		if(error){
-			error.style.display = (err == 0) ? 'none':'';
-			error.innerHTML = html;
-		}
-		
+		// Show error messages
+		ValidationResults(this.validation);
+
 		return this;
 	};
 	Builder.prototype.loadURLToggle = function(){
@@ -543,6 +548,42 @@
 		disable(this.buttons.reset);
 		return this;
 	};
+	function ValidationResults(messages){
+		var i,safe,t,c;
+		var m = {
+			'error':{'title':'ERRORS: {{n}}','n':0,'html':'','id':'errors','class':['ERROR','padded','messages']},
+			'warning':{'title':'WARNINGS: {{n}}','n':0,'html':'','id':'warnings','class':['WARNING','padded','messages']}
+		};
+
+		for(i = 0; i < messages.length; i++){
+			t = messages[i].type||"error";
+			m[t].html += '<li>'+messages[i].message+'</li>';
+			m[t].n++;
+			safe = messages[i].message;
+			if(safe) safe = safe.replace(/<[^\>]*>/g,"");
+			if(t == "error") console.error(safe);
+			else if(t == "warning") console.warn(safe);
+		}
+		for(t in m){
+			if(m[t].html) m[t].html = '<h3>'+(m[t].title.replace(/\{\{n\}\}/g,m[t].n))+'</h3><ul>'+m[t].html+'</ul>';
+			if(m[t].id){
+				m[t].el = document.getElementById(m[t].id);
+				if(!m[t].el){
+					m[t].el = document.createElement('div');
+					m[t].el.setAttribute('id',m[t].id);
+					if(m[t].class){
+						for(c = 0; c < m[t].class.length; c++) m[t].el.classList.add(m[t].class[c]);
+					}
+					document.getElementById('preview').insertAdjacentElement('afterend', m[t].el);
+				}
+			}
+			if(m[t].el){
+				m[t].el.style.display = (m[t].n == 0) ? 'none':'';
+				m[t].el.innerHTML = m[t].html;
+			}
+		}
+		return this;
+	}
 	function niceSize(b){
 		if(b > 1e12) return (b/1e12).toFixed(2)+" TB";
 		if(b > 1e9) return (b/1e9).toFixed(2)+" GB";
