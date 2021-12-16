@@ -257,9 +257,15 @@
 				}
 			}
 			for(category in checksubtotal){
-				t = parseInt(this.data.data[r][category])||0;
-				if(checksubtotal[category].total > t){
-					this.validation.push({'type':'warning','row':r,'field':category,'message':'The value for <code>'+category+'</code> is '+t+' but the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to add up to '+checksubtotal[category].total+' on line '+(r+1)+'.'});
+				if(this.data.data[r][category]){
+					t = parseInt(this.data.data[r][category])||0;
+					if(checksubtotal[category].total > t){
+						this.validation.push({'type':'warning','row':r,'field':category,'message':'The value for <code>'+category+'</code> is <strong>'+t+'</strong> but the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to add up to <strong>'+checksubtotal[category].total+'</strong> on line '+(r+1)+'.'});
+					}
+				}else{
+					if(checksubtotal[category].total > 0){
+						this.validation.push({'type':'warning','row':r,'field':category,'message':'No value has been given for <code>'+category+'</code> although the sub-categories ('+checksubtotal[category].sub.join(', ')+') appear to have values on line '+(r+1)+'.'});
+					}
 				}
 			}
 
