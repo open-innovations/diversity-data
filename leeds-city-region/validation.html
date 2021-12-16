@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8" />
+	<title>Leeds Diversity Dashboard Validation</title>
+	<link rel="icon" href="../resources/favicon.svg" />
+	<link rel="StyleSheet" href="../resources/fonts/open-sans/open-sans.css" type="text/css">
+	<link rel="StyleSheet" href="../resources/style.css" type="text/css" />
+	<style>
+	code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.25em; }
+	.ERROR { color: #D8000C; background-color: #FFD2D2; }
+	.WARNING { color: #9F6000; background-color: #FEEFB3; }
+	.INFO { color: #00529B; background-color: #BDE5F8; }
+	.SUCCESS { color: #4F8A10; background-color: #DFF2BF; }
+	li.ERROR, li.WARNING {
+		padding: 1em;
+		margin-bottom: 1em;
+	}
+	.grid { grid-template-columns: repeat(2,1fr); }
+	.grid a { padding: 2em; display: block; text-decoration: none; color: inherit; height: 100%; }
+	.grid a h3, .grid a h2 { margin-top: 0; font-weight: bold; }
+	.grid a *:last-child { margin-bottom: 0; }
+	.list { list-style: disc; margin-left: 1em; }
+	.block { margin-top: 1em; }
+	.block.ERROR { border: 1px solid #D8000C; }
+	.block.WARNING { border: 1px solid #9F6000; }
+	</style>
+</head>
+<body class="b1-bg">
+	<div id="dashboard">
+		<header class="padded b1-bg not-headless">
+			<h1>Leeds Diversity Dashboard: validation</h1>
+		</header>
+		<div class="main doublepadded">
+			<section>
+				<p>This page shows validation warnings for the <a href="index.html">Leeds City Region Diversity Dashboard</a> and is updated once a day.</p>
+			</section>
+<!-- Start validation -->
+	<ul class="grid compact">
+		<li><a href="https://datamillnorth.org/download/diversityreport/d672ebf6-9f88-419b-9df9-b6ec2b041672/YW%20diversity%20tables.csv" class="ERROR"><h2>Kelda Group plc</h2><div class="ERROR padded block"><h3>ERRORS: 9</h3><ul class="list"><li>The required field <code>employees</code> appears to be missing on line 2</li><li>The required field <code>employees</code> appears to be missing on line 3</li><li>The required field <code>employees</code> appears to be missing on line 4</li><li>The required field <code>employees</code> appears to be missing on line 5</li><li>The required field <code>employees</code> appears to be missing on line 6</li><li>The required field <code>employees</code> appears to be missing on line 7</li><li>The required field <code>employees</code> appears to be missing on line 8</li><li>The required field <code>employees</code> appears to be missing on line 9</li><li>The required field <code>employees</code> appears to be missing on line 10</li></ul></div><div class="WARNING padded block"><h3>WARNINGS: 11</h3><ul class="list"><li>The value for <code>ethnicity_asian</code> is <strong>10</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>16</strong> on line 5</li><li>No value has been given for <code>ethnicity_black</code> although the sub-categories (<code>ethnicity_black_african</code>) appear to add up to <strong>2</strong> on line 5</li><li>The value for <code>ethnicity_asian</code> is <strong>55</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>113</strong> on line 6</li><li>The value for <code>ethnicity_asian</code> is <strong>33</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>72</strong> on line 7</li><li>The value for <code>ethnicity_black</code> is <strong>6</strong> but the sub-categories (<code>ethnicity_black_african</code>, <code>ethnicity_black_caribbean</code>, <code>ethnicity_black_other</code>) appear to add up to <strong>10</strong> on line 7</li><li>The value for <code>ethnicity_asian</code> is <strong>7</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>16</strong> on line 8</li><li>No value has been given for <code>ethnicity_black</code> although the sub-categories (<code>ethnicity_black_african</code>) appear to add up to <strong>1</strong> on line 8</li><li>The value for <code>ethnicity_asian</code> is <strong>48</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>101</strong> on line 9</li><li>The value for <code>ethnicity_black</code> is <strong>1</strong> but the sub-categories (<code>ethnicity_black_caribbean</code>) appear to add up to <strong>2</strong> on line 9</li><li>The value for <code>ethnicity_asian</code> is <strong>34</strong> but the sub-categories (<code>ethnicity_asian_bangladeshi</code>, <code>ethnicity_asian_indian</code>, <code>ethnicity_asian_pakistani</code>) appear to add up to <strong>82</strong> on line 10</li><li>The value for <code>ethnicity_black</code> is <strong>6</strong> but the sub-categories (<code>ethnicity_black_african</code>, <code>ethnicity_black_caribbean</code>, <code>ethnicity_black_other</code>) appear to add up to <strong>14</strong> on line 10</li></ul></div></a></li>
+		<li><a href="https://datamillnorth.org/download/leeds-beckett-university-workforce-diversity/ae78f068-611c-44ee-8e25-a9c78b6b7813/Leeds%20Anchors%20Network%20Diversity%20dashboard.csv" class="SUCCESS"><h2>Leeds Beckett University</h2>VALID</a></li>
+		<li><a href="https://datamillnorth.org/download/leeds-college-of-building-workforce-diversity/3e05ffaf-1c48-4b5c-9b2a-27b2d4d64930/Leeds%20College%20of%20Building%2020211019.csv" class="SUCCESS"><h2>Leeds College of Building</h2>VALID</a></li>
+		<li><a href="https://datamillnorth.org/download/leeds-trinity-university-workforce-diversity/1a36aca8-6656-40a8-8b38-57042efb4e34/Anchor%20Diversity%20Dashboard.csv" class="WARNING"><h2>Leeds Trinity University</h2><div class="WARNING padded block"><h3>WARNINGS: 1</h3><ul class="list"><li>The value for <code>ethnicity_mixed</code> is <strong>5</strong> but the sub-categories (<code>ethnicity_mixed_asian</code>, <code>ethnicity_mixed_caribbean</code>, <code>ethnicity_mixed_other</code>) appear to add up to <strong>18</strong> on line 2</li></ul></div></a></li>
+		<li><a href="https://datamillnorth.org/download/diversity-dashboard-data/407ed3d4-99a3-4a29-a01d-e7da83e45a1f/LeedsCityCouncilDiversityDashboard.csv" class="SUCCESS"><h2>Leeds City Council</h2>VALID</a></li>
+		<li><a href="https://datamillnorth.org/download/workforce-diversity/4aca262d-f31f-4da9-aca9-e46dae9a9a65/Diversity%20Data%20%283%29.csv" class="SUCCESS"><h2>University of Leeds</h2>VALID</a></li>
+	</ul>
+
+<!-- End validation -->
+		</div>
+		
+	</div>
+</body>
+</html>
