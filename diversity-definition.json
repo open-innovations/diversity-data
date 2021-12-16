@@ -222,14 +222,14 @@
 			"properties":[{
 				"key": "daytodayalot",
 				"title": "Reduce ability to work a lot",
-				"description": "The number of people whose day-to-day activities are limited a lot. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a lot",
+				"description": "The number of people whose day-to-day activities are limited a lot. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a lot.  Make sure to also include this value in the group total (<code>disability_yes</code>).",
 				"type": "integer",
 				"minimum": 0,
 				"example": "9"
 			},{
 				"key": "daytodayalittle",
 				"title": "Reduce ability to work a little",
-				"description": "The number of people whose day-to-day activities are limited a little. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a little",
+				"description": "The number of people whose day-to-day activities are limited a little. This allows a breakdown within the category of disability_yes if known. In the ONS OPD Q3 is “Do any of your illnesses or conditions reduce your ability to carry out day to day activities?” Answer: yes a little. Make sure to also include this value in the group total (<code>disability_yes</code>).",
 				"type": "integer",
 				"minimum": 0,
 				"example": "43"
@@ -277,35 +277,35 @@
 			"properties":[{
 				"key": "bangladeshi",
 				"title": "Bangladeshi",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Bangladeshi”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Bangladeshi”. Make sure to also include this value in the group total for <code>ethnicity_asian</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "chinese",
 				"title": "Chinese",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Chinese”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Chinese”. Make sure to also include this value in the group total for <code>ethnicity_asian</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "indian",
 				"title": "Indian",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Indian”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Indian”. Make sure to also include this value in the group total for <code>ethnicity_asian</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "pakistani",
 				"title": "Pakistani",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Pakistani”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Pakistani”. Make sure to also include this value in the group total for <code>ethnicity_asian</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "other",
 				"title": "Other",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Other”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Other”. Make sure to also include this value in the group total for <code>ethnicity_asian</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -320,21 +320,21 @@
 			"properties":[{
 				"key": "african",
 				"title": "African",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “African”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “African”. Make sure to also include this value in the group total for <code>ethnicity_black</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "caribbean",
 				"title": "Caribbean",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Caribbean”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Caribbean”. Make sure to also include this value in the group total for <code>ethnicity_black</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "other",
 				"title": "Any other Black, African or Caribbean background",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Black, African or Caribbean background”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Black, African or Caribbean background”. Make sure to also include this value in the group total for <code>ethnicity_black</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -349,28 +349,28 @@
 			"properties":[{
 				"key": "african",
 				"title": "White and Black African",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”. ",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”. Make sure to also include this value in the group total for <code>ethnicity_mixed</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "asian",
 				"title": "White and Asian",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Asian”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Asian”. Make sure to also include this value in the group total for <code>ethnicity_mixed</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "caribbean",
 				"title": "White and Black Caribbean",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black Caribbean”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black Caribbean”. Make sure to also include this value in the group total for <code>ethnicity_mixed</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "other",
 				"title": "Any other Mixed or Multiple ethnic background",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Mixed or Multiple ethnic background”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other Mixed or Multiple ethnic background”. Make sure to also include this value in the group total for <code>ethnicity_mixed</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -385,14 +385,14 @@
 			"properties":[{
 				"key": "arab",
 				"title": "Arab",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Arab”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Arab”. Make sure to also include this value in the group total for <code>ethnicity_other</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "anyother",
 				"title": "Any other ethnic group",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other ethnic group”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other ethnic group”. Make sure to also include this value in the group total for <code>ethnicity_other</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -407,28 +407,28 @@
 			"properties":[{
 				"key": "british",
 				"title": "English, Welsh, Scottish, Northern Irish or British",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “English, Welsh, Scottish, Northern Irish or British”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “English, Welsh, Scottish, Northern Irish or British”. Make sure to also include this value in the group total for <code>ethnicity_white</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "irish",
 				"title": "Irish",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Irish”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Irish”. Make sure to also include this value in the group total for <code>ethnicity_white</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "traveller",
 				"title": "Gypsy or Irish Traveller",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Gypsy or Irish Traveller”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Gypsy or Irish Traveller”. Make sure to also include this value in the group total for <code>ethnicity_white</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "other",
 				"title": "Any other White background",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other White background”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “Any other White background”. Make sure to also include this value in the group total for <code>ethnicity_white</code>.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -510,7 +510,7 @@
 			"key": "no",
 			"replaces": "trans_yes",
 			"title": "Doesn't match that assigned at birth",
-			"description": "The number of employees whose gender identity doesn’t match that assigned at birth",
+			"description": "The number of employees whose gender identity doesn’t match that assigned at birth.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "5"
@@ -518,7 +518,7 @@
 			"key": "yes",
 			"replaces": "trans_no",
 			"title": "Matches that assigned at birth",
-			"description": "The number of employees whose gender identity matches that assigned at birth",
+			"description": "The number of employees whose gender identity matches that assigned at birth.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "495"
@@ -526,7 +526,7 @@
 			"key": "prefernottosay",
 			"replaces": "trans_prefernottosay",
 			"title": "Prefer not to say",
-			"description": "The number of people who prefer not to say",
+			"description": "The number of people who prefer not to say.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "11"
