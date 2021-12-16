@@ -40,8 +40,9 @@
 	header nav .fileselect { display: none; }
 	header nav ul input { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.01; }
 
-	#errors h3 { margin-top: 0; font-weight: bold; margin-bottom: 0.25em; }
-	#errors ul { list-style: disc; margin-left: 1em; }
+	.messages h3 { margin-top: 0; font-weight: bold; margin-bottom: 0.25em; }
+	.messages ul { list-style: disc; margin-left: 1em; }
+
 	code { font-family: monospace; background: #ccc; line-height: 1em; padding: 0 0.25em; margin-left: 0.25em; }
 	
 	.dialog { position: fixed; }
@@ -80,13 +81,13 @@
 	#builder .row { display: grid; grid-template-columns: 1fr 320px; grid-gap: 1em;	}
 	#builder .row.one-col { grid-template-columns: 100%; }
 	#builder .row:hover, #builder .row:focus { background: #ddd; }
-	#builder .row.level-2 .col:first-child { padding-left: 4em; }
+	#builder .row.level-2 .col:first-child { padding-left: 6em; }
 	#builder .row .col { position: relative; }
-	#builder .row.level-1 .col:first-child { padding-left: 2em; }
+	#builder .row.level-1 .col:first-child { padding-left: 3em; }
 	#builder .row.level-1 .col:first-child:before {
 		content: "";
 		position: absolute;
-		left: 0;
+		left: 1.5em;
 		top: 0.4em;
 		width: 0; 
 		height: 0; 
@@ -387,7 +388,7 @@
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
 								<h4><label for="carer_yes_1-19">Carers (1-19 hours/week)</label> <code>carer_yes_1-19</code></h4>
-								<p>Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census).</p>
+								<p>Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census). This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="carer_yes_1-19" placeholder="e.g. 30" min="0" />
@@ -396,7 +397,7 @@
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
 								<h4><label for="carer_yes_20-49">Carers (20-49 hours/week)</label> <code>carer_yes_20-49</code></h4>
-								<p>Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census).</p>
+								<p>Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census). This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="carer_yes_20-49" placeholder="e.g. 10" min="0" />
@@ -405,7 +406,7 @@
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
 								<h4><label for="carer_yes_50">Carers (50+ hours/week)</label> <code>carer_yes_50</code></h4>
-								<p>Yes, 50 or more hours a week</p>
+								<p>Yes, 50 or more hours a week. This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="carer_yes_50" placeholder="e.g. 10" min="0" />
@@ -525,7 +526,7 @@
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_asian">Asian or Asian British</label> <code>ethnicity_asian</code></h4>
-								<p>The Census group “Asian/Asian British”.</p>
+								<p>The Census group “Asian/Asian British”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_asian" placeholder="e.g. 45" min="0" />
@@ -579,7 +580,7 @@
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_black">Black, African, Caribbean or Black British</label> <code>ethnicity_black</code></h4>
-								<p>The Census group “Black, African, Caribbean or Black British”.</p>
+								<p>The Census group “Black, African, Caribbean or Black British”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_black" placeholder="e.g. 45" min="0" />
@@ -615,7 +616,7 @@
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_mixed">Mixed or Multiple ethnic groups</label> <code>ethnicity_mixed</code></h4>
-								<p>The Census group “Mixed or Multiple ethnic groups”.</p>
+								<p>The Census group “Mixed or Multiple ethnic groups”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_mixed" placeholder="e.g. 45" min="0" />
@@ -624,7 +625,7 @@
 						<div class="row doublepadded level-1 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_mixed_african">White and Black African</label> <code>ethnicity_mixed_african</code></h4>
-								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”.</p>
+								<p>Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”. </p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_mixed_african" placeholder="e.g. 10" min="0" />
@@ -660,7 +661,7 @@
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_other">Other ethnic group</label> <code>ethnicity_other</code></h4>
-								<p>The Census group “Other ethnic group”.</p>
+								<p>The Census group “Other ethnic group”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_other" placeholder="e.g. 45" min="0" />
@@ -687,7 +688,7 @@
 						<div class="row doublepadded level-0 two-col">
 							<div class="col">
 								<h4><label for="ethnicity_white">White</label> <code>ethnicity_white</code></h4>
-								<p>The Census group “White”.</p>
+								<p>The Census group “White”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.</p>
 							</div>
 							<div class="col">
 								<input type="number" id="ethnicity_white" placeholder="e.g. 45" min="0" />

@@ -160,21 +160,21 @@
 			"properties": [{
 				"key": "1-19",
 				"title": "Carers (1-19 hours/week)",
-				"description": "Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census).",
+				"description": "Yes, 1-19 hours a week (the sum of 1-9 and 10-19 in the 2021 Census). This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "30"
 			},{
 				"key": "20-49",
 				"title": "Carers (20-49 hours/week)",
-				"description": "Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census).",
+				"description": "Yes, 20 - 49 hours a week (the sum of 20-34 and 35-49 in the 2021 Census). This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
 			},{
 				"key": "50",
 				"title": "Carers (50+ hours/week)",
-				"description": "Yes, 50 or more hours a week",
+				"description": "Yes, 50 or more hours a week. This field is provided to give a breakdown of <code>carer_yes</code> if you have the data.",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -270,7 +270,7 @@
 		"properties": [{
 			"key": "asian",
 			"title": "Asian or Asian British",
-			"description": "The Census group “Asian/Asian British”.",
+			"description": "The Census group “Asian/Asian British”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "45",
@@ -313,7 +313,7 @@
 		},{
 			"key": "black",
 			"title": "Black, African, Caribbean or Black British",
-			"description": "The Census group “Black, African, Caribbean or Black British”.",
+			"description": "The Census group “Black, African, Caribbean or Black British”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "45",
@@ -342,14 +342,14 @@
 		},{
 			"key": "mixed",
 			"title": "Mixed or Multiple ethnic groups",
-			"description": "The Census group “Mixed or Multiple ethnic groups”.",
+			"description": "The Census group “Mixed or Multiple ethnic groups”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "45",
 			"properties":[{
 				"key": "african",
 				"title": "White and Black African",
-				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”.",
+				"description": "Not required. Allows some organisations to provide more detailed breakdown if they wish and are able to. The Census group of “White and Black African”. ",
 				"type": "integer",
 				"minimum": 0,
 				"example": "10"
@@ -378,7 +378,7 @@
 		},{
 			"key": "other",
 			"title": "Other ethnic group",
-			"description": "The Census group “Other ethnic group”.",
+			"description": "The Census group “Other ethnic group”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "45",
@@ -400,7 +400,7 @@
 		},{
 			"key": "white",
 			"title": "White",
-			"description": "The Census group “White”.",
+			"description": "The Census group “White”. This should be the total for this entire census group. You can also provide the breakdown by sub-group where you have it.",
 			"type": "integer",
 			"minimum": 0,
 			"example": "45",
