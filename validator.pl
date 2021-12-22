@@ -76,7 +76,7 @@ for($d = 0; $d < @dashboards; $d++){
 			if(!$cls){ $cls = "SUCCESS"; $txts = "VALID"; }
 
 			# Make the list item
-			$html .= "\t\t<li><a href=\"$url\" class=\"$cls\"><h2>$name</h2>$txte$txtw$txts</a></li>\n";
+			$html .= "\t\t<li><div class=\"$cls\"><h2>$name</h2><a href=\"$url\">Source data</a> $txte$txtw$txts</div></li>\n";
 		}
 		$html .= "\t</ul>\n";
 
