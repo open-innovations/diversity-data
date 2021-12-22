@@ -3,6 +3,7 @@
 use utf8;
 use Data::Dumper;
 use JSON::XS;
+use POSIX qw(strftime);
 use open qw/ :std :encoding(utf8) /; # To avoid "Wide character warning"
 
 @dashboards = ("leeds-city-region/leeds.csv");
@@ -11,6 +12,7 @@ use open qw/ :std :encoding(utf8) /; # To avoid "Wide character warning"
 # Read in the fields from the definition JSON file - available via %fields
 getFields("diversity-definition.json");
 
+$lastupdated = "<time datetime=\"".strftime("%F",gmtime())."\">".strftime("%A %d %B %Y %R",gmtime())."</time>";
 
 # Loop over the dashboard array
 for($d = 0; $d < @dashboards; $d++){
@@ -80,6 +82,7 @@ for($d = 0; $d < @dashboards; $d++){
 
 		# Replace the portion of the original file with the new HTML fragment
 		$vstr =~ s/(\<\!-- Start validation --\>)(.*)(\<\!-- End validation --\>)/$1\n$html\n$3/gi;
+		$vstr =~ s/(\<\!-- Start date --\>)(.*)(\<\!-- End date --\>)/$1$lastupdated$3/gi;
 
 		# Put newlines back
 		$vstr =~ s/::NEWLINE::/\n/g;
