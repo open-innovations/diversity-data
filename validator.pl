@@ -236,7 +236,8 @@ sub readOrganisationURL {
 
 		foreach $category (sort(keys(%checksubtotal))){
 			$c = $lookup{$category};
-			if($cols[$c]){
+			print "\t$category has an index of $c\n";
+			if($cols[$c] && $c >= 0){
 				$t = $cols[$c]+0;
 				if($checksubtotal{$category}{'total'} > $t){
 					push(@messages,{'type'=>'warning','row'=>$r,'field'=>$category,'message'=>'The value for <code>'.$category.'</code> is <strong>'.$t.'</strong> but the sub-categories ('.join(", ",@{$checksubtotal{$category}{'sub'}}).') appear to add up to <strong>'.$checksubtotal{$category}{'total'}.'</strong> on line '.($r+1)});
