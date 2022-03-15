@@ -1105,7 +1105,7 @@
 					dt = new Date(o.date);
 					sli = document.createElement('li');
 					sli.classList.add('org');
-					sli.innerHTML = '<a href="'+d.URL+'">'+this.compare[i].name+'</a> updated <time datetime="'+o.date+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time>';
+					sli.innerHTML = '<a href="'+d.URL+'">'+this.compare[i].name+'</a> as at <time datetime="'+o.date+'">'+dt.toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })+'</time>';
 					document.querySelector('#sources ul').appendChild(sli);
 					for(r in d){
 						if(typeof d[r]==="object"){
