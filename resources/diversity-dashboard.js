@@ -493,7 +493,7 @@
 			var i,cards,cls,id;
 			if(!attr) attr = {};
 			this.log('MESSAGE','init',attr);
-			if(!attr.index){
+			if(!attr.index && !attr.data){
 				this.log('ERROR','No index file provided');
 				return this;
 			}
@@ -513,45 +513,74 @@
 			// Update the state of the area (it won't process orgs just yet)
 			this.setStateFromHREF();
 
-			// Load the index file
-			OI.ajax(attr.index,{
-				"this": this,
-				"dataType": "text",
-				"success": function(d){
-					d = CSVToArray(d);
-					this.index = d.data;
-					var i,u,urls,toload,loaded;
-					urls = {};
-					toload = 0;
-					loaded = 0;
-					for(i = 0; i < d.data.length; i++){
-						if(d.data[i].URL && !urls[d.data[i].URL]){
-							toload++;
-							urls[d.data[i].URL] = true;
+			if(attr.index){
+				// Load the index file that consists of links to data files
+				OI.ajax(attr.index,{
+					"this": this,
+					"dataType": "text",
+					"success": function(d){
+						d = CSVToArray(d);
+						this.index = d.data;
+						var i,u,urls,toload,loaded;
+						urls = {};
+						toload = 0;
+						loaded = 0;
+						for(i = 0; i < d.data.length; i++){
+							if(d.data[i].URL && !urls[d.data[i].URL]){
+								toload++;
+								urls[d.data[i].URL] = true;
+							}
+						}
+						// Load each URL in the index
+						for(u in urls){
+							if(urls[u]){
+								this.data[u] = {};
+								OI.ajax(u,{
+									"this": this,
+									"dataType": "text",
+									"url": u,
+									"success": function(d,attr){
+										this.cache[attr.data.url] = {'csv':d,'loaded':true};
+										// Store the data
+										this.addData(attr.data.url,CSVToArray(d).data);
+										// Increment the loaded counter
+										loaded++;
+										// If we've loaded them all we finish up
+										if(toload == loaded) this.loaded();
+									},
+									"error": function(err){
+										console.error('ERROR: Unable to load',err);
+										this.cache[attr.data.url] = {'csv':'','loaded':true};
+										// Store the data
+										//this.addData(attr.data.url,CSVToArray(d).data);
+										// Increment the loaded counter
+										loaded++;
+										// If we've loaded them all we finish up
+										if(toload == loaded) this.loaded();
+									}
+								});
+							}
 						}
 					}
-					// Load each URL in the index
-					for(u in urls){
-						if(urls[u]){
-							this.data[u] = {};
-							OI.ajax(u,{
-								"this": this,
-								"dataType": "text",
-								"url": u,
-								"success": function(d,attr){
-									this.cache[attr.data.url] = {'csv':d,'loaded':true};
-									// Store the data
-									this.addData(attr.data.url,CSVToArray(d).data);
-									// Increment the loaded counter
-									loaded++;
-									// If we've loaded them all we finish up
-									if(toload == loaded) this.loaded();
-								}
-							});
-						}
+				});
+			}else if(attr.data){
+				// Load a single combined data file
+				OI.ajax(attr.data,{
+					"this": this,
+					"dataType": "text",
+					"url": attr.data,
+					"success": function(d,attr){
+						this.cache[attr.data.url] = {'csv':d,'loaded':true};
+						// Store the data
+						this.addData(attr.data.url,CSVToArray(d).data);
+						// If we've loaded them all we finish up
+						this.loaded();
+					},
+					"error": function(err,attr){
+						console.error('ERROR: Unable to load',err,attr,this);
 					}
-				}
-			});
+				});
+			}
 
 			// Add events to comparison form
 			if(attr.comparison){
