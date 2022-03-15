@@ -1,1 +1,7 @@
-# diversity-data
+# Diversity data
+
+We have been working with the Leeds Anchors Network to build a "Diversity Dashboard" for the Leeds City Region. The first step was defining [a data standard along with a tool to help people put the data together](https://open-innovations.github.io/diversity-data/builder) into that standard. As well as creating an index of [the data published by organisations](https://github.com/open-innovations/diversity-data/blob/main/leeds-city-region/leeds.csv) we have also created a [Leeds City Region Dashboard](https://open-innovations.github.io/diversity-data/leeds-city-region/) to give a top-level view and exploration of the data. We have demonstrated this work in a [Show & Tell](https://odileeds.sharepoint.com/:v:/s/open-innovations-public/Eakwd8qees5GsUPs6NG8_oABJW_yjqbnNuPfidcoIAu9MA?e=dO3Vl6) for the Leeds Anchors Network.
+
+We have separated the work out into: getting the data, publishing the data, and visualising the data. By splitting it up like this it should be straightforward for other people to take the data to make different visualisations that perhaps do a better job than us or that look at specific aspects of the data.
+
+This work does not have to be specific to Leeds City Region or the Leeds Anchors Network. There is nothing stopping other organisations in different parts of the UK from making use of this too. Setting up a new dashboard is relatively trivial - the majority of the work is in an organisation pulling together what diversity data they have - so we could create versions for other geographic areas or industries.
