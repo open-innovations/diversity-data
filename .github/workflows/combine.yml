@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add leeds-city-region/validation.html
+          git add leeds-city-region/combined.csv
           git commit -m "Update validation" || exit 0
       - name: Push changes
         uses: ad-m/github-push-action@master
