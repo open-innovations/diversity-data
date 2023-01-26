@@ -127,7 +127,7 @@ form .item { display: inline-block; margin-right: 1em; }
 	grid-template-columns: repeat(3, 1fr);	
 }
 .grid.links {
-	grid-template-columns: repeat(8, auto);
+	grid-template-columns: repeat(9, auto);
 	grid-gap: 4px;
 	font-size: 1.25em;
 	margin-bottom: 0;

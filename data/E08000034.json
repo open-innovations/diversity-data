@@ -39,6 +39,12 @@
 			"male": 212346,
 			"total": 433216
 		},
+		"genderidentitymatchesthatassignedatbirth":{
+			"no": 1629,
+			"yes": 323432,
+			"undisclosed": 21214,
+			"total": 346275
+		},
 		"religion":{
 			"buddhist": 996,
 			"christian": 170577,

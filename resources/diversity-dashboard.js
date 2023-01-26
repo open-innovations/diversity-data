@@ -455,6 +455,13 @@
 				'undisclosed':{'_total':0,'_label':'Undisclosed'},
 				'total':{'_total':0,'_label':'Total'}
 			},
+			'genderidentitymatchesthatassignedatbirth':{
+				'no':{'_total':0,'_label':'Doesn\'t match that assigned at birth'},
+				'yes':{'_total':0,'_label':'Matches that assigned at birth'},
+				'prefernottosay':{'_total':0,'_label':'Prefer not to say'},
+				'undisclosed':{'_total':0,'_label':'Undisclosed'},
+				'total':{'_total':0,'_label':'Total'}
+			},
 			'religion':{
 				'buddhist':{'_total':0,'_label':'Buddhist'},
 				'christian':{'_total':0,'_label':'Christian'},
@@ -1179,6 +1186,7 @@
 			this.cards.disability.addPanels(barpanel);
 			this.cards.ethnicity.addPanels(barpanel);
 			this.cards.gender.addPanels(barpanel);
+			this.cards.genderidentitymatchesthatassignedatbirth.addPanels(barpanel);
 			this.cards.religion.addPanels(barpanel);
 			this.cards.seb.addPanels(barpanel);
 			this.cards.sexuality.addPanels(barpanel);
@@ -1189,6 +1197,7 @@
 				'disability':{'table':'','th':'','data': []},
 				'ethnicity':{'table':'','th':'','data': []},
 				'gender':{'table':'','th':'','data': []},
+				'genderidentitymatchesthatassignedatbirth':{'table':'','th':'','data': []},
 				'religion':{'table':'','th':'','data': []},
 				'seb':{'table':'','th':'','data': []},
 				'sexuality':{'table':'','th':'','data': []}
@@ -1196,7 +1205,7 @@
 
 			fmt = JSON.parse(fmt);
 			for(s in data){
-				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender" || s=="religion" || s=="sexuality" || s=="seb"){
+				if(s=="age" || s=="carer" || s=="disability" || s=="ethnicity" || s=="gender" || s=="genderidentitymatchesthatassignedatbirth" || s=="religion" || s=="sexuality" || s=="seb"){
 					for(i = 0; i < this.compare.length; i++){
 						g[s].th += '<th>'+this.compare[i].name+' #</th><th>'+this.compare[i].name+' %</th>';
 					}
@@ -1267,6 +1276,14 @@
 					if(e) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.gender.panels.chart.el);
+			}
+			if(g.genderidentitymatchesthatassignedatbirth.table){
+				this.cards.genderidentitymatchesthatassignedatbirth.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Gender identity</th>'+g.genderidentitymatchesthatassignedatbirth.th+'</tr>'+g.genderidentitymatchesthatassignedatbirth.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
+				this.cards.genderidentitymatchesthatassignedatbirth.chart.setData(g.genderidentitymatchesthatassignedatbirth.data).draw();
+				for(e in this.cards.genderidentitymatchesthatassignedatbirth.panels.chart.events){
+					if(e) this.cards.genderidentitymatchesthatassignedatbirth.chart.on(e,this.cards.genderidentitymatchesthatassignedatbirth.panels.chart.events[e]);
+				}
+				addKey(keytxt,this.cards.genderidentitymatchesthatassignedatbirth.panels.chart.el);
 			}
 			if(g.religion.table){
 				this.cards.religion.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Religion</th>'+g.religion.th+'</tr>'+g.religion.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';

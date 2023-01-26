@@ -100,6 +100,21 @@
 				}
 			}
 		},
+		"genderidentitymatchesthatassignedatbirth": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS078 'Gender identity'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts078-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"no": ["Gender identity: Gender identity different from sex registered at birth but no specific identity given","Gender identity: Trans woman","Gender identity: Trans man","Gender identity: All other gender identities"],
+					"yes": ["Gender identity: Gender identity the same as sex registered at birth"],
+					"undisclosed": ["Gender identity: Not answered"],
+					"total": ["Gender identity: Total: All usual residents aged 16 years and over"]
+				}
+			}
+		},
 		"religion": {
 			"type": "NOMIS",
 			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS030 'Religion'. Save the output files under Census2021/.",
