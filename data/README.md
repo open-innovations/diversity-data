@@ -3,7 +3,122 @@
 Notes on sources for the demographic data. As much as possible we download data by Output Area (OA). We then use a [lookup for output area to LSOA, MSOA, Local Authority, and Region](https://geoportal.statistics.gov.uk/datasets/output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-december-2020-lookup-in-england-and-wales) from ONS (Open Government Licence) to sum the data by geographic area.
  
 
-## Age
+## 2021 data
+
+Get [bulk downloads from Nomisweb](https://www.nomisweb.co.uk/sources/census_2021_bulk).
+
+### Age
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS007 'Age by single year of age'. Save the output files under Census2021/.
+* Group:
+	- "0-14": ["Age: Aged 4 years and under; measures: Value","Age: Aged 5 to 9 years; measures: Value","Age: Aged 10 years; measures: Value","Age: Aged 11 years; measures: Value","Age: Aged 12 years; measures: Value","Age: Aged 13 years; measures: Value","Age: Aged 14 years; measures: Value"],
+	- "15-24": ["Age: Aged 15 years; measures: Value","Age: Aged 16 to 19 years; measures: Value","Age: Aged 20 to 24 years; measures: Value"],
+	- "25-34": ["Age: Aged 25 to 34 years; measures: Value"],
+	- "35-44": ["Age: Aged 35 years; measures: Value","Age: Aged 36 years; measures: Value","Age: Aged 37 years; measures: Value","Age: Aged 38 years; measures: Value","Age: Aged 39 years; measures: Value","Age: Aged 40 years; measures: Value","Age: Aged 41 years; measures: Value","Age: Aged 42 years; measures: Value","Age: Aged 43 years; measures: Value","Age: Aged 44 years; measures: Value"],
+	- "45-54": ["Age: Aged 45 years; measures: Value","Age: Aged 46 years; measures: Value","Age: Aged 47 years; measures: Value","Age: Aged 48 years; measures: Value","Age: Aged 49 years; measures: Value","Age: Aged 50 years; measures: Value","Age: Aged 51 years; measures: Value","Age: Aged 52 years; measures: Value","Age: Aged 53 years; measures: Value","Age: Aged 54 years; measures: Value"],
+	- "55-64": ["Age: Aged 55 years; measures: Value","Age: Aged 56 years; measures: Value","Age: Aged 57 years; measures: Value","Age: Aged 58 years; measures: Value","Age: Aged 59 years; measures: Value","Age: Aged 60 years; measures: Value","Age: Aged 61 years; measures: Value","Age: Aged 62 years; measures: Value","Age: Aged 63 years; measures: Value","Age: Aged 64 years; measures: Value"],
+	- "65-69": ["Age: Aged 65 years; measures: Value","Age: Aged 66 years; measures: Value","Age: Aged 67 years; measures: Value","Age: Aged 68 years; measures: Value","Age: Aged 69 years; measures: Value"],
+	- "70+": ["Age: Aged 70 years; measures: Value","Age: Aged 71 years; measures: Value","Age: Aged 72 years; measures: Value","Age: Aged 73 years; measures: Value","Age: Aged 74 years; measures: Value","Age: Aged 75 to 84 years; measures: Value","Age: Aged 85 years and over; measures: Value"],
+	- "total": ["Age: Total; measures: Value"]
+
+### Carers
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS039 'Provision of unpaid care'. Save the output files under Census2021/.
+* Group:
+	- "total": ["Provision of unpaid care: Total: All usual residents aged 5 and over"],
+	- "yes": ["Provision of unpaid care: Provides 19 hours or less unpaid care a week","Provision of unpaid care: Provides 20 to 49 hours unpaid care a week","Provision of unpaid care: Provides 50 or more hours unpaid care a week"],
+	- "no": ["Provision of unpaid care: Provides no unpaid care"]
+
+### Disability
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS038 'Disability'. Save the output files under Census2021/.
+* Group:
+	- "total": ["Disability: Total: All usual residents"],
+	- "no": ["Disability: Not disabled under the Equality Act"],
+	- "yes": ["Disability: Disabled under the Equality Act"]
+
+### Ethnicity
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS022 'Ethnic group (detailed)'. Save the output files under Census2021/.
+* Group:
+	- "asian": ["Ethnic group (detailed): Asian, Asian British or Asian Welsh"],
+	- "black": ["Ethnic group (detailed): Black, Black British, Black Welsh of African background"],
+	- "mixed": ["Ethnic group (detailed): Mixed or Multiple ethnic groups"],
+	- "other": ["Ethnic group (detailed): Other ethnic group"],
+	- "white": ["Ethnic group (detailed): White"],
+	- "total": ["Ethnic group (detailed): Total: All usual residents"]
+
+### Gender
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS008 'Sex'. Save the output files under Census2021/.
+* Group:
+	- "female": ["Sex: Female; measures: Value"],
+	- "male": ["Sex: Male; measures: Value"],
+	- "total": ["Sex: All persons; measures: Value"]
+
+### Religion
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS030 'Religion'. Save the output files under Census2021/.
+* Group:
+	- "buddhist": ["Religion: Buddhist"],
+	- "christian": ["Religion: Christian"],
+	- "hindu": ["Religion: Hindu"],
+	- "jewish": ["Religion: Jewish"],
+	- "muslim": ["Religion: Muslim"],
+	- "no": ["Religion: No religion"],
+	- "other": ["Religion: Other religion"],
+	- "sikh": ["Religion: Sikh"],
+	- "undisclosed": ["Religion: Not answered"],
+	- "total": ["Religion: Total: All usual residents"]
+
+### Socio-economic background
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS062 'Occupation'. Save the output files under Census2021/.
+* Group:
+	- "total": ["National Statistics Socio-economic Classification (NS-SEC): Total: All usual residents aged 16 years and over"],
+	- "professional": ["National Statistics Socio-economic Classification (NS-SEC): L1, L2 and L3 Higher managerial, administrative and professional occupations","National Statistics Socio-economic Classification (NS-SEC): L4, L5 and L6 Lower managerial, administrative and professional occupations"],
+	- "intermediate": ["National Statistics Socio-economic Classification (NS-SEC): L7 Intermediate occupations","National Statistics Socio-economic Classification (NS-SEC): L8 and L9 Small employers and own account workers"],
+	- "lower": ["National Statistics Socio-economic Classification (NS-SEC): L10 and L11 Lower supervisory and technical occupations","National Statistics Socio-economic Classification (NS-SEC): L12 Semi-routine occupations","National Statistics Socio-economic Classification (NS-SEC): L13 Routine occupations","National Statistics Socio-economic Classification (NS-SEC): L14.1 and L14.2 Never worked and long-term unemployed","National Statistics Socio-economic Classification (NS-SEC): L15 Full-time students"]
+
+### Sexuality
+
+* Year: 2021
+* Geography: LTLA
+* Source: NOMIS
+* Notes: Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS077 'Sexual orientation'. Save the output files under Census2021/.
+* Group:
+	- "bisexual": ["Sexual orientation: Bisexual"],
+	- "gaylesbian": ["Sexual orientation: Gay or Lesbian"],
+	- "prefernottosay": ["Sexual orientation: Not answered"],
+	- "straight": ["Sexual orientation: Straight or Heterosexual"],
+	- "usedifferentterm": ["Sexual orientation: All other sexual orientations"],
+	- "total": ["Sexual orientation: Total: All usual residents aged 16 years and over"]
+
+
+## 2011+ data
+
+### Age
 
 * Year: 2011
 * Geography: OA
@@ -26,7 +141,7 @@ Notes on sources for the demographic data. As much as possible we download data 
 * Citation: Office for National Statistics ; National Records of Scotland ; Northern Ireland Statistics and Research Agency (2017): 2011 Census aggregate data. UK Data Service (Edition: February 2017). DOI: http://dx.doi.org/10.5257/census/aggregate-2011-2. This information is licensed under the terms of the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2).
 
 
-## Carer
+### Carer
 
 * Year: 2011
 * Geography: OA
@@ -38,7 +153,7 @@ Notes on sources for the demographic data. As much as possible we download data 
 	 - "no"=>["Provides no unpaid care"]
 * Citation: Office for National Statistics ; National Records of Scotland ; Northern Ireland Statistics and Research Agency (2017): 2011 Census aggregate data. UK Data Service (Edition: February 2017). DOI: http://dx.doi.org/10.5257/census/aggregate-2011-2. This information is licensed under the terms of the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2).
 
-## Disability
+### Disability
 
 * Year: 2011
 * Geography: OA
@@ -50,7 +165,7 @@ Notes on sources for the demographic data. As much as possible we download data 
   - "yes"=>["Day-to-day activities limited a lot","Day-to-day activities limited a little"]
 * Citation: Office for National Statistics ; National Records of Scotland ; Northern Ireland Statistics and Research Agency (2017): 2011 Census aggregate data. UK Data Service (Edition: February 2017). DOI: http://dx.doi.org/10.5257/census/aggregate-2011-2. This information is licensed under the terms of the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2).
 
-## Ethnicity
+### Ethnicity
 
 * Year: 2011
 * Geography: OA
@@ -85,7 +200,7 @@ Notes on sources for the demographic data. As much as possible we download data 
   - "total"=>["total"]
 * Citation: Office for National Statistics ; National Records of Scotland ; Northern Ireland Statistics and Research Agency (2017): 2011 Census aggregate data. UK Data Service (Edition: February 2017). DOI: http://dx.doi.org/10.5257/census/aggregate-2011-2. This information is licensed under the terms of the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2).
 
-## Gender
+### Gender
 
 * Year: 2011
 * Geography: OA
@@ -100,7 +215,7 @@ Notes on sources for the demographic data. As much as possible we download data 
   - "male"=>["male"],
   - "total"=>["total"]
 
-## Religion
+### Religion
 
 * Year: 2011
 * Geography: OA
@@ -119,7 +234,7 @@ Notes on sources for the demographic data. As much as possible we download data 
   - "total"=>["Total Religion"]
 * Citation: Office for National Statistics ; National Records of Scotland ; Northern Ireland Statistics and Research Agency (2017): 2011 Census aggregate data. UK Data Service (Edition: February 2017). DOI: http://dx.doi.org/10.5257/census/aggregate-2011-2. This information is licensed under the terms of the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2).
 
-## Sexuality
+### Sexuality
 
 * Year: 2018
 * Geography: Region
@@ -127,7 +242,7 @@ Notes on sources for the demographic data. As much as possible we download data 
 * Notes: Go to https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/datasets/sexualidentityuk and download the CSV. Extract the 2018 values (latest) and then rebuild the table so that sexuality totals are given in the columns with regions in rows.* Socio-economic background: NOMIS. Go to https://www.nomisweb.co.uk/census/2011/qs611ew add 'Output Areas and Small Areas' then select 'Query data'. Under 'Geography' select 'All' 2011 output areas. Under 'Social grade' check all the boxes. In the 'Format/layout' check the 'Include codes' box. Save the output under `Census2011/OA/QS611EW.csv`.
 * Citation: ONS, [Open Government Licence v3](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)
 
-## Socio-economic background
+### Socio-economic background
 
 * Year: 2011
 * Source: NOMIS

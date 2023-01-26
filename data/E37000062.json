@@ -1,0 +1,69 @@
+{
+	"name":"Leeds City Region",
+	"id": "E37000062",
+	"counts": {
+		"LAD": 5
+	},
+	"data":{
+		"age":{
+			"0-14": 442311,
+			"15-24": 303499,
+			"25-34": 322586,
+			"35-44": 307551,
+			"45-54": 305578,
+			"55-64": 277561,
+			"65-69": 108118,
+			"70+": 284379,
+			"total": 2351583
+		},
+		"carer":{
+			"no": 2018275,
+			"yes": 193875,
+			"total": 2212150
+		},
+		"disability":{
+			"no": 1937544,
+			"yes": 414035,
+			"total": 2351579
+		},
+		"ethnicity":{
+			"asian": 372726,
+			"black": 46879,
+			"mixed": 64940,
+			"other": 40303,
+			"white": 1801355,
+			"total": 2351578
+		},
+		"gender":{
+			"female": 1200857,
+			"male": 1150725,
+			"total": 2351582
+		},
+		"religion":{
+			"buddhist": 6256,
+			"christian": 955201,
+			"hindu": 18140,
+			"jewish": 6988,
+			"muslim": 340875,
+			"no": 863872,
+			"other": 9824,
+			"sikh": 19245,
+			"undisclosed": 131181,
+			"total": 2351582
+		},
+		"seb":{
+			"intermediate": 386396,
+			"lower": 936299,
+			"professional": 557798,
+			"total": 1880493
+		},
+		"sexuality":{
+			"bisexual": 25550,
+			"gaylesbian": 28246,
+			"prefernottosay": 140357,
+			"straight": 1679765,
+			"usedifferentterm": 6574,
+			"total": 1880492
+		}
+	}
+}

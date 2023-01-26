@@ -1,67 +1,69 @@
 {
 	"name":"Sheffield",
 	"id": "E08000019",
-	"OAs": 1817,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 94507,
-			"15-24": 98443,
-			"25-34": 74741,
-			"35-44": 74331,
-			"45-54": 68713,
-			"55-64": 56265,
-			"65-69": 24114,
-			"70+": 61584,
-			"total": 552698
+			"0-14": 94243,
+			"15-24": 88327,
+			"25-34": 79401,
+			"35-44": 67174,
+			"45-54": 68557,
+			"55-64": 63996,
+			"65-69": 24796,
+			"70+": 70025,
+			"total": 556519
 		},
 		"carer":{
-			"no": 495325,
-			"yes": 57373,
-			"total": 552698
+			"no": 477333,
+			"yes": 49009,
+			"total": 526342
 		},
 		"disability":{
-			"no": 448983,
-			"yes": 103715,
-			"total": 552698
+			"no": 446652,
+			"yes": 109869,
+			"total": 556521
 		},
 		"ethnicity":{
-			"asian": 44385,
-			"black": 20082,
-			"mixed": 13289,
-			"other": 12398,
-			"white": 462544,
-			"total": 552698
+			"asian": 53558,
+			"black": 17876,
+			"mixed": 19707,
+			"other": 17528,
+			"white": 440212,
+			"total": 556516
 		},
 		"gender":{
-			"female": 206409,
-			"male": 204595,
-			"total": 411004
+			"female": 282327,
+			"male": 274194,
+			"total": 556521
 		},
 		"religion":{
-			"buddhist": 2282,
-			"christian": 290299,
-			"hindu": 3566,
-			"jewish": 747,
-			"muslim": 42801,
-			"no": 172516,
-			"other": 1961,
-			"sikh": 942,
-			"undisclosed": 37584,
-			"total": 552698
+			"buddhist": 2215,
+			"christian": 214136,
+			"hindu": 3759,
+			"jewish": 649,
+			"muslim": 57044,
+			"no": 241556,
+			"other": 2635,
+			"sikh": 927,
+			"undisclosed": 33600,
+			"total": 556521
 		},
 		"seb":{
-			"intermediate": 54805,
-			"lower": 81507,
-			"professional": 35747,
-			"total": 172059
+			"intermediate": 85887,
+			"lower": 235983,
+			"professional": 134380,
+			"total": 456250
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"heterosexual": 4106000,
-			"homosexual": 56000,
-			"prefernottosay": 135000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 9018,
+			"gaylesbian": 7395,
+			"prefernottosay": 35889,
+			"straight": 401537,
+			"usedifferentterm": 2411,
+			"total": 456250
 		}
 	}
 }

@@ -1,67 +1,69 @@
 {
 	"name":"Leeds",
 	"id": "E08000035",
-	"OAs": 2543,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 128592,
-			"15-24": 124709,
-			"25-34": 113316,
-			"35-44": 102306,
-			"45-54": 94492,
-			"55-64": 78472,
-			"65-69": 30220,
-			"70+": 79378,
-			"total": 751485
+			"0-14": 144572,
+			"15-24": 122281,
+			"25-34": 121267,
+			"35-44": 108251,
+			"45-54": 99929,
+			"55-64": 88886,
+			"65-69": 33690,
+			"70+": 93074,
+			"total": 811950
 		},
 		"carer":{
-			"no": 679887,
-			"yes": 71598,
-			"total": 751485
+			"no": 703663,
+			"yes": 61490,
+			"total": 765153
 		},
 		"disability":{
-			"no": 625807,
-			"yes": 125678,
-			"total": 751485
+			"no": 676272,
+			"yes": 135681,
+			"total": 811953
 		},
 		"ethnicity":{
-			"asian": 58243,
-			"black": 25893,
-			"mixed": 19632,
-			"other": 8230,
-			"white": 639487,
-			"total": 751485
+			"asian": 78501,
+			"black": 31566,
+			"mixed": 27385,
+			"other": 18888,
+			"white": 641806,
+			"total": 811957
 		},
 		"gender":{
-			"female": 284207,
-			"male": 276642,
-			"total": 560849
+			"female": 415579,
+			"male": 396374,
+			"total": 811953
 		},
 		"religion":{
-			"buddhist": 2772,
-			"christian": 419790,
-			"hindu": 7048,
-			"jewish": 6847,
-			"muslim": 40772,
-			"no": 212229,
-			"other": 2396,
-			"sikh": 8914,
-			"undisclosed": 50717,
-			"total": 751485
+			"buddhist": 2874,
+			"christian": 343311,
+			"hindu": 9217,
+			"jewish": 6267,
+			"muslim": 63054,
+			"no": 326231,
+			"other": 3637,
+			"sikh": 10047,
+			"undisclosed": 47315,
+			"total": 811953
 		},
 		"seb":{
-			"intermediate": 80315,
-			"lower": 110588,
-			"professional": 54711,
-			"total": 245614
+			"intermediate": 130514,
+			"lower": 314337,
+			"professional": 213620,
+			"total": 658471
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 12656,
+			"gaylesbian": 12229,
+			"prefernottosay": 48264,
+			"straight": 582244,
+			"usedifferentterm": 3078,
+			"total": 658471
 		}
 	}
 }

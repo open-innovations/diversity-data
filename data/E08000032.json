@@ -1,67 +1,69 @@
 {
 	"name":"Bradford",
 	"id": "E08000032",
-	"OAs": 1528,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 114917,
-			"15-24": 71047,
-			"25-34": 75631,
-			"35-44": 71618,
-			"45-54": 65499,
-			"55-64": 54348,
-			"65-69": 18570,
-			"70+": 50822,
-			"total": 522452
+			"0-14": 117002,
+			"15-24": 70913,
+			"25-34": 72556,
+			"35-44": 73889,
+			"45-54": 68088,
+			"55-64": 60960,
+			"65-69": 24124,
+			"70+": 58877,
+			"total": 546409
 		},
 		"carer":{
-			"no": 471426,
-			"yes": 51026,
-			"total": 522452
+			"no": 464672,
+			"yes": 45643,
+			"total": 510315
 		},
 		"disability":{
-			"no": 431925,
-			"yes": 90527,
-			"total": 522452
+			"no": 452714,
+			"yes": 93697,
+			"total": 546411
 		},
 		"ethnicity":{
-			"asian": 140149,
-			"black": 9267,
-			"mixed": 12979,
-			"other": 7740,
-			"white": 352317,
-			"total": 522452
+			"asian": 175666,
+			"black": 6836,
+			"mixed": 15007,
+			"other": 10753,
+			"white": 334004,
+			"total": 546407
 		},
 		"gender":{
-			"female": 184595,
-			"male": 181622,
-			"total": 366217
+			"female": 278968,
+			"male": 267444,
+			"total": 546412
 		},
 		"religion":{
-			"buddhist": 1000,
-			"christian": 239843,
-			"hindu": 4882,
-			"jewish": 299,
-			"muslim": 129041,
-			"no": 108027,
-			"other": 1686,
-			"sikh": 5125,
-			"undisclosed": 32549,
-			"total": 522452
+			"buddhist": 959,
+			"christian": 182566,
+			"hindu": 4757,
+			"jewish": 254,
+			"muslim": 166846,
+			"no": 154305,
+			"other": 2074,
+			"sikh": 4834,
+			"undisclosed": 29816,
+			"total": 546411
 		},
 		"seb":{
-			"intermediate": 44649,
-			"lower": 83304,
-			"professional": 25791,
-			"total": 153744
+			"intermediate": 87498,
+			"lower": 225354,
+			"professional": 108722,
+			"total": 421574
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 4261,
+			"gaylesbian": 4545,
+			"prefernottosay": 36918,
+			"straight": 374590,
+			"usedifferentterm": 1260,
+			"total": 421574
 		}
 	}
 }

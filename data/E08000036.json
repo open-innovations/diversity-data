@@ -1,67 +1,69 @@
 {
 	"name":"Wakefield",
 	"id": "E08000036",
-	"OAs": 1081,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 55962,
-			"15-24": 39585,
-			"25-34": 39370,
-			"35-44": 46714,
-			"45-54": 47790,
-			"55-64": 41274,
-			"65-69": 16902,
-			"70+": 38240,
-			"total": 325837
+			"0-14": 61899,
+			"15-24": 35867,
+			"25-34": 48974,
+			"35-44": 44374,
+			"45-54": 49100,
+			"55-64": 46551,
+			"65-69": 18401,
+			"70+": 48209,
+			"total": 353375
 		},
 		"carer":{
-			"no": 289216,
-			"yes": 36621,
-			"total": 325837
+			"no": 301565,
+			"yes": 31731,
+			"total": 333296
 		},
 		"disability":{
-			"no": 253936,
-			"yes": 71901,
-			"total": 325837
+			"no": 282164,
+			"yes": 71206,
+			"total": 353370
 		},
 		"ethnicity":{
-			"asian": 8498,
-			"black": 2512,
-			"mixed": 2928,
-			"other": 942,
-			"white": 310957,
-			"total": 325837
+			"asian": 12633,
+			"black": 3539,
+			"mixed": 4941,
+			"other": 2544,
+			"white": 328747,
+			"total": 353381
 		},
 		"gender":{
-			"female": 121432,
-			"male": 119565,
-			"total": 240997
+			"female": 179539,
+			"male": 173831,
+			"total": 353370
 		},
 		"religion":{
-			"buddhist": 573,
-			"christian": 216215,
-			"hindu": 831,
-			"jewish": 117,
-			"muslim": 6475,
-			"no": 79497,
-			"other": 973,
-			"sikh": 399,
-			"undisclosed": 20757,
-			"total": 325837
+			"buddhist": 797,
+			"christian": 173070,
+			"hindu": 1270,
+			"jewish": 127,
+			"muslim": 11279,
+			"no": 145950,
+			"other": 1405,
+			"sikh": 501,
+			"undisclosed": 18972,
+			"total": 353371
 		},
 		"seb":{
-			"intermediate": 27855,
-			"lower": 59888,
-			"professional": 15306,
-			"total": 103049
+			"intermediate": 58041,
+			"lower": 151261,
+			"professional": 78236,
+			"total": 287538
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 2968,
+			"gaylesbian": 4321,
+			"prefernottosay": 17945,
+			"straight": 261615,
+			"usedifferentterm": 689,
+			"total": 287538
 		}
 	}
 }

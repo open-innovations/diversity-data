@@ -1,0 +1,157 @@
+{
+	"geographies": ["E06000010","E08000019","E08000032","E08000033","E08000034","E08000035","E08000036","E12000003","E37000062"],
+	"lookup": [{
+		"file": "ONS/OAs_to_LSOAs_to_MSOAs_to_LEP_to_LAD_(December_2022)_Lookup_in_England.csv",
+		"source": "https://geoportal.statistics.gov.uk/datasets/ons::oas-to-lsoas-to-msoas-to-lep-to-lad-december-2022-lookup-in-england/explore",
+		"notes": "",
+		"geographies": {
+			"OA": {"code":"OA21CD"},
+			"LSOA": {"code":"LSOA21CD","name":"LSOA21NM"},
+			"MSOA": {"code":"MSOA21CD","name":"MSOA21NM"},
+			"LAD": {"code":"LAD22CD","name":"LAD22NM"},
+			"LEP": {"code":"LEP22CD1","name":"LEP22NM1"}
+		}
+	},{
+		"file": "ONS/OA21_RGN22_LU.csv",
+		"source": "https://geoportal.statistics.gov.uk/datasets/output-area-to-region-december-2021-lookup-in-england-and-wales-1/about",
+		"notes": "",
+		"geographies": {
+			"OA": {"code":"oa21cd"},
+			"RGN": {"code":"rgn22cd","name":"rgn22nm"}
+		}
+	}],
+	"segments": {
+		"age": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS007 'Age by single year of age'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts007-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"0-14": ["Age: Aged 4 years and under; measures: Value","Age: Aged 5 to 9 years; measures: Value","Age: Aged 10 years; measures: Value","Age: Aged 11 years; measures: Value","Age: Aged 12 years; measures: Value","Age: Aged 13 years; measures: Value","Age: Aged 14 years; measures: Value"],
+					"15-24": ["Age: Aged 15 years; measures: Value","Age: Aged 16 to 19 years; measures: Value","Age: Aged 20 to 24 years; measures: Value"],
+					"25-34": ["Age: Aged 25 to 34 years; measures: Value"],
+					"35-44": ["Age: Aged 35 years; measures: Value","Age: Aged 36 years; measures: Value","Age: Aged 37 years; measures: Value","Age: Aged 38 years; measures: Value","Age: Aged 39 years; measures: Value","Age: Aged 40 years; measures: Value","Age: Aged 41 years; measures: Value","Age: Aged 42 years; measures: Value","Age: Aged 43 years; measures: Value","Age: Aged 44 years; measures: Value"],
+					"45-54": ["Age: Aged 45 years; measures: Value","Age: Aged 46 years; measures: Value","Age: Aged 47 years; measures: Value","Age: Aged 48 years; measures: Value","Age: Aged 49 years; measures: Value","Age: Aged 50 years; measures: Value","Age: Aged 51 years; measures: Value","Age: Aged 52 years; measures: Value","Age: Aged 53 years; measures: Value","Age: Aged 54 years; measures: Value"],
+					"55-64": ["Age: Aged 55 years; measures: Value","Age: Aged 56 years; measures: Value","Age: Aged 57 years; measures: Value","Age: Aged 58 years; measures: Value","Age: Aged 59 years; measures: Value","Age: Aged 60 years; measures: Value","Age: Aged 61 years; measures: Value","Age: Aged 62 years; measures: Value","Age: Aged 63 years; measures: Value","Age: Aged 64 years; measures: Value"],
+					"65-69": ["Age: Aged 65 years; measures: Value","Age: Aged 66 years; measures: Value","Age: Aged 67 years; measures: Value","Age: Aged 68 years; measures: Value","Age: Aged 69 years; measures: Value"],
+					"70+": ["Age: Aged 70 years; measures: Value","Age: Aged 71 years; measures: Value","Age: Aged 72 years; measures: Value","Age: Aged 73 years; measures: Value","Age: Aged 74 years; measures: Value","Age: Aged 75 to 84 years; measures: Value","Age: Aged 85 years and over; measures: Value"],
+					"total": ["Age: Total; measures: Value"]
+				}
+			}
+		},
+		"carer": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS039 'Provision of unpaid care'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts039-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"total": ["Provision of unpaid care: Total: All usual residents aged 5 and over"],
+					"yes": ["Provision of unpaid care: Provides 19 hours or less unpaid care a week","Provision of unpaid care: Provides 20 to 49 hours unpaid care a week","Provision of unpaid care: Provides 50 or more hours unpaid care a week"],
+					"no": ["Provision of unpaid care: Provides no unpaid care"]
+				}
+			}
+		},
+		"disability": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS038 'Disability'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts038-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"total": ["Disability: Total: All usual residents"],
+					"no": ["Disability: Not disabled under the Equality Act"],
+					"yes": ["Disability: Disabled under the Equality Act"]
+				}
+			}
+		},
+		"ethnicity": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS022 'Ethnic group (detailed)'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts022-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"asian": ["Ethnic group (detailed): Asian, Asian British or Asian Welsh"],
+					"black": ["Ethnic group (detailed): Black, Black British, Black Welsh of African background"],
+					"mixed": ["Ethnic group (detailed): Mixed or Multiple ethnic groups"],
+					"other": ["Ethnic group (detailed): Other ethnic group"],
+					"white": ["Ethnic group (detailed): White"],
+					"total": ["Ethnic group (detailed): Total: All usual residents"]
+				}
+			}
+		},
+		"gender": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS008 'Sex'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts008-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"female": ["Sex: Female; measures: Value"],
+					"male": ["Sex: Male; measures: Value"],
+					"total": ["Sex: All persons; measures: Value"]
+				}
+			}
+		},
+		"religion": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS030 'Religion'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts030-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"buddhist": ["Religion: Buddhist"],
+					"christian": ["Religion: Christian"],
+					"hindu": ["Religion: Hindu"],
+					"jewish": ["Religion: Jewish"],
+					"muslim": ["Religion: Muslim"],
+					"no": ["Religion: No religion"],
+					"other": ["Religion: Other religion"],
+					"sikh": ["Religion: Sikh"],
+					"undisclosed": ["Religion: Not answered"],
+					"total": ["Religion: Total: All usual residents"]
+				}
+			}
+		},
+		"seb": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS062 'Occupation'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts062-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"total": ["National Statistics Socio-economic Classification (NS-SEC): Total: All usual residents aged 16 years and over"],
+					"professional": ["National Statistics Socio-economic Classification (NS-SEC): L1, L2 and L3 Higher managerial, administrative and professional occupations","National Statistics Socio-economic Classification (NS-SEC): L4, L5 and L6 Lower managerial, administrative and professional occupations"],
+					"intermediate": ["National Statistics Socio-economic Classification (NS-SEC): L7 Intermediate occupations","National Statistics Socio-economic Classification (NS-SEC): L8 and L9 Small employers and own account workers"],
+					"lower": ["National Statistics Socio-economic Classification (NS-SEC): L10 and L11 Lower supervisory and technical occupations","National Statistics Socio-economic Classification (NS-SEC): L12 Semi-routine occupations","National Statistics Socio-economic Classification (NS-SEC): L13 Routine occupations","National Statistics Socio-economic Classification (NS-SEC): L14.1 and L14.2 Never worked and long-term unemployed","National Statistics Socio-economic Classification (NS-SEC): L15 Full-time students"]
+				}
+			}
+		},
+		"sexuality": {
+			"type": "NOMIS",
+			"notes": "Go to https://www.nomisweb.co.uk/sources/census_2021_bulk and download TS077 'Sexual orientation'. Save the output files under Census2021/.",
+			"file": "Census2021/census2021-ts077-ltla.csv",
+			"options": {
+				"type": "LAD",
+				"column": "geography code",
+				"group": {
+					"bisexual": ["Sexual orientation: Bisexual"],
+					"gaylesbian": ["Sexual orientation: Gay or Lesbian"],
+					"prefernottosay": ["Sexual orientation: Not answered"],
+					"straight": ["Sexual orientation: Straight or Heterosexual"],
+					"usedifferentterm": ["Sexual orientation: All other sexual orientations"],
+					"total": ["Sexual orientation: Total: All usual residents aged 16 years and over"]
+				}
+			}
+		}
+	}
+}

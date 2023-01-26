@@ -1,67 +1,69 @@
 {
 	"name":"Calderdale",
 	"id": "E08000033",
-	"OAs": 668,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 37451,
-			"15-24": 24050,
-			"25-34": 24464,
-			"35-44": 29563,
-			"45-54": 30081,
-			"55-64": 25745,
-			"65-69": 9848,
-			"70+": 22624,
-			"total": 203826
+			"0-14": 37433,
+			"15-24": 21727,
+			"25-34": 24920,
+			"35-44": 25684,
+			"45-54": 29544,
+			"55-64": 28012,
+			"65-69": 10870,
+			"70+": 28437,
+			"total": 206627
 		},
 		"carer":{
-			"no": 182457,
-			"yes": 21369,
-			"total": 203826
+			"no": 177337,
+			"yes": 17977,
+			"total": 195314
 		},
 		"disability":{
-			"no": 167226,
-			"yes": 36600,
-			"total": 203826
+			"no": 168769,
+			"yes": 37860,
+			"total": 206629
 		},
 		"ethnicity":{
-			"asian": 16875,
-			"black": 899,
-			"mixed": 2797,
-			"other": 468,
-			"white": 182787,
-			"total": 203826
+			"asian": 21727,
+			"black": 835,
+			"mixed": 4024,
+			"other": 1607,
+			"white": 177827,
+			"total": 206624
 		},
 		"gender":{
-			"female": 74959,
-			"male": 73807,
-			"total": 148766
+			"female": 105901,
+			"male": 100730,
+			"total": 206631
 		},
 		"religion":{
-			"buddhist": 593,
-			"christian": 114667,
-			"hindu": 616,
+			"buddhist": 630,
+			"christian": 85677,
+			"hindu": 1173,
 			"jewish": 153,
-			"muslim": 14802,
-			"no": 57193,
-			"other": 808,
-			"sikh": 355,
-			"undisclosed": 14639,
-			"total": 203826
+			"muslim": 19650,
+			"no": 86787,
+			"other": 1045,
+			"sikh": 387,
+			"undisclosed": 11129,
+			"total": 206631
 		},
 		"seb":{
-			"intermediate": 20156,
-			"lower": 32590,
-			"professional": 13810,
-			"total": 66556
+			"intermediate": 37318,
+			"lower": 75372,
+			"professional": 53944,
+			"total": 166634
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 1968,
+			"gaylesbian": 2811,
+			"prefernottosay": 11488,
+			"straight": 149815,
+			"usedifferentterm": 552,
+			"total": 166634
 		}
 	}
 }

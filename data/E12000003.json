@@ -1,67 +1,69 @@
 {
 	"name":"Yorkshire and The Humber",
 	"id": "E12000003",
-	"OAs": 17275,
+	"counts": {
+		"LAD": 21
+	},
 	"data":{
 		"age":{
-			"0-14": 932018,
-			"15-24": 731324,
-			"25-34": 668632,
-			"35-44": 720793,
-			"45-54": 725788,
-			"55-64": 630607,
-			"65-69": 252608,
-			"70+": 621963,
-			"total": 5283733
+			"0-14": 957294,
+			"15-24": 670741,
+			"25-34": 718243,
+			"35-44": 673578,
+			"45-54": 718569,
+			"55-64": 701367,
+			"65-69": 280699,
+			"70+": 760268,
+			"total": 5480759
 		},
 		"carer":{
-			"no": 4732392,
-			"yes": 551341,
-			"total": 5283733
+			"no": 4710222,
+			"yes": 471994,
+			"total": 5182216
 		},
 		"disability":{
-			"no": 4290084,
-			"yes": 993649,
-			"total": 5283733
+			"no": 4459448,
+			"yes": 1021322,
+			"total": 5480770
 		},
 		"ethnicity":{
-			"asian": 385964,
-			"black": 80345,
-			"mixed": 84558,
-			"other": 40910,
-			"white": 4691956,
-			"total": 5283733
+			"asian": 487040,
+			"black": 79220,
+			"mixed": 116997,
+			"other": 79100,
+			"white": 4680003,
+			"total": 5480793
 		},
 		"gender":{
-			"female": 1949555,
-			"male": 1925664,
-			"total": 3875219
+			"female": 2791686,
+			"male": 2689091,
+			"total": 5480777
 		},
 		"religion":{
-			"buddhist": 14319,
-			"christian": 3143819,
-			"hindu": 24074,
-			"jewish": 9929,
-			"muslim": 326050,
-			"no": 1366219,
-			"other": 16517,
-			"sikh": 22179,
-			"undisclosed": 360627,
-			"total": 5283733
+			"buddhist": 15801,
+			"christian": 2461515,
+			"hindu": 29242,
+			"jewish": 9358,
+			"muslim": 442532,
+			"no": 2161186,
+			"other": 23621,
+			"sikh": 24038,
+			"undisclosed": 313484,
+			"total": 5480777
 		},
 		"seb":{
-			"intermediate": 481281,
-			"lower": 850999,
-			"professional": 308284,
-			"total": 1640564
+			"intermediate": 925765,
+			"lower": 2229228,
+			"professional": 1305304,
+			"total": 4460297
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 58584,
+			"gaylesbian": 63793,
+			"prefernottosay": 320182,
+			"straight": 4002965,
+			"usedifferentterm": 14775,
+			"total": 4460299
 		}
 	}
 }

@@ -31,7 +31,7 @@
 								<option value="E06000010">Hull</option>
 								<option value="E08000034">Kirklees</option>
 								<option value="E08000035">Leeds</option>
-								<option value="E37000050" selected="selected">Leeds City Region</option>
+								<option value="E37000062" selected="selected">Leeds City Region</option>
 								<option value="E08000019">Sheffield</option>
 								<option value="E08000036">Wakefield</option>
 								<option value="E12000003">Yorkshire and The Humber</option>
@@ -68,6 +68,7 @@
 				<article class="facet" id="carer" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Carers</h2></header>
+						<p>Only includes usual residents aged 5 and over.</p>
 					</div>
 				</article>
 
@@ -81,7 +82,7 @@
 				<article class="facet" id="ethnicity" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Ethnicity</h2></header>
-						<summary>This section groups people into one of the <a href="https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups">5 ethnic groups used by the 2011 Census</a>.</summary>
+						<summary>This section groups people into one of the <a href="https://www.ethnicity-facts-figures.service.gov.uk/style-guide/ethnic-groups">5 ethnic groups used by the 2021 Census</a>.</summary>
 					</div>
 				</article>
 
@@ -102,15 +103,21 @@
 					<div class="doublepadded grey">
 						<header><h2>Socio-economic background</h2></header>
 						<summary>This section uses categories from the <a href="https://socialmobilityworks.org/toolkit/measurement/">Social Mobility Commission toolkit</a> which suggests employers ask the key question <q cite="https://socialmobilityworks.org/toolkit/measurement/">"What was the occupation of your main household earner when you were about aged 14?"</q>. The options include: <em>lower socio-economic background</em> (e.g. technical and craft occupations; routine, semi-routine manual and service occupations; long-term unemployed); <em>intermediate background</em> (e.g. clerical and intermediate occupations; small business owners); <em>professional background</em> (e.g. modern professional &amp; traditional occupations; senior or junior managers or administrators).</summary>
-						<p>Reference area values come from <a href="https://www.nomisweb.co.uk/census/2011/qs611ew">2011 Census data for approximated social grade</a>. We have grouped <em>C2</em> and <em>DE</em> as <em>Lower</em>, <em>C1</em> as <em>Intermediate</em>, and <em>AB</em> as <em>Professional</em>.</p>
+						<p>Reference area values come from <a href="https://www.ons.gov.uk/datasets/TS062/editions/2021/versions/1">2021 Census data for National Statistics Socio-economic Classification</a> which includes usual residents aged 16 years and over. Previously we used data split by AB/C1/C2/D/E approximated social grade classifications. In the 2021 Census data we have grouped National Statistics Socio-economic Classification categories as follows:</p>
+						<ul>
+						<li><strong>Lower</strong> - <em>L10 and L11 Lower supervisory and technical occupations</em>, <em>L12 Semi-routine occupations</em> <em>L13 Routine occupations</em>, <em>L14.1 and L14.2 Never worked and long-term unemployed</em>, <em>L15 Full-time students</em></li>
+						<li><strong>Intermediate</strong> - <em>L7 Intermediate occupations</em>, <em>L8 and L9 Small employers and own account workers</em></li>
+						<li><strong>Professional</strong> - <em>L1, L2 and L3 Higher managerial, administrative and professional occupations</em>, <em>L4, L5 and L6 Lower managerial, administrative and professional occupations</em></li>
+						</ul>
+						<p>Note that these classifications are for individuals as of the 2021 Census rather than the classification of their parents when they were 14 as this is the best proxy we have available for this question.</p> 
 					</div>
 				</article>
 
 				<article class="facet" id="sexuality" role="tabpanel">
 					<div class="doublepadded grey">
 						<header><h2>Sexuality</h2></header>
-						<summary>This section has options limited to those offered by the <a href="https://www.abs.gov.au/statistics/standards/standard-sex-gender-variations-sex-characteristics-and-sexual-orientation-variables/latest-release#sexual-orientation">Australian Bureau of Statistics</a> / <a href="https://gss.civilservice.gov.uk/policy-store/sexual-orientation/">Government Statistical Service guidance on reporting statistics about sexual orientation</a>.</summary>
-						<p>The 2011 Census doesn't provide data on sexuality so the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2018">sexuality figures come from the ONS Population Survey (2018)</a>. This is only published by UK Region (e.g. Yorkshire and The Humber) so we have used the regional values.</p>
+						<summary>This section has options as defined in the 2021 Census.</summary>
+						<p>Reference area values come from <a href="https://www.ons.gov.uk/datasets/TS077/editions/2021/versions/1">2021 Census data for National Statistics Sexual orientation</a> which provides fine-detailed geographic breakdown for the first time. They only include usual residents aged 16 years and over.</p>
 					</div>
 				</article>
 			</section>
@@ -130,10 +137,9 @@
 					<h2>Data sources</h2>
 					<p>Please read the <a href="https://github.com/open-innovations/diversity-data/blob/main/data/README.md">notes on data sources for full citations and notes on groupings</a>.</p>
 					<ul>
-						<li><a href="https://geoportal.statistics.gov.uk/datasets/output-area-to-lower-layer-super-output-area-to-middle-layer-super-output-area-to-local-authority-district-december-2020-lookup-in-england-and-wales">Lookup from Output Area to Local Authority District and Region</a> updated December 2020 (OGL)</li>
-						<li><a href="http://infuse2011gf.ukdataservice.ac.uk/infusewizgeo.aspx">Census 2011 data</a> updated 2011 (OGL)</li>
-						<li><a href="https://www.nomisweb.co.uk/census/2011/ks601ew">Sex data by economic activity</a> updated 2011 (OGL)</li>
-						<li><a href="https://www.nomisweb.co.uk/census/2011/qs611ew">Approximated Social Grade for all Household Reference Persons aged 16 to 64</a> updated 2011 (OGL)</li>
+						<li><a href="https://geoportal.statistics.gov.uk/datasets/ons::oas-to-lsoas-to-msoas-to-lep-to-lad-december-2022-lookup-in-england/explore">Lookup from Output Area to LSOA, MSOA, Local Authority District, and Local Enterprise Partnership</a> updated December 2022 (OGL)</li>
+						<li><a href="https://geoportal.statistics.gov.uk/datasets/output-area-to-region-december-2021-lookup-in-england-and-wales-1/about">Lookup from Output Area to Region</a> updated December 2021 (OGL)</li>
+						<li><a href="https://www.nomisweb.co.uk/sources/census_2021_bulk">Census 2021 data</a> updated 2021 (OGL)</li>
 					</ul>
 					
 				</section>

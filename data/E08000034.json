@@ -1,67 +1,69 @@
 {
 	"name":"Kirklees",
 	"id": "E08000034",
-	"OAs": 1311,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 80535,
-			"15-24": 56373,
-			"25-34": 54429,
-			"35-44": 59939,
-			"45-54": 57186,
-			"55-64": 49846,
-			"65-69": 19323,
-			"70+": 44827,
-			"total": 422458
+			"0-14": 81405,
+			"15-24": 52711,
+			"25-34": 54869,
+			"35-44": 55353,
+			"45-54": 58917,
+			"55-64": 53152,
+			"65-69": 21033,
+			"70+": 55782,
+			"total": 433222
 		},
 		"carer":{
-			"no": 378793,
-			"yes": 43665,
-			"total": 422458
+			"no": 371038,
+			"yes": 37034,
+			"total": 408072
 		},
 		"disability":{
-			"no": 347495,
-			"yes": 74963,
-			"total": 422458
+			"no": 357625,
+			"yes": 75591,
+			"total": 433216
 		},
 		"ethnicity":{
-			"asian": 67782,
-			"black": 7905,
-			"mixed": 9790,
-			"other": 2711,
-			"white": 334270,
-			"total": 422458
+			"asian": 84199,
+			"black": 4103,
+			"mixed": 13583,
+			"other": 6511,
+			"white": 318971,
+			"total": 433209
 		},
 		"gender":{
-			"female": 153544,
-			"male": 153650,
-			"total": 307194
+			"female": 220870,
+			"male": 212346,
+			"total": 433216
 		},
 		"religion":{
-			"buddhist": 845,
-			"christian": 225751,
-			"hindu": 1544,
-			"jewish": 189,
-			"muslim": 61280,
-			"no": 100829,
-			"other": 1300,
-			"sikh": 3330,
-			"undisclosed": 27390,
-			"total": 422458
+			"buddhist": 996,
+			"christian": 170577,
+			"hindu": 1723,
+			"jewish": 187,
+			"muslim": 80046,
+			"no": 150599,
+			"other": 1663,
+			"sikh": 3476,
+			"undisclosed": 23949,
+			"total": 433216
 		},
 		"seb":{
-			"intermediate": 38151,
-			"lower": 67636,
-			"professional": 25171,
-			"total": 130958
+			"intermediate": 73025,
+			"lower": 169975,
+			"professional": 103276,
+			"total": 346276
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 3697,
+			"gaylesbian": 4340,
+			"prefernottosay": 25742,
+			"straight": 311501,
+			"usedifferentterm": 995,
+			"total": 346275
 		}
 	}
 }

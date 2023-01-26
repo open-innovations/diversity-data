@@ -1,67 +1,69 @@
 {
 	"name":"Kingston upon Hull, City of",
 	"id": "E06000010",
-	"OAs": 853,
+	"counts": {
+		"LAD": 1
+	},
 	"data":{
 		"age":{
-			"0-14": 45276,
-			"15-24": 41456,
-			"25-34": 37577,
-			"35-44": 34805,
-			"45-54": 33971,
-			"55-64": 27590,
-			"65-69": 9635,
-			"70+": 26096,
-			"total": 256406
+			"0-14": 50031,
+			"15-24": 34910,
+			"25-34": 41038,
+			"35-44": 34506,
+			"45-54": 33555,
+			"55-64": 32143,
+			"65-69": 12220,
+			"70+": 28607,
+			"total": 267010
 		},
 		"carer":{
-			"no": 232770,
-			"yes": 23636,
-			"total": 256406
+			"no": 229820,
+			"yes": 21241,
+			"total": 251061
 		},
 		"disability":{
-			"no": 206015,
-			"yes": 50391,
-			"total": 256406
+			"no": 213616,
+			"yes": 53395,
+			"total": 267011
 		},
 		"ethnicity":{
-			"asian": 6471,
-			"black": 2996,
-			"mixed": 3454,
-			"other": 2164,
-			"white": 241321,
-			"total": 256406
+			"asian": 7516,
+			"black": 4171,
+			"mixed": 4509,
+			"other": 4930,
+			"white": 244988,
+			"total": 267010
 		},
 		"gender":{
-			"female": 94078,
-			"male": 96532,
-			"total": 190610
+			"female": 133781,
+			"male": 133233,
+			"total": 267014
 		},
 		"religion":{
-			"buddhist": 771,
-			"christian": 140753,
-			"hindu": 439,
-			"jewish": 172,
-			"muslim": 5447,
-			"no": 89336,
-			"other": 794,
-			"sikh": 289,
-			"undisclosed": 18405,
-			"total": 256406
+			"buddhist": 746,
+			"christian": 106411,
+			"hindu": 646,
+			"jewish": 146,
+			"muslim": 9285,
+			"no": 131424,
+			"other": 1124,
+			"sikh": 277,
+			"undisclosed": 16957,
+			"total": 267016
 		},
 		"seb":{
-			"intermediate": 23000,
-			"lower": 55909,
-			"professional": 9032,
-			"total": 87941
+			"intermediate": 36158,
+			"lower": 135394,
+			"professional": 42325,
+			"total": 213877
 		},
 		"sexuality":{
-			"bisexual": 45000,
-			"gaylesbian": 56000,
-			"prefernottosay": 135000,
-			"straight": 4106000,
-			"usedifferentterm": 20000,
-			"total": 4362000
+			"bisexual": 3522,
+			"gaylesbian": 3655,
+			"prefernottosay": 17539,
+			"straight": 188281,
+			"usedifferentterm": 880,
+			"total": 213877
 		}
 	}
 }
