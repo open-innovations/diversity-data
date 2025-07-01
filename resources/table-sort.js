@@ -1,5 +1,5 @@
 /*
-	Open Innovations Sortable Tables v0.3.1
+	Open Innovations Sortable Tables v0.3.2
 	Helper function to make any table with class="table-sort" sortable.
 	We would have used https://github.com/leewannacott/table-sort-js/ but it couldn't deal with merged rows
 */
@@ -119,11 +119,11 @@
 
 		for(c = 0; c < ncol; c++){
 			for(typ in coltype[c]){
-				if(coltype[c][typ]==rows.length){
+				if(coltype[c][typ]>=0.8*rows.length){
 					for(r = 0; r < rows.length; r++){
 						v = mtable[r][c].v;
-						if(typ=="float") v = parseFloat(v.replace(/,/g,''));
-						if(typ=="integer") v = parseInt(v.replace(/,/g,''));
+						if(typ=="float") v = parseFloat(v.replace(/,/g,'')||'0');
+						if(typ=="integer") v = parseInt(v.replace(/,/g,'')||'0');
 						if(typ=="datetime") v = (new Date(v)).getTime();
 						mtable[r][c].v = v;
 					}
@@ -204,7 +204,7 @@
 		this.columns = new Array(table.cols);
 		this.sortColumn = function(col){
 			dir = this.columns[col].toggleDirection();
-			
+
 			table.table = table.table.sort(function(a,b){
 				if(a[col].v == b[col].v) return false;
 				return (dir == "up" ? -1: 1)*(a[col].v > b[col].v ? 1 : -1);
