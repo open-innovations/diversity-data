@@ -179,7 +179,7 @@
 	function Loader(_parent){
 		var el = document.createElement('div');
 		el.classList.add('spinner');
-		el.innerHTML = '<img src="https://odileeds.org/resources/images/odi.svg" alt="Loading..." />';
+		el.innerHTML = '<img src="https://open-innovations.org/resources/images/loader.svg" alt="Loading..." />';
 		_parent.appendChild(el);
 		this.remove = function(){ _parent.innerHTML = ''; };
 		this.error = function(msg){ _parent.innerHTML = '<span class="error">'+msg+'</span>'; };
@@ -606,7 +606,7 @@
 					if(!attr.comparison.dialogDefault) attr.comparison.dialogDefault = attr.comparison.dialog.querySelector('select'); // Default form element to focus on
 					cls = attr.comparison.dialog.querySelector('.close');
 
-					attr.comparison.dialogSubmit.addEventListener('click',function(e){ e.preventDefault(); console.log('add comparison'); _obj.addComparison(); _obj.update(); _obj.toggleDialog(); _obj.updateHistory(); });
+					attr.comparison.dialogSubmit.addEventListener('click',function(e){ e.preventDefault(); _obj.addComparison(); _obj.update(); _obj.toggleDialog(); _obj.updateHistory(); });
 					if(!cls){
 						cls = document.createElement('button');
 						cls.classList.add('close');
@@ -1242,6 +1242,8 @@
 					if(e) this.cards.age.chart.on(e,this.cards.age.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.age.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.age.panels.table.el.querySelector('table'));
 				//key.querySelector('.extranotes').innerHTML = (employees>data.age.total.n.total ? '<p>There are '+(employees-data.age.total.n.total).toLocaleString()+' employees without age data':'');
 			}
 			if(g.carer.table){
@@ -1251,6 +1253,8 @@
 					if(e) this.cards.carer.chart.on(e,this.cards.carer.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.carer.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.carer.panels.table.el.querySelector('table'));
 				//key.querySelector('.extranotes').innerHTML = (employees>data.carer.total.n.total ? '<p>There are '+(employees-data.carer.total.n.total).toLocaleString()+' employees without carer data':'');
 			}
 			if(g.disability.table){
@@ -1260,6 +1264,8 @@
 					if(e) this.cards.disability.chart.on(e,this.cards.disability.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.disability.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.disability.panels.table.el.querySelector('table'));
 			}
 			if(g.ethnicity.table){
 				this.cards.ethnicity.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Ethnicity</th>'+g.ethnicity.th+'</tr>'+g.ethnicity.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1268,6 +1274,8 @@
 					if(e) this.cards.ethnicity.chart.on(e,this.cards.ethnicity.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.ethnicity.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.ethnicity.panels.table.el.querySelector('table'));
 			}
 			if(g.gender.table){
 				this.cards.gender.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Gender</th>'+g.gender.th+'</tr>'+g.gender.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1276,6 +1284,8 @@
 					if(e) this.cards.gender.chart.on(e,this.cards.gender.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.gender.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.gender.panels.table.el.querySelector('table'));
 			}
 			if(g.genderidentitymatchesthatassignedatbirth.table){
 				this.cards.genderidentitymatchesthatassignedatbirth.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Gender identity</th>'+g.genderidentitymatchesthatassignedatbirth.th+'</tr>'+g.genderidentitymatchesthatassignedatbirth.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1284,6 +1294,8 @@
 					if(e) this.cards.genderidentitymatchesthatassignedatbirth.chart.on(e,this.cards.genderidentitymatchesthatassignedatbirth.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.genderidentitymatchesthatassignedatbirth.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.genderidentitymatchesthatassignedatbirth.panels.table.el.querySelector('table'));
 			}
 			if(g.religion.table){
 				this.cards.religion.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Religion</th>'+g.religion.th+'</tr>'+g.religion.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1292,6 +1304,8 @@
 					if(e) this.cards.religion.chart.on(e,this.cards.religion.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.religion.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.religion.panels.table.el.querySelector('table'));
 			}
 			if(g.sexuality.table){
 				this.cards.sexuality.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.sexuality.th+'</tr>'+g.sexuality.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1300,6 +1314,8 @@
 					if(e) this.cards.sexuality.chart.on(e,this.cards.sexuality.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.sexuality.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.sexuality.panels.table.el.querySelector('table'));
 			}
 			if(g.seb.table){
 				this.cards.seb.panels.table.el.innerHTML = '<table class="table-sort"><tr><th>Sexuality</th>'+g.seb.th+'</tr>'+g.seb.table+'</table><p>Percentages are rounded in the table so may not add up to 100%. Clicking on a column heading will sort the table by that column.</p>';
@@ -1308,10 +1324,10 @@
 					if(e) this.cards.seb.chart.on(e,this.cards.seb.panels.chart.events[e]);
 				}
 				addKey(keytxt,this.cards.seb.panels.chart.el);
+				// Make tables sortable
+				if(OI.TableSort) OI.TableSort(this.cards.seb.panels.table.el.querySelector('table'));
 			}
 			
-			// Make tables sortable
-			if(typeof root.tableSortJs==="function") root.tableSortJs();
 
 			// Update numbers
 			document.querySelector('.lastupdated').innerHTML = (new Date(this.lastupdate).toLocaleDateString('en-GB',{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
