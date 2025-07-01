@@ -111,15 +111,16 @@
 				if(v.match(/^[\-\+0-9\,]+\.[0-9]+$/)) typ = "float";
 				else if(v.match(/^([0-9]+|[0-9\,]+\,[0-9]{3})$/)) typ = "integer";
 				else if(!isNaN(Date.parse(v))) typ = "datetime";
+				else if(v=="") typ = "empty";
 				if(!coltype[c][typ]) coltype[c][typ] = 0;
 				coltype[c][typ]++;
 
 			}
 		}
-
 		for(c = 0; c < ncol; c++){
 			for(typ in coltype[c]){
-				if(coltype[c][typ]>=0.8*rows.length){
+				// If the type + empty values is more than 80% of the column we use this type
+				if(coltype[c][typ] + (coltype[c].empty||0) >= 0.8*rows.length){
 					for(r = 0; r < rows.length; r++){
 						v = mtable[r][c].v;
 						if(typ=="float") v = parseFloat(v.replace(/,/g,'')||'0');
